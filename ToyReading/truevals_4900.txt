@@ -1,0 +1,9 @@
+bs_signal_mean 5369.53
+d2kspipi_exp_mix_combs_slope -0.0048621
+frac010_bs_4900 0.6922
+n_bd_fit_d2kspipi_both_mix_merge 108.588
+n_bs_fit_d2kspipi_both_mix_merge 209.088
+n_comb_d2kspipi_both_mix_merge 692.48
+ratio_bs_drho_both_mix_merge 0.0356 
+ratio_bs_dstkst_both_mix_merge 1.427
+signal_width 14.2879

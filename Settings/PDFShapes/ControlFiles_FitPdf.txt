@@ -1,0 +1,20 @@
+fit_signal Settings/PDFShapes/Fit/signal.txt
+fit_combs Settings/PDFShapes/Fit/combs.txt
+fit_drho Settings/PDFShapes/Fit/drho.txt
+** Part reco
+** BDT > 0.75 and Cos theta cut (DEFAULT)
+fit_partreco Settings/PDFShapes/Fit/partreco_CosTheta_0.75.txt
+** BDT > 0.8
+* fit_partreco Settings/PDFShapes/Fit/partreco.txt
+** BDT > 0.8 and Cos theta cut
+* fit_partreco Settings/PDFShapes/Fit/partreco_CosThetaCut.txt
+** Split helamp
+* fit_partreco_010 Settings/PDFShapes/Fit/partreco_010_CosTheta_0.75.txt
+* fit_partreco_001 Settings/PDFShapes/Fit/partreco_001_CosTheta_0.75.txt
+*
+fit_d3h Settings/PDFShapes/Fit/d3h.txt
+fit_Lb Settings/PDFShapes/Fit/lambda.txt
+*
+gensettings Settings/GeneralSettings.txt
+* shapes correlation matrix and fit errors
+fit_d2kspipi_shapesFitResults Settings/PDFShapes/Fit/persistFitOutput.root

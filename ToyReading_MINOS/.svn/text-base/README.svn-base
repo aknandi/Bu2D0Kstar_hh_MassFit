@@ -1,0 +1,13 @@
+Do
+  ./makeplots.sh ***.txt
+
+  where ***.txt contains list of variable names and values generated
+  [varname value]
+
+Output plots are in :
+  report.pdf
+  report_roofit.pdf
+
+Biases are in :
+  bias.txt
+  [varname pullmean pullmeanerr pullwidth pullwidtherr]

@@ -1,0 +1,266 @@
+#include <vector>
+#include <iostream>
+#include <map>
+#include <math.h>
+#include "Yields.h"
+//#include "InternalStorage.h"
+//#include "CommonTools.h"
+#include "RooRealVar.h"
+#include "RooConstVar.h"
+#include "RooArgSet.h"
+//#include "RooUnblindUniform.h"
+using namespace std;
+using namespace RooFit;
+
+class InternalStorage;
+
+Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allbinList, std::string unblind)
+{
+  _genConfs = genConfs;
+  _fileList = fileList;
+  //stuff so that the bin lists and categories are defined and also the paramter object p.
+
+  modeList=allmodeList;
+  chargeList=allchargeList;
+  trackList=alltrackList;
+  binList=allbinList;
+
+  input = new Settings("SetRatios");
+  input->readPairStringsToMap(_fileList->get("PathnameToRatios"));
+  input->readPairStringsToMap(_fileList->get("PathnameToYieldCorrections"));
+  input->readPairStringsToMap(_fileList->get("PathnameToTotals"));
+  input->readPairStringsToMap(_fileList->get("PathnameToFitRatios"));
+
+  //myMaps.Initialize(fileList, modeList,chargeList,trackList,binList);
+
+  genscale = 1.; // scale yields for generation
+  limitlow = _genConfs->get("fit_limit_low");
+
+  std::cout << "*****************************************************" << std::endl;
+  std::cout << "Initialising yields ... " << std::endl;
+  SetOtherBkgs(); // this has to come before setyieldsGenandfit()
+  SetDstKstGenandFit();
+  SetDrhoGenandFit();
+  SetYieldsGenandFit(); // must be last
+
+  std::cout<<" Yields done "<<std::endl;
+
+}
+
+void Yields::SetDrhoGenandFit()
+{
+  for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+    for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
+      for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
+
+        double drho_ratio=0.;
+        if(_genConfs->get("genToys")=="false"){ 
+          drho_ratio = input->getD(Form("Bd_Drho_ratio_to_Bs_%s",limitlow.c_str())) * input->getD("Drho_Swave_factor");
+        }
+        else {
+          // 1. Calculated value
+          // drho_ratio = input->getD(Form("Bd_Drho_ratio_to_Bs_%s",limitlow.c_str())) * input->getD("Drho_Swave_factor");
+          // 2. Fit value
+          drho_ratio = input->getD(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * input->getD("Drho_Swave_factor");
+        }
+
+        double drho_ratio_err = input->getD(Form("Bd_Drho_ratio_to_Bs_%s_err",limitlow.c_str())) * input->getD("Drho_Swave_factor");
+
+        // Hard code Alexis' numbers
+        //if(*t=="LL") { drho_ratio = 0.0392; drho_ratio_err=0.0096; }
+        //if(*t=="DD") { drho_ratio = 0.0381; drho_ratio_err=0.0093; }
+
+        ratio_bs_drho[*c][*t][*a] = new RooRealVar(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",drho_ratio,0.0,1.0);
+        std::cout << ratio_bs_drho[*c][*t][*a]->GetName() << " " << drho_ratio << " +- " << drho_ratio_err << std::endl;
+        // Gaussian constrain
+        gausratio_bs_drho[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_drho[*c][*t][*a], RooFit::RooConst(drho_ratio), RooFit::RooConst(drho_ratio_err));
+      }
+    }
+  }
+
+
+}
+
+void Yields::SetOtherBkgs()
+{
+
+  double scalefactor = input->getD("lowmass_factor");
+
+  std::cout << "Scaling D3h backgrounds by factor: " << scalefactor << std::endl;
+  // Shared kspipi and kskk 
+  for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+    for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
+      for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
+
+        // --- DKpipi ratio --- 
+        ratio_bs_dkpipi[*c][*t][*a] = new RooRealVar(Form("ratio_bs_dkpipi_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"", scalefactor*input->getD(Form("Bu_DKpipi_ratio_to_Bs_%s",limitlow.c_str())),0.,5.0);
+        // Gaussian constrain
+        gausratio_bs_dkpipi[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_dkpipi_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_dkpipi[*c][*t][*a], RooFit::RooConst(scalefactor*input->getD(Form("Bu_DKpipi_ratio_to_Bs_%s",limitlow.c_str()))), RooFit::RooConst(scalefactor*input->getD(Form("Bu_DKpipi_ratio_to_Bs_%s_err",limitlow.c_str()))));
+
+        // --- Dpipipi ratio --- 
+        ratio_bs_dpipipi[*c][*t][*a] = new RooRealVar(Form("ratio_bs_dpipipi_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"", scalefactor*input->getD(Form("Bu_Dpipipi_ratio_to_Bs_%s",limitlow.c_str())),0.,1.0);
+        // Gaussian constrain
+        gausratio_bs_dpipipi[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_dpipipi_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_dpipipi[*c][*t][*a], RooFit::RooConst(scalefactor*input->getD(Form("Bu_Dpipipi_ratio_to_Bs_%s",limitlow.c_str()))), RooFit::RooConst(scalefactor*input->getD(Form("Bu_Dpipipi_ratio_to_Bs_%s_err",limitlow.c_str()))));
+
+        // --- Lambda_b -> Dppi ratio ---
+        double lambda_ratio = input->getD(Form("Lb_Dppi_misIDpK_ratio_to_Bs_%s",limitlow.c_str())) * input->getD("Lb_Dppi_factor");
+        double lambda_ratio_err = input->getD(Form("Lb_Dppi_misIDpK_ratio_to_Bs_%s_err",limitlow.c_str())) * input->getD("Lb_Dppi_factor");
+        ratio_bs_lambda[*c][*t][*a] = new RooRealVar(Form("ratio_bs_lambda_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",lambda_ratio,0.0,1.0); 
+        // Gaussian constrain       
+        gausratio_bs_lambda[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_lambda_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_lambda[*c][*t][*a], RooFit::RooConst(lambda_ratio), RooFit::RooConst(lambda_ratio_err));
+
+
+      }
+    }
+  }
+
+
+
+
+}
+
+void Yields::SetDstKstGenandFit()
+{
+  input->readPairStringsToMap(_fileList->get("PathnameToRatiosBsDstKst"));
+  input->readPairStringsToMap(_fileList->get("PathnameToRatiosBdDstKst"));
+
+  // Shared Kspipi and KsKK
+  for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+    for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
+      for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
+
+        double r_dstkst=0.;
+        if(_genConfs->get("genToys")=="false"){ 
+          r_dstkst = input->getD(Form("Bs_DstKst_ratio_to_Bs_%s",limitlow.c_str())); 
+        }
+        else {
+          // 1. Calculated
+          //double r_dstkst = input->getD(Form("Bs_DstKst_ratio_to_Bs_%s",limitlow.c_str())); 
+          // 2. Fitted
+          r_dstkst = input->getD(Form("ratio_bs_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()));
+        }
+
+        // --- B_s -> D*K* ratio --- 
+        ratio_bs_dstkst[*c][*t][*a] = new RooRealVar(Form("ratio_bs_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",r_dstkst,0.,5.0); 
+        // Gaussian constrain
+        gausratio_bs_dstkst[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_dstkst[*c][*t][*a], 
+                                                          RooFit::RooConst(r_dstkst),
+                                                          RooFit::RooConst(input->getD(Form("Bs_DstKst_ratio_to_Bs_%s_err",limitlow.c_str())))); 
+        
+        // --- B_s -> D*K* ratio split by Helamp ---
+        /*
+        double ratio_tot = input->getD(Form("Bs_DstKst_ratio_to_Bs_%s",limitlow.c_str()));
+        double ratio_tot_err = input->getD(Form("Bs_DstKst_ratio_to_Bs_%s_err",limitlow.c_str()));
+        double frac010 = input->getD(Form("frac010_bs_%s",limitlow.c_str()));
+        double frac010_err = input->getD(Form("frac010_bs_%s_err",limitlow.c_str()));
+        double frac001 = 1-frac010;
+        double frac001_err = frac010_err * frac001 / frac010;
+        double ratio_010 = ratio_tot * frac010;
+        double ratio_001 = ratio_tot * frac001;
+        double ratio_010_err = sqrt( pow(ratio_tot_err/ratio_tot,2) + pow(frac010_err/frac010,2) ) * ratio_010;
+        double ratio_001_err = sqrt( pow(ratio_tot_err/ratio_tot,2) + pow(frac001_err/frac001,2) ) * ratio_001;
+
+        ratio_bs_dstkst_010[*c][*t][*a] = new RooRealVar(Form("ratio_bs_dstkst_010_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",
+                                                         ratio_010,0,5.0); 
+        ratio_bs_dstkst_001[*c][*t][*a] = new RooRealVar(Form("ratio_bs_dstkst_001_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",
+                                                         ratio_001,0,5.0); 
+
+        // Gaussian constrain
+        gausratio_bs_dstkst_010[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_dstkst_010_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_dstkst_010[*c][*t][*a], 
+                                                              RooFit::RooConst(ratio_010),RooFit::RooConst(ratio_010_err));
+        gausratio_bs_dstkst_001[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_dstkst_001_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_dstkst_001[*c][*t][*a], 
+                                                              RooFit::RooConst(ratio_001),RooFit::RooConst(ratio_001_err)); 
+        */
+
+        // --- B_d -> D*K* ratio --- 
+        ratio_bd_dstkst[*c][*t][*a] = new RooRealVar(Form("ratio_bd_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",
+                                                          input->getD(Form("Bd_DstKst_ratio_to_Bs_%s",limitlow.c_str())),0.,5.0); 
+
+        // Gaussian constrain
+        gausratio_bd_dstkst[*c][*t][*a] = new RooGaussian(Form("gausratio_bd_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bd_dstkst[*c][*t][*a], 
+                                                          RooFit::RooConst(input->getD(Form("Bd_DstKst_ratio_to_Bs_%s",limitlow.c_str()))), 
+                                                          RooFit::RooConst(input->getD(Form("Bd_DstKst_ratio_to_Bs_%s_err",limitlow.c_str())))); 
+
+      }
+    }
+  }
+
+
+}
+
+
+void Yields::SetYieldsGenandFit()
+{
+  for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
+    for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+      for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
+        for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
+
+          // --- Gen yields ---
+          double N_bd   = input->getD(Form("N_bd_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          n_bd_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bd_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bd,0,10000);
+          double N_bs   = input->getD(Form("N_bs_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          n_bs_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0,10000);
+          double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000);
+          
+          ///////////////////////
+          // The all-important ratios
+          //
+          // 1. If you want to generate with the calculated values of ratios:
+          //
+          //double N_drho = ratio_bs_drho[*c][*t][*a]->getVal() * N_bs;
+          //double N_bs_dstkst = ratio_bs_dstkst[*c][*t][*a]->getVal() * N_bs;
+          //double N_bd_dstkst = ratio_bd_dstkst[*c][*t][*a]->getVal() * N_bs;
+          //
+          // 2. If you want to generate with the FITTED central value of ratios:
+          //
+          //double N_drho = input->getD(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
+          //double N_bs_dstkst = input->getD(Form("ratio_bs_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
+          //double N_bd_dstkst = input->getD(Form("ratio_bd_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
+          //
+          // 3. If you want to generate directly with yields
+          //
+          double N_drho = input->getD(Form("N_drho_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          double N_bs_dstkst = input->getD(Form("N_bs_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          double N_bd_dstkst = input->getD(Form("N_bd_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+          //////////////////////
+
+          n_drho_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_drho_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_drho,0,10000);
+          n_bs_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_dstkst_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs_dstkst,0,10000);
+          n_bd_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bd_dstkst_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bd_dstkst,0,10000);
+
+          // --- Fit yields ---
+          n_bd_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bd_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bd,-10.,10000.);
+          n_bs_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0.,10000.);
+          n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000.);
+          n_drho[*m][*c][*t][*a] = new RooFormulaVar(Form("n_drho_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_drho[*c][*t][*a]));
+          n_bs_dstkst[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bs_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_dstkst[*c][*t][*a]));
+          // Split helamps
+          //n_bs_dstkst_010[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bs_dstkst_010_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_dstkst_010[*c][*t][*a]));
+          //n_bs_dstkst_001[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bs_dstkst_001_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_dstkst_001[*c][*t][*a]));
+
+          n_bd_dstkst[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bd_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bd_dstkst[*c][*t][*a]));
+          n_lambda[*m][*c][*t][*a] = new RooFormulaVar(Form("n_lambda_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_lambda[*c][*t][*a]));
+          n_dkpipi[*m][*c][*t][*a] = new RooFormulaVar(Form("n_dkpipi_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_dkpipi[*c][*t][*a]));
+          n_dpipipi[*m][*c][*t][*a] = new RooFormulaVar(Form("n_dpipipi_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"@0*@1",RooArgList(*n_bs_fit[*m][*c][*t][*a],*ratio_bs_dpipipi[*c][*t][*a]));
+
+          // --- No ratios ---
+          //n_bd_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bd_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bd_dstkst,0.,300.);
+          //n_bs_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs_dstkst,0.,350.);
+          //n_drho[*m][*c][*t][*a] = new RooRealVar(Form("n_drho_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",2,0,2000);
+          //n_dkpipi[*m][*c][*t][*a] = new RooRealVar(Form("n_dkpipi_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",100,0,2000);
+          //n_dpipipi[*m][*c][*t][*a] = new RooRealVar(Form("n_dpipipi_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",100,0,500);
+          // n_lambda[*m][*c][*t][*a] = new RooRealVar(Form("n_lambda_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",10,0,2000);
+
+          //ratio_bs_dstkst[*c][*t][*a]->setConstant(kFALSE);
+          //ratio_bs_dstkst[*c][*t][*a]->setConstant(kTRUE);
+
+        }
+      }
+    }
+  }
+}
+
+
+

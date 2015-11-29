@@ -1,0 +1,13 @@
+* 5200 : KsPiPi + KsKK
+gen_signal Settings/PDFShapes/Gen/signalFIXED.txt
+gen_combs Settings/PDFShapes/Gen/combsFIXED.txt
+gen_partreco Settings/PDFShapes/Gen/partrecoFIXED.txt
+*
+** Part reco: Generate what was calculated
+* gen_partreco Settings/PDFShapes/Gen/partreco_CosTheta_0.75.txt
+** Part reco: Generate central value of what was fitted:
+* gen_partreco Settings/PDFShapes/Gen/partrecoFIXED.txt
+*
+** Drho
+gen_drho Settings/PDFShapes/Gen/drho.txt
+gensettings Settings/GeneralSettings.txt

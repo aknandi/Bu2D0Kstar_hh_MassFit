@@ -1,0 +1,6 @@
+d2kskk_exp_mix_combs_slope -0.00340902
+d2kskk_exp_mix_combs_slope_LimU -0.00340902
+d2kskk_exp_mix_combs_slope_LimL -0.00340902
+d2kspipi_exp_mix_combs_slope -0.00524778
+d2kspipi_exp_mix_combs_slope_LimU -0.00524778
+d2kspipi_exp_mix_combs_slope_LimL -0.00524778

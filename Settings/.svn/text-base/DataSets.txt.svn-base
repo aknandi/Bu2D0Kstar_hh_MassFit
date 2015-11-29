@@ -1,0 +1,65 @@
+** Data sets **
+* 
+** BDT > 0.75, DD and LL merged,  (DEFAULT)
+** no DK veto, abs(CosThetaK*) > 0.4, m(K*) fixed, Ks FDsig cut
+pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
+pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
+pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
+pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
+*
+** BDT > 0.75, abs(CosThetaK*) > 0.4  ** 
+* KsPiPi 
+*pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_CosTheta_0.75.root
+*pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_CosTheta_0.75.root
+*pathToData_d2kspipi_DD_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_DD_CosTheta_0.75.root
+*pathToData_d2kspipi_DD_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_DD_CosTheta_0.75.root
+*pathToData_d2kspipi_LL_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_LL_CosTheta_0.75.root
+*pathToData_d2kspipi_LL_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_LL_CosTheta_0.75.root
+* KsKK
+*pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_CosTheta_0.75.root
+*pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_CosTheta_0.75.root
+*pathToData_d2kskk_DD_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_DD_CosTheta_0.75.root
+*pathToData_d2kskk_DD_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_DD_CosTheta_0.75.root
+*pathToData_d2kskk_LL_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_LL_CosTheta_0.75.root
+*pathToData_d2kskk_LL_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_LL_CosTheta_0.75.root
+*
+*
+** BDT > 0.95, DD and LL merged ** 
+* KsPiPi 
+* pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_BDT_0.95.root
+* pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_BDT_0.95.root
+* KsKK
+* pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_BDT_0.95.root
+* pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_BDT_0.95.root
+*
+** BDT > 0.9, DD and LL merged ** 
+* KsPiPi 
+* pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_BDT_0.9.root
+* pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_BDT_0.9.root
+* KsKK
+* pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_BDT_0.9.root
+* pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_BDT_0.9.root
+*
+** BDT > 0.8, DD and LL merged ** 
+* KsPiPi 
+* pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_ALL.root
+* pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_ALL.root
+* KsKK
+* pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_ALL.root
+* pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_ALL.root
+* 
+** BDT > 0.75, DD and LL merged ** 
+* KsPiPi 
+* pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_BDT_0.75.root
+* pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_BDT_0.75.root
+* KsKK
+* pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_BDT_0.75.root
+* pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_BDT_0.75.root
+*
+* Old ntuples
+* KsPiPi
+* pathToData_d2kspipi_LL_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/S20rX_withBDT/Reduced_forMassFit/Data_2013_B02DKstar_D2KsPiPi_LL_MagUp_forMassFit_BDT_RDS.root
+* pathToData_d2kspipi_LL_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/S20rX_withBDT/Reduced_forMassFit/Data_2013_B02DKstar_D2KsPiPi_LL_MagDown_forMassFit_BDT_RDS.root
+* pathToData_d2kspipi_DD_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/S20rX_withBDT/Reduced_forMassFit/Data_2013_B02DKstar_D2KsPiPi_DD_MagUp_forMassFit_BDT_RDS.root
+* pathToData_d2kspipi_DD_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/S20rX_withBDT/Reduced_forMassFit/Data_2013_B02DKstar_D2KsPiPi_DD_MagDown_forMassFit_BDT_RDS.root
+*

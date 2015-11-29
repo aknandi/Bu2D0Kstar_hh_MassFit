@@ -1,0 +1,64 @@
+bs_mean 5370
+bs_mean_LimL 5340
+bs_mean_LimU 5420
+bd_mean 5280
+bd_mean_LimL 5240
+bd_mean_LimU 5320
+bs_width 14. 
+bs_width_LimL 0.
+bs_width_LimU 50.
+* m(Bs) - m(Bd) = 5366.77 - 5279.78
+bd_bs_shift 87.19
+*
+* alpha, n, frac obtained from fit to MC -- DOUBLE CRYSTAL BALL
+* Same shape for all categories
+* Obtained from Alexis ANA note v2 (with cos theta* cut)
+bs_alpha1 1.5422
+bs_alpha1_LimL 1.5422
+bs_alpha1_LimU 1.5422
+bs_alpha2 1.6196
+bs_alpha2_LimL 1.6196
+bs_alpha2_LimU 1.6196
+bs_frac1 0.46214
+bs_frac1_LimL 0.46214
+bs_frac1_LimU 0.46214
+bs_n1 2.7836
+bs_n1_LimL 2.7836
+bs_n1_LimU 2.7836
+bs_n2 6.6324
+bs_n2_LimL 6.6324
+bs_n2_LimU 6.6324
+*
+* Obtained from combLLDD, BDTA>0.75, with truth matching
+* bs_alpha1 1.53
+* bs_alpha1_LimL 1.53
+* bs_alpha1_LimU 1.53
+* bs_alpha2 1.63
+* bs_alpha2_LimL 1.63
+* bs_alpha2_LimU 1.63
+* bs_frac1 0.45
+* bs_frac1_LimL 0.45
+* bs_frac1_LimU 0.45
+* bs_n1 2.81
+* bs_n1_LimL 2.81
+* bs_n1_LimU 2.81
+* bs_n2 6.47
+* bs_n2_LimL 6.47
+* bs_n2_LimU 6.47
+*
+* Numbers from BDT>0.7 shape
+* bs_alpha1 1.52
+* bs_alpha1_LimL 1.52
+* bs_alpha1_LimU 1.52
+* bs_alpha2 1.64
+* bs_alpha2_LimL 1.64
+* bs_alpha2_LimU 1.64
+* bs_frac1 0.44
+* bs_frac1_LimL 0.44
+* bs_frac1_LimU 0.44
+* bs_n1 2.67
+* bs_n1_LimL 2.67
+* bs_n1_LimU 2.67
+* bs_n2 6.16
+* bs_n2_LimL 6.16
+* bs_n2_LimU 6.16
