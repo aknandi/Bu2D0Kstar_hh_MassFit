@@ -2,4 +2,7 @@ bin/*
 obj/*
 figs/*
 output/*
+.cproject
+.project
+.svn/*
 *~
