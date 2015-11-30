@@ -1,0 +1,126 @@
+10
+
+dir
+197396
+svn+ssh://svn.cern.ch/reps/lhcb/Erasmus/trunk/Bu2D0H/B02DKstar_Kshh/B02DKstar_Kshh_MassFit
+svn+ssh://svn.cern.ch/reps/lhcb
+
+
+
+2015-11-04T14:10:54.363314Z
+197196
+shcheung
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4525493e-7705-40b1-a816-d608a930855b
+
+Settings
+dir
+
+output
+dir
+
+Inputs
+dir
+
+ToyReading
+dir
+
+scripts
+dir
+
+src
+dir
+
+bin
+dir
+
+figs
+dir
+
+ToyReading_MINOS
+dir
+
+obj
+dir
+
+Makefile
+file
+
+
+
+
+2015-11-10T09:28:56.000000Z
+f0d5e911cc467e31961375cac11df8b7
+2015-06-29T15:14:57.528859Z
+191087
+shcheung
+has-props
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+5272
+
+README
+file
+
+
+
+
+2015-11-10T09:28:56.000000Z
+99da6fdc5e6f31ffadd51ec154944403
+2015-07-30T06:34:41.056708Z
+192812
+shcheung
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+3187
+
