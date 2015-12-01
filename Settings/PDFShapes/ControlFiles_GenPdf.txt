@@ -9,5 +9,4 @@ gen_partreco Settings/PDFShapes/Gen/partrecoFIXED.txt
 * gen_partreco Settings/PDFShapes/Gen/partrecoFIXED.txt
 *
 ** Drho
-gen_drho Settings/PDFShapes/Gen/drho.txt
 gensettings Settings/GeneralSettings.txt

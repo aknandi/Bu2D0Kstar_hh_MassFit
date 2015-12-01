@@ -32,7 +32,7 @@ Model::Model(Settings* genConfs, RooRealVar* pmB, RooCategory* cat, std::vector<
 	
   // Set up yields -- contains the yields for gen and fit pdfs
   Settings* yields_fileList = new Settings("Yields settings");
-  yields_fileList->readPairStringsToMap("Inputs/ControlFiles.txt");
+  yields_fileList->readPairStringsToMap("Settings/Yields/ControlFiles.txt");
   std::string unblind=_genConfs->get("UNBLIND");
   if(_genConfs->get("genToys")=="true") unblind="true"; // if generating toys, don't want to blind
   yields = new Yields(genConfs, yields_fileList,_modeList,_chargeList,_trackList,_runList,unblind);

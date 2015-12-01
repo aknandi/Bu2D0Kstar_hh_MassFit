@@ -1,0 +1,6 @@
+ratio_bs_drho_both_mix_merge 0.0349009
+ratio_bs_drho_both_mix_merge_LimU 0.0349009
+ratio_bs_drho_both_mix_merge_LimL 0.0349009
+ratio_bs_dstkst_both_mix_merge 0.30882
+ratio_bs_dstkst_both_mix_merge_LimU 0.30882
+ratio_bs_dstkst_both_mix_merge_LimL 0.30882

@@ -724,8 +724,8 @@ void Fitting::RunFullFit(bool draw=true)
   std::cout<<" going to draw projections "<<std::endl;
 
   //draw pulls underneath fits?
-  //bool drawpulls = false;
-  bool drawpulls = true;
+  bool drawpulls = false;
+  //bool drawpulls = true;
 
   //create canvases
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++)

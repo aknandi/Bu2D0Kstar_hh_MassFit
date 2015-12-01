@@ -1,56 +1,40 @@
 * Exponential
-d2kspipi_exp_mix_combs_slope -0.005
-d2kspipi_exp_mix_combs_slope_LimL -0.1
-d2kspipi_exp_mix_combs_slope_LimU 0.
-d2kspipi_exp_LL_combs_slope -0.004
-d2kspipi_exp_LL_combs_slope_LimL -1.0
-d2kspipi_exp_LL_combs_slope_LimU 1.0
-d2kspipi_exp_DD_combs_slope -0.004
-d2kspipi_exp_DD_combs_slope_LimL -1.0
-d2kspipi_exp_DD_combs_slope_LimU 1.0
+d2kpi_exp_mix_combs_slope -0.005
+d2kpi_exp_mix_combs_slope_LimL -0.1
+d2kpi_exp_mix_combs_slope_LimU 0.
+d2kpi_exp_LL_combs_slope -0.004
+d2kpi_exp_LL_combs_slope_LimL -1.0
+d2kpi_exp_LL_combs_slope_LimU 1.0
+d2kpi_exp_DD_combs_slope -0.004
+d2kpi_exp_DD_combs_slope_LimL -1.0
+d2kpi_exp_DD_combs_slope_LimU 1.0
 *
-d2kskk_exp_mix_combs_slope -0.003
-d2kskk_exp_mix_combs_slope_LimL -1.0
-d2kskk_exp_mix_combs_slope_LimU 1.0
-d2kskk_exp_LL_combs_slope -0.003
-d2kskk_exp_LL_combs_slope_LimL -1.0
-d2kskk_exp_LL_combs_slope_LimU 1.0
-d2kskk_exp_DD_combs_slope -0.003
-d2kskk_exp_DD_combs_slope_LimL -1.0
-d2kskk_exp_DD_combs_slope_LimU 1.0
+d2kk_exp_mix_combs_slope -0.003
+d2kk_exp_mix_combs_slope_LimL -1.0
+d2kk_exp_mix_combs_slope_LimU 1.0
+d2kk_exp_LL_combs_slope -0.003
+d2kk_exp_LL_combs_slope_LimL -1.0
+d2kk_exp_LL_combs_slope_LimU 1.0
+d2kk_exp_DD_combs_slope -0.003
+d2kk_exp_DD_combs_slope_LimL -1.0
+d2kk_exp_DD_combs_slope_LimU 1.0
 *
-* Linear (Chebychev components range -1,1)
-* d2kspipi_exp_LL_combs_slope -0.004
-* d2kspipi_exp_LL_combs_slope_LimL -0.007
-* d2kspipi_exp_LL_combs_slope_LimU -0.001
-* d2kspipi_exp_DD_combs_slope -0.001
-* d2kspipi_exp_DD_combs_slope_LimL -0.010
-* d2kspipi_exp_DD_combs_slope_LimU -0.0001
+d2pipi_exp_mix_combs_slope -0.003
+d2pipi_exp_mix_combs_slope_LimL -1.0
+d2pipi_exp_mix_combs_slope_LimU 1.0
+d2pipi_exp_LL_combs_slope -0.003
+d2pipi_exp_LL_combs_slope_LimL -1.0
+d2pipi_exp_LL_combs_slope_LimU 1.0
+d2pipi_exp_DD_combs_slope -0.003
+d2pipi_exp_DD_combs_slope_LimL -1.0
+d2pipi_exp_DD_combs_slope_LimU 1.0
 *
-* d2kskk_exp_LL_combs_slope -0.001
-* d2kskk_exp_LL_combs_slope_LimL -0.010
-* d2kskk_exp_LL_combs_slope_LimU -0.0001
-* d2kskk_exp_DD_combs_slope -0.001
-* d2kskk_exp_DD_combs_slope_LimL -0.010
-* d2kskk_exp_DD_combs_slope_LimU -0.0001
-*
-* Double Exponential
-* d2kspipi_LL_dblexp_coef1 -0.002147
-* d2kspipi_LL_dblexp_coef1_LimL -0.002147
-* d2kspipi_LL_dblexp_coef1_LimU -0.002147
-* d2kspipi_LL_dblexp_coef2 -6.88e-4
-* d2kspipi_LL_dblexp_coef2_LimL -6.88e-4
-* d2kspipi_LL_dblexp_coef2_LimU -6.88e-4
-* d2kspipi_LL_dblexp_frac1 1.00
-* d2kspipi_LL_dblexp_frac1_LimL 0.57
-* d2kspipi_LL_dblexp_frac1_LimU 0.57
-*
-* d2kskk_LL_dblexp_coef1 -0.002147
-* d2kskk_LL_dblexp_coef1_LimL -0.002147
-* d2kskk_LL_dblexp_coef1_LimU -0.002147
-* d2kskk_LL_dblexp_coef2 -0.001
-* d2kskk_LL_dblexp_coef2_LimL -0.01
-* d2kskk_LL_dblexp_coef2_LimU 0.0
-* d2kskk_LL_dblexp_frac1 0.57
-* d2kskk_LL_dblexp_frac1_LimL 0.57
-* d2kskk_LL_dblexp_frac1_LimU 0.57
+d2pik_exp_mix_combs_slope -0.003
+d2pik_exp_mix_combs_slope_LimL -1.0
+d2pik_exp_mix_combs_slope_LimU 1.0
+d2pik_exp_LL_combs_slope -0.003
+d2pik_exp_LL_combs_slope_LimL -1.0
+d2pik_exp_LL_combs_slope_LimU 1.0
+d2pik_exp_DD_combs_slope -0.003
+d2pik_exp_DD_combs_slope_LimL -1.0
+d2pik_exp_DD_combs_slope_LimU 1.0

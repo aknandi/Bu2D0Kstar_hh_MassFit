@@ -4,6 +4,6 @@ figs/*
 output/*
 .cproject
 .project
-.svn/*
+.svn/
 .settings/*
 *~
