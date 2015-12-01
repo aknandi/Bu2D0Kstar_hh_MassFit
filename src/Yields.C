@@ -194,7 +194,7 @@ void Yields::SetYieldsGenandFit()
 
           // --- Gen yields ---
           double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bd_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,0,10000);
+          n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,0,10000);
      /*     double N_bs   = input->getD(Form("N_bs_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           n_bs_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0,10000);
           double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;

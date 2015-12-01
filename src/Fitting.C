@@ -79,6 +79,7 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   //RooTrace::verbose(kTRUE);
   //RooTrace::active(kTRUE);
   
+  // Read true/false parameters from GeneralSettings file and convert the string to lower case
   batchMode = _genConfs->get("batchMode");boost::to_lower(batchMode);
   drawProjections = _genConfs->get("drawProjections");boost::to_lower(drawProjections);
   doFit = _genConfs->get("doFit");boost::to_lower(doFit);
@@ -118,8 +119,8 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
 	
   // Create model object and super category from which can be retrieved the fit/gen pdfs
   DefineRooCategories();
-  cat = new RooSuperCategory("cat","mode/charge/track/bin",RooArgSet(mode,charge,track,run));
-  //model = new Model(_genConfs,&mB,cat,modeList,chargeList,trackList,binList);
+  cat = new RooSuperCategory("cat","mode/charge/track/run",RooArgSet(mode,charge,track,run));
+  //model = new Model(_genConfs,&mB,cat,modeList,chargeList,trackList,runList);
   model = new Model(_genConfs,&mB,catNew,modeList,chargeList,trackList,runList);
 
   if(readToys=="true")
@@ -174,6 +175,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2kpi);
   modeList.push_back(d2kk);
   modeList.push_back(d2pipi);
+  modeList.push_back(d2pik);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());
@@ -892,7 +894,7 @@ void Fitting::RunFullFit(bool draw=true)
                   gPad->SetTicks(1, 1);//upper and right-hand ticks
                   //resize pad if drawing pulls (makes pads too small if not drawing pulls)
 //                  if (drawpulls) gPad->SetPad(Form("fit_%s_%s_%s",p->c_str(),t->c_str(),a->c_str()),"",0.5*(p-pidList.begin()),0.3,0.5+0.5*(p-pidList.begin()),1,0,0,-1);
-                  if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.3,1,1,0,0,-1);
+                  if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
 
                 }
               if(*c==plus)
