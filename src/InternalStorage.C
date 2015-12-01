@@ -8,7 +8,7 @@
 //#include "CommonTools.h"
 using namespace std;
 
-void InternalStorage::Initialize(Settings* Input , std::vector<std::string> allmodeList, std::vector<std::string> allchargeList, std::vector<std::string> alltrackList, std::vector<std::string> allbinList)
+void InternalStorage::Initialize(Settings* Input , std::vector<std::string> allmodeList, std::vector<std::string> allchargeList, std::vector<std::string> alltrackList, std::vector<std::string> allrunList)
 {
 
   _Control=Input;
@@ -16,7 +16,7 @@ void InternalStorage::Initialize(Settings* Input , std::vector<std::string> allm
   modeList=allmodeList;
   chargeList = allchargeList;
   trackList=alltrackList;
-  binList=allbinList;
+  runList=allrunList;
 
   
   SetTotals();
@@ -32,7 +32,7 @@ InternalStorage::InternalStorage()
 
 void InternalStorage::SetTotals()
 {
-  std::string filename = _Control->get("PathnameToTotals");
+/*  std::string filename = _Control->get("PathnameToTotals");
 
   Settings totals;
   totals.readPairStringsToMap(filename);
@@ -40,7 +40,7 @@ void InternalStorage::SetTotals()
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
     for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end(); c++){
       for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
-        /*
+
         FracBsInLowMass[*m]["pass"][*c][*t]=totals.getD("FracBsBkgInLowMass_"+(*m)+"_pass_"+(*c)+"_"+(*t));
           std::string SigYield = "Nsignal_"+(*m)+"_"+(*p)+"_"+(*c)+"_"+(*t);
           std::string ComYield = "NComb_"+(*m)+"_"+(*p)+"_"+(*c)+"_"+(*t);
@@ -57,10 +57,10 @@ void InternalStorage::SetTotals()
             TotLowmass[*m][*p][*c][*t]*=100.;
             TotComb[*m][*p][*c][*t]*=100.;
           }
-          */
+
       }
     }
-  }
+  }*/
 }
 
    

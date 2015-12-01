@@ -1,6 +1,10 @@
 * 2013 (2011 + 2012)
 *
 DEBUG_runInHighStatsMode 0
+N_bu_d2kpi_both_mix 63.4
+N_bu_d2kk_both_mix 100.4
+N_bu_d2pipi_both_mix 86.4
+N_bu_d2pik_both_mix 43.4
 N_bd_d2kspipi_both_mix 81.4449
 N_bd_d2kspipi_plus_mix 40.7225
 N_bd_d2kspipi_minus_mix 40.7225

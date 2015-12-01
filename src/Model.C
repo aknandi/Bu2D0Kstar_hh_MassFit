@@ -19,12 +19,12 @@
 #include "RooConstVar.h"
 #include "RooExtendPdf.h"
 
-Model::Model(Settings* genConfs, RooRealVar* pmB, RooCategory* cat, std::vector<std::string> modeList, std::vector<std::string> chargeList, std::vector<std::string> trackList, std::vector<std::string> binList)
+Model::Model(Settings* genConfs, RooRealVar* pmB, RooCategory* cat, std::vector<std::string> modeList, std::vector<std::string> chargeList, std::vector<std::string> trackList, std::vector<std::string> runList)
   : Base()
   , _modeList(modeList)
   , _chargeList(chargeList)
   , _trackList(trackList)
-  , _binList(binList)									 
+  , _runList(runList)
 {  
   _genConfs=genConfs;
   mB=pmB;
@@ -35,13 +35,13 @@ Model::Model(Settings* genConfs, RooRealVar* pmB, RooCategory* cat, std::vector<
   yields_fileList->readPairStringsToMap("Inputs/ControlFiles.txt");
   std::string unblind=_genConfs->get("UNBLIND");
   if(_genConfs->get("genToys")=="true") unblind="true"; // if generating toys, don't want to blind
-  yields = new Yields(genConfs, yields_fileList,_modeList,_chargeList,_trackList,_binList,unblind);
+  yields = new Yields(genConfs, yields_fileList,_modeList,_chargeList,_trackList,_runList,unblind);
 
   // Set up shapes
   Settings* pdf_fit_settings = new Settings("pdf_fit_settings");
   pdf_fit_settings->readPairStringsToMap("Settings/PDFShapes/ControlFiles_FitPdf.txt");
   pdf_fit_settings->readPairStringsToMap("Settings/PDFShapes/ControlFiles_GenPdf.txt");
-  fitPdf = Pdf_Fit(pdf_fit_settings,_genConfs,mB,_modeList,_chargeList,_trackList,_binList,_genConfs->getI("inputTwoStageFitErrors"),_genConfs->get("MCsimfit"));
+  fitPdf = Pdf_Fit(pdf_fit_settings,_genConfs,mB,_modeList,_chargeList,_trackList,_runList,_genConfs->getI("inputTwoStageFitErrors"),_genConfs->get("MCsimfit"));
 }
 
 RooSimultaneous* Model::getGenPdf()
@@ -52,22 +52,22 @@ RooSimultaneous* Model::getGenPdf()
   // Set up shapes
   Settings* pdf_gen_settings = new Settings("pdf_gen_settings");
   pdf_gen_settings->readPairStringsToMap("Settings/PDFShapes/ControlFiles_GenPdf.txt");
-  genPdf = Pdf_Gen(pdf_gen_settings,mB,_modeList,_chargeList,_trackList,_binList);
+  genPdf = Pdf_Gen(pdf_gen_settings,mB,_modeList,_chargeList,_trackList,_runList);
 
   //Add to master PDF
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
-        for(std::vector<std::string>::iterator a=_binList.begin();a!=_binList.end();a++){
+        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           std::string tag=(*m)+underscore+(*c)+underscore+(*t)+underscore+(*a);
 
           RooArgSet pdflist;
           RooArgSet nevents;
 
           // Bd
-          pdflist.add(*(genPdf.roopdf_bd[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bd_gen[*m][*c][*t][*a]));
-          // Bs
+          pdflist.add(*(genPdf.roopdf_bu[*m][*c][*t][*a]));
+          nevents.add(*(yields->n_bu_gen[*m][*c][*t][*a]));
+/*          // Bs
           pdflist.add(*(genPdf.roopdf_bs[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bs_gen[*m][*c][*t][*a]));
           if(_genConfs->get("MCsimfit")!="true") {
@@ -89,7 +89,7 @@ RooSimultaneous* Model::getGenPdf()
               nevents.add(*(yields->n_drho_gen[*m][*c][*t][*a]));
             }
           }
-         
+         */
 
           // --- Print out generated yields ---
           cout << "Generating yields ..." << endl;
@@ -124,16 +124,16 @@ RooSimultaneous* Model::getFitPdf()
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
-        for(std::vector<std::string>::iterator a=_binList.begin();a!=_binList.end();a++){
+        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
 
           std::string tag=(*m)+underscore+(*c)+underscore+(*t)+underscore+(*a);
           RooArgSet pdflist;
           RooArgSet nevents;
 
           // Bd
-          pdflist.add(*(fitPdf.roopdf_bd[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bd_fit[*m][*c][*t][*a]));
-          // Bs
+          pdflist.add(*(fitPdf.roopdf_bu[*m][*c][*t][*a]));
+          nevents.add(*(yields->n_bu_fit[*m][*c][*t][*a]));
+ /*         // Bs
           pdflist.add(*(fitPdf.roopdf_bs[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bs_fit[*m][*c][*t][*a]));
           if(_genConfs->get("MCsimfit")!="true")
@@ -173,7 +173,7 @@ RooSimultaneous* Model::getFitPdf()
                 pdflist.add(*(fitPdf.roopdf_dpipipi[*m][*c][*t][*a]));
                 nevents.add(*(yields->n_dpipipi[*m][*c][*t][*a]));
               }
-            }
+            }*/
           
           // --- No Gaussian Constraints --- 
           //RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
@@ -212,7 +212,7 @@ RooSimultaneous* Model::getFitPdf()
               r_drho_err = 0.010;
             }
 
-            // frac010
+            /*// frac010
             double f010_mean_fit = rand->Gaus(f010_mean,f010_err);
             gaus_f010 = new RooGaussian("gaus_f010","",*(fitPdf.bs_frac010),RooFit::RooConst(f010_mean_fit), RooFit::RooConst(f010_err));
             constpdfset.add(*gaus_f010);
@@ -225,11 +225,11 @@ RooSimultaneous* Model::getFitPdf()
             //RooGaussian* gaus_r_drho = new RooGaussian("gaus_r_drho","",*(yields->ratio_bs_drho[*c][*t][*a]), RooFit::RooConst(r_drho_mean_fit), RooFit::RooConst(r_drho_err));
             //if(_genConfs->get("bd_drho")=="true") constpdfset.add(*gaus_r_drho);
             constpdfset.add(*(yields->gausratio_bs_drho[*c][*t][*a]));
-
+*/
           }
           else
           {
-            // Add gaussian constraint for yields
+/*            // Add gaussian constraint for yields
             if(_genConfs->get("bd_drho")=="true"){
               constpdfset.add(*(yields->gausratio_bs_drho[*c][*t][*a]));
             }
@@ -244,7 +244,7 @@ RooSimultaneous* Model::getFitPdf()
             if(_genConfs->get("bd_dstkst")=="true") constpdfset.add(*(fitPdf.gaus_frac010_bd[*c][*t][*a]));
             if(_genConfs->get("lb_dppi")=="true") constpdfset.add(*(yields->gausratio_bs_lambda[*c][*t][*a]));
             if(_genConfs->get("bu_dkpipi")=="true") constpdfset.add(*(yields->gausratio_bs_dkpipi[*c][*t][*a]));
-            if(_genConfs->get("bu_dpipipi")=="true") constpdfset.add(*(yields->gausratio_bs_dpipipi[*c][*t][*a]));
+            if(_genConfs->get("bu_dpipipi")=="true") constpdfset.add(*(yields->gausratio_bs_dpipipi[*c][*t][*a]));*/
           }
 
           constpdfset.Print("v");
@@ -265,15 +265,15 @@ RooSimultaneous* Model::getFitPdf()
 
 void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high)
 {
-
+/*
   mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
 
   // --- for manual integration of RooKeysPdf ---
-  RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bd_dstkst_integEvents = fitPdf.roopdf_bd_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bs_dstkst_integEvents = fitPdf.roopdf_bs_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  //RooDataSet *bs_dstkst_010_integEvents = fitPdf.roopdf_bs_dstkst_010[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  //RooDataSet *bs_dstkst_001_integEvents = fitPdf.roopdf_bs_dstkst_001[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+  RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+  RooDataSet *bd_dstkst_integEvents = fitPdf.roopdf_bd_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+  RooDataSet *bs_dstkst_integEvents = fitPdf.roopdf_bs_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+  //RooDataSet *bs_dstkst_010_integEvents = fitPdf.roopdf_bs_dstkst_010[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+  //RooDataSet *bs_dstkst_001_integEvents = fitPdf.roopdf_bs_dstkst_001[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
   RooDataSet *lambda_integEvents = 0;
   if(_genConfs->get("lb_dppi")=="true") lambda_integEvents = fitPdf.roopdf_lambda[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
 
@@ -295,7 +295,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
-        for(std::vector<std::string>::iterator a=_binList.begin();a!=_binList.end();a++){
+        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           //////////////////////////////////////////////////////////////////////
           // Integrals in signal window
           //////////////////////////////////////////////////////////////////////
@@ -416,13 +416,14 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
     }
   }
 
-  GenTotals.close();
+  GenTotals.close();*/
 
 }
 /*
 void Model::printYields()
 {
    
+
 
   // need to integrate RooKeysPdf manually
   RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
@@ -434,7 +435,7 @@ void Model::printYields()
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
-        for(std::vector<std::string>::iterator a=_binList.begin();a!=_binList.end();a++){
+        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           //////////////////////////////////////////////////////////////////////
           // Write out yields to text files
           //////////////////////////////////////////////////////////////////////

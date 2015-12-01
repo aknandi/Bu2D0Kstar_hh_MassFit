@@ -57,18 +57,18 @@ class Fitting : public Base
   RooRealVar bid;
   RooRealVar bach_dll;
   RooRealVar assignedCharge;
-  RooRealVar dalitzm2_plus;
-  RooRealVar dalitzm2_minus;
-  RooRealVar DalitzBinNumber_equal;
-  RooRealVar DalitzBinNumber_optimal;
-  RooRealVar DalitzBinNumber_modopt;
-  RooRealVar DalitzBinNumber;
+//  RooRealVar dalitzm2_plus;
+//  RooRealVar dalitzm2_minus;
+//  RooRealVar DalitzBinNumber_equal;
+//  RooRealVar DalitzBinNumber_optimal;
+//  RooRealVar DalitzBinNumber_modopt;
+//  RooRealVar DalitzBinNumber;
   RooRealVar BDTGresponse;
 
   RooSuperCategory* cat;	
   RooCategory* catNew;
   RooCategory mode;
-  RooCategory bin;
+  RooCategory run;
   RooCategory charge;
   RooCategory track;
   
@@ -83,7 +83,7 @@ class Fitting : public Base
   std::vector<std::string> modeList;
   std::vector<std::string> chargeList;
   std::vector<std::string> trackList;
-  std::vector<std::string> binList;
+  std::vector<std::string> runList;
 	
   std::map<std::string,std::map<std::string,std::map<std::string,std::map<std::string,string> > > > title;
   std::map<std::string,std::map<std::string,int> > nVeto;

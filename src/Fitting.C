@@ -55,14 +55,14 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   , assignedCharge("KstK_Q","KstK charge",-1,1.0)
   //, dalitzm2_plus("m2_D0constKS0constPVconst_Ks_dauPlus", "m2(K_{S}^{0} #pi^{+})",0.0,3.2)
   //, dalitzm2_minus("m2_D0constKS0constPVconst_Ks_dauMinus", "m2(K_{S}^{0} #pi^{-})",0.0,3.2)
-  , DalitzBinNumber_equal("B0_D0constKS0constPVconst_Bin_KsPiPi_equal","Equal phase binning",-8,8)
-  , DalitzBinNumber_optimal("B0_D0constKS0constPVconst_Bin_KsPiPi_optimal", "Optimal KsPiPi binning",-8,8)
-  , DalitzBinNumber_modopt("B0_D0constKS0constPVconst_Bin_KsPiPi_modopt","Modified optimal binning",-8,8)
-  , DalitzBinNumber("Bin_KsKK_2bins", "Equal KsKK binning", -2, 2)
+//  , DalitzBinNumber_equal("B0_D0constKS0constPVconst_Bin_KsPiPi_equal","Equal phase binning",-8,8)
+//  , DalitzBinNumber_optimal("B0_D0constKS0constPVconst_Bin_KsPiPi_optimal", "Optimal KsPiPi binning",-8,8)
+//  , DalitzBinNumber_modopt("B0_D0constKS0constPVconst_Bin_KsPiPi_modopt","Modified optimal binning",-8,8)
+//  , DalitzBinNumber("Bin_KsKK_2bins", "Equal KsKK binning", -2, 2)
   , BDTGresponse("BDT","BDT",0.7,1)
   , mode("mode","D^{0} decay mode")
-  , bin("bin","Dalitz Bin")
-  , charge("charge","batchelor charge")
+  , run("run","Data set")
+  , charge("charge","bachelor charge")
   , track("track","Ks daughters' track type")
   , _genConfs(genConfs)
   , batchMode()
@@ -118,9 +118,9 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
 	
   // Create model object and super category from which can be retrieved the fit/gen pdfs
   DefineRooCategories();
-  cat = new RooSuperCategory("cat","mode/charge/track/bin",RooArgSet(mode,charge,track,bin));
+  cat = new RooSuperCategory("cat","mode/charge/track/bin",RooArgSet(mode,charge,track,run));
   //model = new Model(_genConfs,&mB,cat,modeList,chargeList,trackList,binList);
-  model = new Model(_genConfs,&mB,catNew,modeList,chargeList,trackList,binList);
+  model = new Model(_genConfs,&mB,catNew,modeList,chargeList,trackList,runList);
 
   if(readToys=="true")
     {
@@ -171,8 +171,9 @@ void Fitting::DefineRooCategories()
   // Define categories. In each case push back into a list (to loop over) and define a new 'type' in that RooCategory.
   
   // Define mode category
-  modeList.push_back(d2kspipi);
-  modeList.push_back(d2kskk);
+  modeList.push_back(d2kpi);
+  modeList.push_back(d2kk);
+  modeList.push_back(d2pipi);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());
@@ -194,18 +195,20 @@ void Fitting::DefineRooCategories()
   trackList.push_back(mix);
   track.defineType(mix.c_str());
 
+  runList.push_back(all);
+  run.defineType(all.c_str());
   // Define bin categories - could be all separated binm1,binm2 etc or merge
-  if(_genConfs->getI("numBinsToUse")==0) { // set 0 to define one bin across Dalitz space
-    binList.push_back("merge");
-    bin.defineType("merge");
-  }
-  else { // want to define bins either side of the symmetry axis
-    for(int i=-1*_genConfs->getI("numBinsToUse");i<=_genConfs->getI("numBinsToUse");i++) {
-      if(i==0)continue;
-      binList.push_back(bins[i]);
-      bin.defineType(bins[i].c_str());
-    }
-  }
+//  if(_genConfs->getI("numBinsToUse")==0) { // set 0 to define one bin across Dalitz space
+//    binList.push_back("merge");
+//    bin.defineType("merge");
+//  }
+//  else { // want to define bins either side of the symmetry axis
+//    for(int i=-1*_genConfs->getI("numBinsToUse");i<=_genConfs->getI("numBinsToUse");i++) {
+//      if(i==0)continue;
+//      binList.push_back(bins[i]);
+//      bin.defineType(bins[i].c_str());
+//    }
+//  }
 
   catNew = new RooCategory("catNew", "catNew");
   std::string catNewLabel;
@@ -213,7 +216,7 @@ void Fitting::DefineRooCategories()
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++) {
     for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++) {
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
-        for(std::vector<std::string>::iterator b=binList.begin();b!=binList.end();b++) {
+        for(std::vector<std::string>::iterator b=runList.begin();b!=runList.end();b++) {
            catNewLabel = *m + "_" + *c + "_" + *t + "_" + *b;
            catNew->defineType(catNewLabel.c_str());
         }
@@ -225,7 +228,7 @@ void Fitting::DefineRooCategories()
   reducedlist.add(BDTGresponse);
   //RooRealVars created above
   reducedlist.add(mode);
-  reducedlist.add(bin);
+  reducedlist.add(run);
   reducedlist.add(charge);
   reducedlist.add(track);
   reducedlist.add(*catNew);
@@ -256,7 +259,7 @@ void Fitting::DefineRooCategories()
 
 int Fitting::LoadDataSet()
 {
-  cout << "Reached LoadDataSet" << endl;
+/*  cout << "Reached LoadDataSet" << endl;
   // Get paths to data
   Settings dataSettings("Data settings");
   dataSettings.readPairStringsToMap(_genConfs->get("dataSetLists"));
@@ -308,14 +311,14 @@ int Fitting::LoadDataSet()
   cout << "DataSetSize: " << data->numEntries() << endl;
   std::cout << "Printing dataset: " << std::endl;
   data->Print("v");
-  std::cout << std::endl;
+  std::cout << std::endl;*/
   return 0;
 }
 
 //version passed a TTree
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, TTree* tree) //, TH2F &_h_diagnose)
 {
-  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
+/*  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
   // Need to exclude events falling outside the D0 phasespace. Do this on the basis of the binning histograms (depending on the binning, this *could* be different
   // Note this routine just reads the file names; it doesn't open the actual binning histograms (which can be found in Bu2D0H_KSHH_BinnedFit2013)
   TString exclusionString;
@@ -398,13 +401,13 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
     }
   
   input->merge(extra);
-  return input;
+  return input;*/
 }
 
 //version passed a RooDataSet
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, RooDataSet* DS)
 {
-  if (!DS)
+/*  if (!DS)
     {
       std::cout << "\n THE DATASET IS A ZERO POINTER IN " << s_mode << " " << s_track << std::endl;
       return 0;
@@ -473,7 +476,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
     }
   
   input->merge(extra);
-  return input;
+  return input;*/
 }
 
 
@@ -485,12 +488,12 @@ void Fitting::PrintDataSet(bool verbose)
         {
           const RooArgSet *row = data->get(i);
           RooRealVar*  v1 = (RooRealVar*)  row->find(mB.GetName());
-          RooCategory* c0 = (RooCategory*) row->find("bin");
+          RooCategory* c0 = (RooCategory*) row->find("run");
           RooCategory* c1 = (RooCategory*) row->find("track");
           RooCategory* c2 = (RooCategory*) row->find("charge");
           RooCategory* c3 = (RooCategory*) row->find("mode");
      
-          std::cout <<"bin "<<c0->getLabel()<<", "<<", "<<c1->getLabel()<<": "<<c2->getLabel()<<" "
+          std::cout <<"run "<<c0->getLabel()<<", "<<", "<<c1->getLabel()<<": "<<c2->getLabel()<<" "
                     <<"\t mB="<<v1->getVal()<<"\t "<<c3->getLabel()<<"   "<<std::endl;
         }
     }
@@ -731,7 +734,7 @@ void Fitting::RunFullFit(bool draw=true)
       std::map< std::string, std::map<std::string, TCanvas* > > v_canRes;
       std::map< std::string, std::map<std::string, TCanvas* > > v_canvaslog;
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
-        for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++) {
+        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
           TCanvas* canvas=new TCanvas(Form("canvas_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),
                                       30,30,(chargeList.size()*500),350);
 
@@ -763,7 +766,7 @@ void Fitting::RunFullFit(bool draw=true)
       //draw each fit
       for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
         for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++){
+          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
             int numbins=40;
             plot[*c][*t][*a] = mB.frame(RooFit::Bins(numbins));
             //cat->setLabel(Form("{%s;%s;%s;%s}",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str()));
@@ -1069,7 +1072,7 @@ void Fitting::RunFullFit(bool draw=true)
       //fonts and y-axis minimum
       for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
         for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++){
+          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
             plot[*c][*t][*a]->SetTitleFont(132,"X"); plot[*c][*t][*a]->SetLabelFont(132,"X");
             plot[*c][*t][*a]->SetTitleFont(132,"Y"); plot[*c][*t][*a]->SetLabelFont(132,"Y");
             if(_genConfs->get("setLogScale")=="true") plot[*c][*t][*a]->SetMinimum(0.100001);
@@ -1080,7 +1083,7 @@ void Fitting::RunFullFit(bool draw=true)
     
       //save plots
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-        for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++){
+        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
           if(_genConfs->get("setLogScale")=="true")
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvas[*t][*a]->GetName()));
@@ -1111,14 +1114,14 @@ void Fitting::RunFullFit(bool draw=true)
       //fonts and y-axis minimum
       for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
         for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++){
+          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
             //plot[*c][*t][*a]->SetMinimum(0.100001);
             plot[*c][*t][*a]->SetMinimum(0.001);
           }
         }
       }
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-        for(std::vector<std::string>::iterator a=binList.begin();a!=binList.end();a++){
+        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvaslog[*t][*a]->GetName()));
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvaslog[*t][*a]->GetName()));
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvaslog[*t][*a]->GetName()));
@@ -1234,7 +1237,7 @@ void Fitting::NewOrderToys(int n)
   RooAbsPdf* genPdf = model->getGenPdf();
   RooAbsPdf* fitPdf = model->getFitPdf();
   RooAbsPdf* sim_template = (RooAbsPdf*)fitPdf->Clone("Copy of the initial state of the simultaneous pdf");
-  RooArgSet* fittedPars = sim_template->getParameters(RooArgSet(mB,mode,charge,track,bin));
+  RooArgSet* fittedPars = sim_template->getParameters(RooArgSet(mB,mode,charge,track,run));
   RooArgSet* frozen = (RooArgSet*) fittedPars->snapshot(kTRUE); 
 
   //from here i should save the fitPdf state  
@@ -1318,7 +1321,7 @@ void Fitting::NewOrderToys(int n)
       if(_genConfs->get("fixedGC")=="false") toyFitPdf = model->getFitPdf();  // back in the for loop because GC's implemented here
 
       // Reset fit params to defaults (not the last fit result)
-      RooArgSet* initialPars= toyFitPdf->getParameters(RooArgSet(mB,mode,charge,track,bin));
+      RooArgSet* initialPars= toyFitPdf->getParameters(RooArgSet(mB,mode,charge,track,run));
       TIterator* initialIter= initialPars->createIterator();
       TObject* initialObj;  TObject* fittedObj;
       while((initialObj=initialIter->Next())) {

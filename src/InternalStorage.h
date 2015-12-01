@@ -21,7 +21,7 @@ class InternalStorage
 {
  public:
 
-  void Initialize(Settings* Input , std::vector<std::string> allmodeList ,  std::vector<std::string> allChargeList, std::vector<std::string> alltrackList, std::vector<std::string> allbinList);
+  void Initialize(Settings* Input , std::vector<std::string> allmodeList ,  std::vector<std::string> allChargeList, std::vector<std::string> alltrackList, std::vector<std::string> allrunList);
 
   InternalStorage();
 
@@ -55,7 +55,7 @@ class InternalStorage
   std::vector<std::string> modeList;
   std::vector<std::string> chargeList;
   std::vector<std::string> trackList;
-  std::vector<std::string> binList;
+  std::vector<std::string> runList;
 
 };
 #endif

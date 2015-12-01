@@ -5,4 +5,5 @@ output/*
 .cproject
 .project
 .svn/*
+.settings/*
 *~

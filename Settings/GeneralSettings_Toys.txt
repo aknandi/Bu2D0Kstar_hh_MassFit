@@ -9,8 +9,8 @@ fit_limit_low 5200
 fit_limit_high 5800
 *
 * PDFS
-bd_drho true
-bs_dstkst true
+bd_drho false
+bs_dstkst false
 bd_dstkst false
 bu_dkpipi false 
 bu_dpipipi false
@@ -44,7 +44,7 @@ binningHistName_KsKK binningHistograms/KsKK_2bins.root
 *
 * SYSTEMATICS - set to zero if you don't want to run
 inputTwoStageFitErrors 0
-makeCorrelationMatrix true
+makeCorrelationMatrix false
 cisishiftsyst 0
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should
 * be 'false' for data)

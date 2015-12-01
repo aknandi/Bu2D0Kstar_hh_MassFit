@@ -45,7 +45,7 @@ class Model : public Base
   std::vector<std::string> _modeList;
   std::vector<std::string> _chargeList;
   std::vector<std::string> _trackList;
-  std::vector<std::string> _binList;
+  std::vector<std::string> _runList;
   
 };
 

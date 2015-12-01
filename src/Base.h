@@ -13,17 +13,19 @@ class Base
   Base(); 
   virtual ~Base( ){}
  protected:
-  std::string d2kspipi;
-  std::string d2kskk;
   std::string d2kpi;
+  std::string d2kk;
+  std::string d2pipi;
+  std::string d2pik;
   std::string minus;
   std::string plus;
   std::string both;
   std::string LL;
   std::string DD;
   std::string mix;
-  std::map< int, std::string > bins;
-  int numBinsToUse;
+  std::string run1;
+  std::string run2;
+  std::string all;
   std::string merge;
   std::string separate;
   std::string slash;
