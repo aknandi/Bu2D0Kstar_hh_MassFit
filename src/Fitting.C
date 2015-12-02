@@ -556,6 +556,7 @@ void Fitting::RunFullFit(bool draw=true)
       ////, RooFit::Hesse(false), RooFit::InitialHesse(true));//,RooFit::Strategy(0),RooFit::PrintLevel(1),RooFit::Warnings(true));
 
       std::cout << "End fitTo" << std::endl;
+/*
    
       // Get mean in order to calculate yields and purities in Bd, Bs region
       RooArgList allPars = result->floatParsFinal();
@@ -572,6 +573,7 @@ void Fitting::RunFullFit(bool draw=true)
       model->printYieldsAndPurities("full",integ_limit_low,integ_limit_high);
       model->printYieldsAndPurities("binnedfit",5200,5800);
 
+*/
 
       std::cout <<"\n-------- FULL FIT, ALL FLOATING ---------"<< std::endl;
       std::cout <<"\n-------- minNLL = " << double(result->minNll()) << std::endl;
@@ -637,7 +639,7 @@ void Fitting::RunFullFit(bool draw=true)
 
       //a lot of the below is not used any more and may need to be updated
 
-      // parameter files:
+/*      // parameter files:
       ofstream parFile_combs("output/combsFIXED.txt");
       ifstream parFileTemplate_combs("output/combs_template.txt");
       ofstream parFile_signal("output/signalFIXED.txt");
@@ -713,7 +715,7 @@ void Fitting::RunFullFit(bool draw=true)
       std::cout << "result->floatParsFinal().getSize() is " << result->floatParsFinal().getSize() << std::endl;
       
       parFile_allvals.close();
-      parFile_allerrs.close();
+      parFile_allerrs.close();*/
 
     } // end of doFit = true
 

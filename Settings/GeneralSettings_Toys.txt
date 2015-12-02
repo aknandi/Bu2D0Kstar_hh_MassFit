@@ -1,5 +1,5 @@
-doFit false
-drawProjections false
+doFit true
+drawProjections true
 *
 * INTEGRATION RANGES
 integ_range_low 25
@@ -9,20 +9,16 @@ fit_limit_low 4900
 fit_limit_high 5600
 *
 * PDFS
-bd_drho false
-bs_dstkst false
+bd_drho true
+bs_dstkst true
 bd_dstkst false
-bu_dkpipi false 
+bu_dkpipi false
 bu_dpipipi false
 lb_dppi false
 *
-binned 0
 batchMode true 
 setLogScale false
 doMinosErrors_xy false
-*
-* set numBinsToUse to 0 for putting whole Dalitz space into one bin
-numBinsToUse 0  
 *
 * TOYS
 startSeed 100
@@ -38,9 +34,6 @@ OutputFileNameAndLOC TOYS/test/PlotFile.root
 *
 * DATA
 dataSetLists Settings/DataSets.txt
-* Dalitz Binnings
-binningHistName binningHistograms/dkpp_blur.root
-binningHistName_KsKK binningHistograms/KsKK_2bins.root
 *
 * SYSTEMATICS - set to zero if you don't want to run
 inputTwoStageFitErrors 0

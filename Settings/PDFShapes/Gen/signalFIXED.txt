@@ -1,7 +1,7 @@
 bu_mean 5279
 bu_mean_LimL 5270
 bu_mean_LimU 5288
-bu_width 3.0
+bu_width 15.0
 bu_width_LimL 0.0
 bu_width_LimU 20.0
 d2kpi_bu_mix_gaussian_mean 5279
