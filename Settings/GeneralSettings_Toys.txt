@@ -26,7 +26,6 @@ nToys 1
 genToys true
 readToys false
 readData false
-fixedGC true
 * refreshQuickDataSet true
 numCPUsToUse 1
 toyLocation TOYS/test/
@@ -38,7 +37,6 @@ dataSetLists Settings/DataSets.txt
 * SYSTEMATICS - set to zero if you don't want to run
 inputTwoStageFitErrors 0
 makeCorrelationMatrix false
-cisishiftsyst 0
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should
 * be 'false' for data)
 MCsimfit false

@@ -182,13 +182,13 @@ RooSimultaneous* Model::getFitPdf()
           RooAddPdf* addpdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
           RooArgSet constpdfset(*addpdf);
 
-          if(_genConfs->get("genToys")=="true" && _genConfs->get("fixedGC")=="false")
+          if(_genConfs->get("genToys")=="true")
           {
             int seed = _genConfs->getD("startSeed");
             TRandom3* rand = new TRandom3();
             rand->SetSeed(seed*2);
 
-            // Set up sampling Gaussians to fit toys
+/*            // Set up sampling Gaussians to fit toys
             double f010_mean(0.), f010_err(0.);
             double r_dstkst_mean(0.), r_dstkst_err(0.);
             double r_drho_mean(0.), r_drho_err(0.);
@@ -210,7 +210,7 @@ RooSimultaneous* Model::getFitPdf()
               r_dstkst_err = 0.29;
               r_drho_mean = 0.035;
               r_drho_err = 0.010;
-            }
+            }*/
 
             /*// frac010
             double f010_mean_fit = rand->Gaus(f010_mean,f010_err);

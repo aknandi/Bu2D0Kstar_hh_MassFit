@@ -1,11 +1,24 @@
 ** Data sets **
 * 
+pathToData_d2kpi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
+pathToData_d2kk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
+pathToData_d2pipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
+pathToData_d2pik_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
+pathToData_d2kpi_LL_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
+pathToData_d2kk_LL_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
+pathToData_d2pipi_LL_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
+pathToData_d2pik_LL_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
+pathToData_d2kpi_DD_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
+pathToData_d2kk_DD_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
+pathToData_d2pipi_DD_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
+pathToData_d2pik_DD_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
+*
 ** BDT > 0.75, DD and LL merged,  (DEFAULT)
 ** no DK veto, abs(CosThetaK*) > 0.4, m(K*) fixed, Ks FDsig cut
-pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
-pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
-pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
-pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
+*pathToData_d2kspipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
+*pathToData_d2kspipi_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
+*pathToData_d2kskk_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root
+*pathToData_d2kskk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstKK_Final_0.75.root
 *
 ** BDT > 0.75, abs(CosThetaK*) > 0.4  ** 
 * KsPiPi 

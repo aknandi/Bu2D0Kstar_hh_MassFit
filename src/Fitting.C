@@ -53,12 +53,6 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   , reducedlist("reduced content")
   , mB("B0_PVFit_M","m(B)",genConfs->getD("fit_limit_low"),genConfs->getD("fit_limit_high"),"MeV/c^{2}")
   , assignedCharge("KstK_Q","KstK charge",-1,1.0)
-  //, dalitzm2_plus("m2_D0constKS0constPVconst_Ks_dauPlus", "m2(K_{S}^{0} #pi^{+})",0.0,3.2)
-  //, dalitzm2_minus("m2_D0constKS0constPVconst_Ks_dauMinus", "m2(K_{S}^{0} #pi^{-})",0.0,3.2)
-//  , DalitzBinNumber_equal("B0_D0constKS0constPVconst_Bin_KsPiPi_equal","Equal phase binning",-8,8)
-//  , DalitzBinNumber_optimal("B0_D0constKS0constPVconst_Bin_KsPiPi_optimal", "Optimal KsPiPi binning",-8,8)
-//  , DalitzBinNumber_modopt("B0_D0constKS0constPVconst_Bin_KsPiPi_modopt","Modified optimal binning",-8,8)
-//  , DalitzBinNumber("Bin_KsKK_2bins", "Equal KsKK binning", -2, 2)
   , BDTGresponse("BDT","BDT",0.7,1)
   , mode("mode","D^{0} decay mode")
   , run("run","Data set")
@@ -134,7 +128,6 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
           if(_genConfs->getI("nToys")==1)
             {
               OrderToys(1);
-              cout << "DB1" << endl;
               PrintDataSet(false);
               RunFullFit(true);
             }
@@ -199,18 +192,6 @@ void Fitting::DefineRooCategories()
 
   runList.push_back(all);
   run.defineType(all.c_str());
-  // Define bin categories - could be all separated binm1,binm2 etc or merge
-//  if(_genConfs->getI("numBinsToUse")==0) { // set 0 to define one bin across Dalitz space
-//    binList.push_back("merge");
-//    bin.defineType("merge");
-//  }
-//  else { // want to define bins either side of the symmetry axis
-//    for(int i=-1*_genConfs->getI("numBinsToUse");i<=_genConfs->getI("numBinsToUse");i++) {
-//      if(i==0)continue;
-//      binList.push_back(bins[i]);
-//      bin.defineType(bins[i].c_str());
-//    }
-//  }
 
   catNew = new RooCategory("catNew", "catNew");
   std::string catNewLabel;
@@ -238,12 +219,6 @@ void Fitting::DefineRooCategories()
   if(_genConfs->get("MCsimfit")!="true")
     {
       //inputlist.add(assignedCharge);
-      //inputlist.add(dalitzm2_plus);
-      //inputlist.add(dalitzm2_minus);
-      //inputlist.add(DalitzBinNumber_equal);
-      //inputlist.add(DalitzBinNumber_optimal);
-      //inputlist.add(DalitzBinNumber_modopt);
-      //inputlist.add(DalitzBinNumber);
     }
   fulllist.add(reducedlist);  
   fulllist.add(inputlist);
@@ -261,7 +236,7 @@ void Fitting::DefineRooCategories()
 
 int Fitting::LoadDataSet()
 {
-/*  cout << "Reached LoadDataSet" << endl;
+  cout << "Reached LoadDataSet" << endl;
   // Get paths to data
   Settings dataSettings("Data settings");
   dataSettings.readPairStringsToMap(_genConfs->get("dataSetLists"));
@@ -308,23 +283,24 @@ int Fitting::LoadDataSet()
       tfile_11->Close();
 
      }
+
   }
   
   cout << "DataSetSize: " << data->numEntries() << endl;
   std::cout << "Printing dataset: " << std::endl;
   data->Print("v");
-  std::cout << std::endl;*/
+  std::cout << std::endl;
   return 0;
 }
 
 //version passed a TTree
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, TTree* tree) //, TH2F &_h_diagnose)
 {
-/*  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
+  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
   // Need to exclude events falling outside the D0 phasespace. Do this on the basis of the binning histograms (depending on the binning, this *could* be different
   // Note this routine just reads the file names; it doesn't open the actual binning histograms (which can be found in Bu2D0H_KSHH_BinnedFit2013)
   TString exclusionString;
-  TString histName;
+/*  TString histName;
   if (s_mode == "d2kspipi")
     {
       histName = _genConfs->get("binningHistName");
@@ -353,7 +329,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
     }
   if (_genConfs->get("MCsimfit") == "true") exclusionString = "";
 
-  std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl;
+  std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl; */
   std::string masscut = "B0_PVFit_M[0] > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M[0] <" + _genConfs->get("fit_limit_high");
   //exclusionString += masscut;
   exclusionString = masscut;
@@ -381,7 +357,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   RooDataSet *input = new RooDataSet(Form("%s_%s",s_mode.c_str(),s_track.c_str()),
                                      Form("Final %s %s",s_mode.c_str(),s_track.c_str()),
                                      (TTree*)newtree,inputlist); //,exclusionString);
-  RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,bin,track,charge,*catNew));
+  RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,run,track,charge,*catNew));
   
   // Now loop over the entries in the dataset and make sure all the types are assigned 
   int numEntries = input->numEntries();
@@ -391,25 +367,25 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
   charge.setLabel(both.c_str());
-  bin.setLabel("merge");
-  RooArgSet datadetails(mode, bin, track, charge, *catNew);
+  run.setLabel("all");
+  RooArgSet datadetails(mode, run, track, charge, *catNew);
 
   std::string catNewLabel;
   for(int i = 0; i < input->numEntries(); i++)
     {
-      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "merge";
+      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "all";
       catNew->setLabel(catNewLabel.c_str());
       extra->add(datadetails);
     }
   
   input->merge(extra);
-  return input;*/
+  return input;
 }
 
 //version passed a RooDataSet
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, RooDataSet* DS)
 {
-/*  if (!DS)
+  if (!DS)
     {
       std::cout << "\n THE DATASET IS A ZERO POINTER IN " << s_mode << " " << s_track << std::endl;
       return 0;
@@ -418,7 +394,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   // Need to exclude events falling outside the D0 phasespace. Do this on the basis of the binning histograms (depending on the binning, this *could* be different
   // Note this routine just reads the file names; it doesn't open the actual binning histograms (which can be found in Bu2D0H_KSHH_BinnedFit2013)
   TString exclusionString;
-  TString histName;
+/*  TString histName;
   if (s_mode == "d2kspipi")
     {
       histName = _genConfs->get("binningHistName");
@@ -448,7 +424,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   if (_genConfs->get("MCsimfit") == "true") exclusionString = "";
 
   std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl;
-  std::cout << "AND CHECK FINALDATASET() FOR TREES" << std::endl;
+  std::cout << "AND CHECK FINALDATASET() FOR TREES" << std::endl; */
   std::string masscut = "B0_PVFit_M > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M<" + _genConfs->get("fit_limit_high");
   //exclusionString += masscut;
   exclusionString = masscut;
@@ -462,23 +438,23 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   std::cout << "Number of entries after exclusion: " << numEntries << std::endl;
   
   // Now loop over the entries in the dataset and make sure all the types are assigned 
-  RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,bin,track,charge,*catNew));
+  RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,run,track,charge,*catNew));
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
   charge.setLabel(both.c_str());
-  bin.setLabel("merge");
-  RooArgSet datadetails(mode, bin, track, charge, *catNew);
+  run.setLabel("all");
+  RooArgSet datadetails(mode, run, track, charge, *catNew);
   
   std::string catNewLabel;
   for(int i = 0; i < input->numEntries(); i++)
     {
-      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "merge";
+      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "all";
       catNew->setLabel(catNewLabel.c_str());
       extra->add(datadetails);
     }
   
   input->merge(extra);
-  return input;*/
+  return input;
 }
 
 
@@ -520,7 +496,6 @@ void Fitting::RunFullFit(bool draw=true)
 
   std::cout << "Fixed parameters" << std::endl;
   std::vector <RooRealVar*> *fixedParams = model->GetFixedParameters();
-  std::cout << "hello" << std::endl;
   //create new RooRealVars
   //this is necessary because saving the default RooRealVars somehow pulls along the PDF dependencies and RooFit complains
   RooArgList fixedVars;
@@ -793,7 +768,7 @@ void Fitting::RunFullFit(bool draw=true)
               if(v_canRes[*t][*a]) {
                 hresid = plot[*c][*t][*a]->pullHist(); hresid->GetYaxis()->SetNdivisions(515);hresid->setYAxisLimits(-5,5);
               }
-              //Bd - Double CB
+/*              //Bd - Double CB
               std::cout<<" plotting Bd "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("DoubleCrystalBall_%s_bd_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
@@ -810,13 +785,7 @@ void Fitting::RunFullFit(bool draw=true)
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
                            RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3) );
-              /*
-              //Bs ->D*K*
-              std::cout<<" plotting Bs -> D*K*  "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("PartRecoDstKst_%s_bs_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3)  );
-              */
+
               //Bs -> D*K* - regexp to pick up also version split by helamp
               std::cout<<" plotting Bs -> D*K*  "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
@@ -826,42 +795,13 @@ void Fitting::RunFullFit(bool draw=true)
                            //),
                            RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3)  );
 
-              //Drho
-              std::cout<<" plotting Bd -> D0rho0 "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           //RooFit::Components(Form("KeysPdf_%s_drho_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::Components(Form("DoubleCrystalBall_%s_drho_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kGreen), RooFit::LineWidth(3)  );
-
               //Bd -> D*K*  
               if(_genConfs->get("bd_dstkst")=="true"){ 
               std::cout<<" plotting Bd -> D*K* "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("PartRecoDstKst_%s_bd_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
                            RooFit::LineStyle(kDashed),RooFit::LineColor(kRed), RooFit::LineWidth(3)  );
-              }
-              //LbDppi
-              if(_genConfs->get("lb_dppi")=="true"){ 
-              std::cout<<" plotting Lb -> D0ppi "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("Lambda_%s_lambda_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kViolet), RooFit::LineWidth(3)  );
-              }
-              //DKpipi
-              if(_genConfs->get("bu_dkpipi")=="true"){ 
-              std::cout<<" plotting Bu -> D0Kpipi "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("KeysPdf_%s_dkpipi_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kOrange), RooFit::LineWidth(3)  );
-              }
-              //Dpipipi
-              if(_genConfs->get("bu_dkpipi")=="true"){ 
-              std::cout<<" plotting Bu -> D0pipipi "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("KeysPdf_%s_dpipipi_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kDashed),RooFit::LineColor(kOrange), RooFit::LineWidth(3)  );
-              }
+              }*/
 
               //plot total PDF again
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
@@ -1170,7 +1110,7 @@ void Fitting::OrderToys(int n)
 {
   RooAbsPdf* genPdf = model->getGenPdf();
   RooAbsPdf* fitPdf = model->getFitPdf();
-  bool DB=false;
+  bool DB=false; // Switch on debug mode, more verbose output
   RooMsgService::instance().setGlobalKillBelow(RooFit::ERROR);
   
   RooMCStudy* mcstudy = new RooMCStudy(*genPdf,reducedlist,RooFit::FitModel(*fitPdf),RooFit::FitOptions(RooFit::Save(true),RooFit::Extended(true),RooFit::NumCPU(_genConfs->getI("numCPUsToUse")),RooFit::PrintLevel(DB?1:-1)));
@@ -1315,14 +1255,13 @@ void Fitting::NewOrderToys(int n)
   }
   else{
     RooAbsPdf * toyFitPdf = 0; 
-    if(_genConfs->get("fixedGC")=="true") toyFitPdf=model->getFitPdf();
     RooFitResult* result = 0;
 
     for(int i=0; i<n; i++){
       std::cout<<" I'm going to generate the " << i << "th toy data set and fit pdf!" << std::endl;
 
       RooAbsData* toyData = (RooAbsData*)mcstudy->genData(i);
-      if(_genConfs->get("fixedGC")=="false") toyFitPdf = model->getFitPdf();  // back in the for loop because GC's implemented here
+      toyFitPdf = model->getFitPdf();  // back in the for loop because GC's implemented here
 
       // Reset fit params to defaults (not the last fit result)
       RooArgSet* initialPars= toyFitPdf->getParameters(RooArgSet(mB,mode,charge,track,run));
@@ -1399,12 +1338,12 @@ void Fitting::NewOrderToys(int n)
 
       if(i==0) {
         std::cout << "Now making a plot" << std::endl;
-        catNew->setLabel(Form("%s_%s_%s_%s","d2kspipi","both","mix","merge"));
+        catNew->setLabel(Form("%s_%s_%s_%s","d2kpi","both","mix","all"));
 
         RooPlot* frame = mB.frame(RooFit::Bins(40));
         toyData->plotOn(frame,RooFit::Cut(Form("catNew==catNew::%s_%s_%s_%s",
-                                               "d2kspipi","both","mix","merge")));
-                                               //"d2kspipi","both","DD","merge")));
+                                               "d2kpi","both","mix","all")));
+                                               //"d2kpi","both","DD","all")));
         toyFitPdf->plotOn(frame,RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*toyData));
         TCanvas* ctoy = new TCanvas("ctoy","",1000,700);
         frame->Draw();
@@ -1416,11 +1355,11 @@ void Fitting::NewOrderToys(int n)
       }/*
       if(i==0) {
         std::cout << "Now making a plot" << std::endl;
-        catNew->setLabel(Form("%s_%s_%s_%s","d2kspipi","both","LL","merge"));
+        catNew->setLabel(Form("%s_%s_%s_%s","d2kpi","both","LL","all"));
 
         RooPlot* frame = mB.frame(RooFit::Bins(40));
         toyData->plotOn(frame,RooFit::Cut(Form("catNew==catNew::%s_%s_%s_%s",
-                                               "d2kspipi","both","LL","merge")));
+                                               "d2kpi","both","LL","all")));
         toyFitPdf->plotOn(frame,RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*toyData));
         TCanvas* ctoy = new TCanvas("ctoy","",1000,700);
         frame->Draw();
@@ -1437,11 +1376,10 @@ void Fitting::NewOrderToys(int n)
       result = 0;
       delete par;
       delete toyData;
-      if(_genConfs->get("fixedGC")=="false") delete toyFitPdf;
+      delete toyFitPdf;
 
       std::cout << "now ready to start next toy loop" << std::endl;
     }
-    if(_genConfs->get("fixedGC")=="true") delete toyFitPdf; 
     resfile.close();	
     //gDirectory->ls();
   }
@@ -1509,7 +1447,7 @@ void Fitting::DisplayToys()
     // For now I want to look at all pull distributions, so can uncomment this later
     if(0==std::string(var->GetName()).find(mB.GetName())) continue;
     // If the variable is not interesting (so not one of the below) then skip
-    if((0!=std::string(var->GetName()).find("n_comb_d2kspipi_fail_plus_DD_binp"))
+    if((0!=std::string(var->GetName()).find("n_comb_d2kpi_fail_plus_DD_binp"))
        //if((0!=std::string(var->GetName()).find("n_")) and 
        //(0!=std::string(var->GetName()).find("comb_coef")) and
        //(0!=std::string(var->GetName()).find("xplus")) and
