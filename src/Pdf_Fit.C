@@ -34,6 +34,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           bu[*m][*c][*t][*a]  = new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_signal"));
+          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
 
         }
       }
@@ -50,7 +51,7 @@ void Pdf_Fit::setRelations()
   // Set up the configuration files
   Settings relConfs("Pdf_Fit::SetRelations");
   relConfs.readPairStringsToMap(_fileList->get("fit_signal"));
-  //relConfs.readPairStringsToMap(_fileList->get("fit_combs"));
+  relConfs.readPairStringsToMap(_fileList->get("fit_combs"));
 //  relConfs.readPairStringsToMap(_fileList->get("fit_drho"));
   relConfs.readPairStringsToMap(_fileList->get("gensettings"));
   //Settings pdfGenConfs("pdfGenConfs");
@@ -66,6 +67,13 @@ void Pdf_Fit::setRelations()
   RooRealVar* bu_width = new RooRealVar("bu_width","",relConfs.getD("bu_width"),
                                               relConfs.getD("bu_width_LimL"),relConfs.getD("bu_width_LimU") );
 
+  RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
+                                                   relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
+
+  //  RooRealVar *combs_slope_LL = new RooRealVar("d2kspipi_exp_LL_combs_slope","",relConfs.getD("d2kspipi_exp_LL_combs_slope"),
+  //                                                 relConfs.getD("d2kspipi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_LL_combs_slope_LimU") );
+  //  RooRealVar *combs_slope_DD = new RooRealVar("d2kspipi_exp_DD_combs_slope","",relConfs.getD("d2kspipi_exp_DD_combs_slope"),
+  //                                                 relConfs.getD("d2kspipi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_DD_combs_slope_LimU") );
 
 
   //PartReco
@@ -145,8 +153,10 @@ void Pdf_Fit::setRelations()
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
 
           //Signal
-          bu[*m][*c][*t][*a]->setRelation("mean",bu_mean);
-          bu[*m][*c][*t][*a]->setRelation("width",bu_width);
+          bu[*m][*c][*t][*a]->setMean(bu_mean);
+          bu[*m][*c][*t][*a]->setWidth(bu_width);
+
+          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
 //          //Combinatoric - floating Exponential
 //          if(*m=="d2kspipi") {
@@ -169,7 +179,7 @@ void Pdf_Fit::setRelations()
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           roopdf_bu[*m][*c][*t][*a]     = bu[*m][*c][*t][*a]->getPdf();
-          //roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
+          roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
         }
       }
     }

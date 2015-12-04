@@ -17,20 +17,20 @@ OBJS	      = $(OBJDIR)Main.o $(OBJDIR)Base.o $(OBJDIR)CommonTools.o $(OBJDIR)Fit
 #PDF wrappers
 OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o 
 #Low-mass analytic PDF classes
-DATAOBJS      = $(SRCDIR)RooHILLdini.C #$(SRCDIR)RooHORNSdini.C  $(SRCDIR)RooLITTLEHORNSdini.C 
+#DATAOBJS      = $(SRCDIR)RooHILLdini.C #$(SRCDIR)RooHORNSdini.C  $(SRCDIR)RooLITTLEHORNSdini.C 
 
 #-------------------------------------------------------------
-$(EXECUTABLE) :			$(OBJS)	$(OBJDIR)EventDict.o
-				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS) $(OBJDIR)EventDict.o
-#$(EXECUTABLE) :			$(OBJS)	
-#				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS)
+#$(EXECUTABLE) :			$(OBJS)	$(OBJDIR)EventDict.o
+#				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS) $(OBJDIR)EventDict.o
+$(EXECUTABLE) :			$(OBJS)	
+				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS)
 #-------------------------------------------------------------
 
-$(OBJDIR)EventDict.o : 		${DATAOBJS}
-				@echo "Generating dictionary ..."
-				@rm -f ${SRCDIR}EventDict.C ${SRCDIR}EventDict.h
-				@rootcint ${SRCDIR}EventDict.C -c ${DATAOBJS}
-				${CC} $(CXXFLAGS) -c ${SRCDIR}EventDict.C -o $(OBJDIR)EventDict.o
+#$(OBJDIR)EventDict.o : 		${DATAOBJS}
+#				@echo "Generating dictionary ..."
+#				@rm -f ${SRCDIR}EventDict.C ${SRCDIR}EventDict.h
+#				@rootcint ${SRCDIR}EventDict.C -c ${DATAOBJS}
+#				${CC} $(CXXFLAGS) -c ${SRCDIR}EventDict.C -o $(OBJDIR)EventDict.o
 
 $(OBJDIR)Main.o : 		$(SRCDIR)Main.C
 				@mkdir -p bin
@@ -44,9 +44,6 @@ $(OBJDIR)Exponential.o :	$(SRCDIR)Exponential.C $(SRCDIR)Exponential.h
 
 $(OBJDIR)myGaussian.o :	$(SRCDIR)myGaussian.C $(SRCDIR)myGaussian.h
 				${CC} $(CXXFLAGS) -c $(SRCDIR)myGaussian.C -o $(OBJDIR)myGaussian.o
-
-$(OBJDIR)RooHILLdini.o :	$(SRCDIR)RooHILLdini.C $(SRCDIR)RooHILLdini.h
-				${CC} $(CXXFLAGS) -c $(SRCDIR)RooHILLdini.C -o $(OBJDIR)RooHILLdini.o
 
 $(OBJDIR)CommonTools.o : 	$(SRCDIR)CommonTools.C $(SRCDIR)CommonTools.h
 				${CC} $(CXXFLAGS) -c $(SRCDIR)CommonTools.C -o $(OBJDIR)CommonTools.o

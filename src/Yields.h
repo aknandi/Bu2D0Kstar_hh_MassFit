@@ -40,6 +40,8 @@ class Yields
   // Bs 
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_gen;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_fit;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb_gen;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb;
 
 
   //std::map<std::string, std::map<std::string, std::map<std::string,  RooRealVar*> > >n_totsigs; //no pid & no bins

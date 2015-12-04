@@ -5,6 +5,8 @@
 #include "RooRealVar.h"
 #include "Settings.h"
 #include "Pdf_Base.h"
+#include "myGaussian.h"
+#include "Exponential.h"
 
 class Pdf_Fit
 {
@@ -14,9 +16,9 @@ class Pdf_Fit
   void setRelations();
   // PDFs to return
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bu;
-/*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs;
+//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_comb;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_drho;
+/*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_drho;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bd_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs_dstkst_001;
@@ -38,10 +40,10 @@ class Pdf_Fit
   std::string _MCsimfit;
   std::string _toys;
   // PDFs
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bu;
-/*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > comb;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myGaussian*> > > > bu;
+//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Exponential*> > > > comb;
+/*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst_001;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst_010;

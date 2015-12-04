@@ -67,14 +67,15 @@ RooSimultaneous* Model::getGenPdf()
           // Bd
           pdflist.add(*(genPdf.roopdf_bu[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bu_gen[*m][*c][*t][*a]));
+
 /*          // Bs
           pdflist.add(*(genPdf.roopdf_bs[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bs_gen[*m][*c][*t][*a]));
+          nevents.add(*(yields->n_bs_gen[*m][*c][*t][*a]));*/
           if(_genConfs->get("MCsimfit")!="true") {
             // Combinatorics
             pdflist.add(*(genPdf.roopdf_comb[*m][*c][*t][*a]));
             nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
-            // Part Reco
+ /*           // Part Reco
             if(_genConfs->get("bd_dstkst")=="true"){
               pdflist.add(*(genPdf.roopdf_bd_dstkst[*m][*c][*t][*a]));
               nevents.add(*(yields->n_bd_dstkst_gen[*m][*c][*t][*a]));
@@ -87,9 +88,9 @@ RooSimultaneous* Model::getGenPdf()
             if(_genConfs->get("bd_drho")=="true"){
               pdflist.add(*(genPdf.roopdf_drho[*m][*c][*t][*a]));
               nevents.add(*(yields->n_drho_gen[*m][*c][*t][*a]));
-            }
+            }*/
           }
-         */
+
 
           // --- Print out generated yields ---
           cout << "Generating yields ..." << endl;
@@ -133,15 +134,16 @@ RooSimultaneous* Model::getFitPdf()
           // Bd
           pdflist.add(*(fitPdf.roopdf_bu[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bu_fit[*m][*c][*t][*a]));
+
  /*         // Bs
           pdflist.add(*(fitPdf.roopdf_bs[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bs_fit[*m][*c][*t][*a]));
+          nevents.add(*(yields->n_bs_fit[*m][*c][*t][*a]));*/
           if(_genConfs->get("MCsimfit")!="true")
             {
               // Combinatorics
               pdflist.add(*(fitPdf.roopdf_comb[*m][*c][*t][*a]));
               nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
-              // Part Reco
+/*              // Part Reco
               if(_genConfs->get("bd_dstkst")=="true"){
                 pdflist.add(*(fitPdf.roopdf_bd_dstkst[*m][*c][*t][*a]));
                 nevents.add(*(yields->n_bd_dstkst[*m][*c][*t][*a]));
@@ -172,8 +174,8 @@ RooSimultaneous* Model::getFitPdf()
               if(_genConfs->get("bu_dpipipi")=="true"){ 
                 pdflist.add(*(fitPdf.roopdf_dpipipi[*m][*c][*t][*a]));
                 nevents.add(*(yields->n_dpipipi[*m][*c][*t][*a]));
-              }
-            }*/
+              }*/
+            }
           
           // --- No Gaussian Constraints --- 
           //RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);

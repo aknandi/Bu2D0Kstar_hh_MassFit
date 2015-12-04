@@ -22,6 +22,11 @@ Exponential::Exponential(RooRealVar* pmB, std::string m,std::string p, std::stri
   _intVars["slope"]=0;
 }
 
+void Exponential::setSlope(RooAbsReal* newSlope)
+{
+	setRelation("slope",newSlope);
+}
+
 RooAbsPdf* Exponential::getPdf()
 {
   // If any RooFit variables still have 0 pointers (ie have not been set from outside (e.g. sharing parameters (like mean) across multiple shapes) then

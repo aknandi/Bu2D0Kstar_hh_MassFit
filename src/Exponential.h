@@ -8,7 +8,7 @@ class Exponential: public Pdf_Base
 {
  public:
   Exponential(RooRealVar*, std::string,std::string,std::string,std::string,std::string,std::string);
-		
+  void setSlope(RooAbsReal*);
   RooAbsPdf* getPdf();
  private:
   double _coef;

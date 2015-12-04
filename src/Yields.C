@@ -35,6 +35,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
 
   genscale = 1.; // scale yields for generation
   limitlow = _genConfs->get("fit_limit_low");
+  unblind=_genConfs->get("UNBLIND");
 
   std::cout << "*****************************************************" << std::endl;
   std::cout << "Initialising yields ... " << std::endl;
@@ -196,10 +197,10 @@ void Yields::SetYieldsGenandFit()
           double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,0,10000);
      /*     double N_bs   = input->getD(Form("N_bs_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          n_bs_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0,10000);
+          n_bs_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0,10000);*/
           double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000);
-          */
+
           ///////////////////////
           // The all-important ratios
           //
@@ -224,9 +225,9 @@ void Yields::SetYieldsGenandFit()
 
           // --- Fit yields ---
           n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,-10.,10000.);
-         /* n_bs_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0.,10000.);
+ //         n_bs_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0.,10000.);
           n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000.);
-*/
+
 
         }
       }

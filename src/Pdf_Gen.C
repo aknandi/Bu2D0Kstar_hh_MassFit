@@ -25,7 +25,8 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           bu[*m][*c][*t][*a]  = new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal"));
-
+          //bu[*m][*c][*t][*a] = static_cast<myGaussian*>(new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal")));
+          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
            }
       }
     }
@@ -40,7 +41,7 @@ void Pdf_Gen::setRelations()
   // Set up the configuration files
   Settings relConfs("Pdf_Gen::SetRelations");
   relConfs.readPairStringsToMap(_fileList->get("gen_signal"));
-//  relConfs.readPairStringsToMap(_fileList->get("gen_combs"));
+  relConfs.readPairStringsToMap(_fileList->get("gen_combs"));
 
 
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
@@ -51,11 +52,19 @@ void Pdf_Gen::setRelations()
   RooRealVar* bu_width = new RooRealVar("bu_width","",relConfs.getD("bu_width"),
                                         relConfs.getD("bu_width_LimL"),relConfs.getD("bu_width_LimU") );
 
+  RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
+                                                   relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
+
+  //  RooRealVar *combs_slope_LL = new RooRealVar("d2kspipi_exp_LL_combs_slope","",relConfs.getD("d2kspipi_exp_LL_combs_slope"),
+  //                                                 relConfs.getD("d2kspipi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_LL_combs_slope_LimU") );
+  //  RooRealVar *combs_slope_DD = new RooRealVar("d2kspipi_exp_DD_combs_slope","",relConfs.getD("d2kspipi_exp_DD_combs_slope"),
+  //                                                 relConfs.getD("d2kspipi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_DD_combs_slope_LimU") );
 
   std::cout << std::endl << "PdfGen : floating parameters " << std::endl;
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
   floatParams->push_back(bu_mean);
-  floatParams->push_back(bu_width);/*
+  floatParams->push_back(bu_width);
+  floatParams->push_back(combs_slope_mix);/*
   floatParams->push_back(bs_frac010);
   floatParams->push_back(combs_slope_mix);
   floatParams->push_back(combs_slope_mix_kskk);*/
@@ -97,9 +106,10 @@ void Pdf_Gen::setRelations()
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
 
           //Signal
-          bu[*m][*c][*t][*a]->setRelation("mean",bu_mean);
-          bu[*m][*c][*t][*a]->setRelation("width",bu_width);
+          bu[*m][*c][*t][*a]->setMean(bu_mean);
+          bu[*m][*c][*t][*a]->setWidth(bu_width);
 
+          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 /*          //Comb
           if(*m=="d2kspipi") {
             if(*t=="mix") comb[*m][*c]["mix"][*a]->setRelation("slope",combs_slope_mix);
@@ -122,7 +132,7 @@ void Pdf_Gen::setRelations()
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           roopdf_bu[*m][*c][*t][*a]     = bu[*m][*c][*t][*a]->getPdf();
-//          roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
+          roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
 
         }
       }

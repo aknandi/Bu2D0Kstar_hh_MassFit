@@ -9,9 +9,9 @@ class Pdf_Base {
  public:
   Pdf_Base(){};
   virtual RooAbsPdf* getPdf()=0;
-  void setRelation(std::string, RooAbsReal*);
  protected:
   RooRealVar *_mB;
+  void setRelation(std::string, RooAbsReal*);
   std::map<std::string,RooAbsReal*> _intVars;
   std::string _name;
 };

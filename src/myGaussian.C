@@ -24,6 +24,18 @@ myGaussian::myGaussian(RooRealVar* pmB, std::string m,std::string p, std::string
   _intVars["width"]=0;
 }
 
+
+void myGaussian::setMean(RooAbsReal* newMean)
+{
+	setRelation("mean",newMean);
+}
+
+void myGaussian::setWidth(RooAbsReal* newWidth)
+{
+	setRelation("width",newWidth);
+}
+
+
 RooAbsPdf* myGaussian::getPdf()
 {
   // If any RooFit variables still have 0 pointers (ie have not been set from outside (e.g. sharing parameters (like mean) across multiple shapes) then
