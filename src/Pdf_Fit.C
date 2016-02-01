@@ -1,18 +1,14 @@
 #include "Pdf_Fit.h"
-//#include "DoubleCrystalBall.h"
 //#include "KeysPdf.h"
 //#include "PartRecoDstKst.h"
 #include "Exponential.h"
-//#include "DoubleExponential.h"
-//#include "Linear.h"
 #include "RooFormulaVar.h"
-#include "myGaussian.h"
+#include "myCrystalBall.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
 #include "TVectorD.h"
 #include "TRandom.h"
-//#include "Lambda.h"
 #include "RooGaussian.h"
 #include "RooConstVar.h"
 
@@ -33,7 +29,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-          bu[*m][*c][*t][*a]  = new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_signal"));
+          bu[*m][*c][*t][*a]  = new myCrystalBall(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_signal"));
           comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
 
         }
@@ -66,6 +62,20 @@ void Pdf_Fit::setRelations()
 
   RooRealVar* bu_width = new RooRealVar("bu_width","",relConfs.getD("bu_width"),
                                               relConfs.getD("bu_width_LimL"),relConfs.getD("bu_width_LimU") );
+
+  RooRealVar* bu_alpha_LL = new RooRealVar("bu_alpha_LL","",relConfs.getD("bu_alpha_LL"),
+                                       relConfs.getD("bu_alpha_LL_LimL"),relConfs.getD("bu_alpha_LL_LimU") );
+  RooRealVar* bu_n_LL = new RooRealVar("bu_n_LL","",relConfs.getD("bu_n_LL"),
+                                        relConfs.getD("bu_n_LL_LimL"),relConfs.getD("bu_n_LL_LimU") );
+  RooRealVar* bu_alpha_DD = new RooRealVar("bu_alpha_DD","",relConfs.getD("bu_alpha_DD"),
+                                       relConfs.getD("bu_alpha_DD_LimL"),relConfs.getD("bu_alpha_DD_LimU") );
+  RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",relConfs.getD("bu_n_DD"),
+                                        relConfs.getD("bu_n_DD_LimL"),relConfs.getD("bu_n_DD_LimU") );
+
+  RooRealVar* bu_alpha_mix = new RooRealVar("bu_alpha_mix","",relConfs.getD("bu_alpha_mix"),
+                                       relConfs.getD("bu_alpha_mix_LimL"),relConfs.getD("bu_alpha_mix_LimU") );
+  RooRealVar* bu_n_mix = new RooRealVar("bu_n_mix","",relConfs.getD("bu_n_mix"),
+                                        relConfs.getD("bu_n_mix_LimL"),relConfs.getD("bu_n_mix_LimU") );
 
   RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
                                                    relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
@@ -115,25 +125,12 @@ void Pdf_Fit::setRelations()
   
   std::cout << std::endl << "PdfFit: Setting parameters constant" << std::endl;
   fixedParams = new std::vector <RooRealVar*>;
-//  fixedParams->push_back(bs_alpha1);
-//  fixedParams->push_back(bs_alpha2);
-//  fixedParams->push_back(bs_n1);
-//  fixedParams->push_back(bs_n2);
-//  fixedParams->push_back(bs_frac1);
-//  fixedParams->push_back(bd_bs_shift);
-//  fixedParams->push_back(drho_mean);
-//  fixedParams->push_back(drho_mean2);
-//  fixedParams->push_back(drho_width);
-//  fixedParams->push_back(drho_width2);
-//  fixedParams->push_back(drho_alpha1);
-//  fixedParams->push_back(drho_alpha2);
-//  fixedParams->push_back(drho_n1);
-//  fixedParams->push_back(drho_n2);
-//  fixedParams->push_back(drho_frac1);
-  //fixedParams->push_back(bs_frac010);
-  //fixedParams->push_back(bs_010_frac010);
-  //fixedParams->push_back(bs_001_frac010);
-  //fixedParams->push_back(bd_frac010);
+
+  fixedParams->push_back(bu_alpha_LL);
+  fixedParams->push_back(bu_n_LL);
+  fixedParams->push_back(bu_alpha_DD);
+  fixedParams->push_back(bu_n_DD);
+
  
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
     {
@@ -156,17 +153,21 @@ void Pdf_Fit::setRelations()
           bu[*m][*c][*t][*a]->setMean(bu_mean);
           bu[*m][*c][*t][*a]->setWidth(bu_width);
 
+          if(*t=="LL")  {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_LL);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_LL);
+          }
+          else if(*t=="DD") {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_DD);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_DD);
+          }
+          else if(*t=="mix") {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_mix);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_mix);
+          }
+
           comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
-//          //Combinatoric - floating Exponential
-//          if(*m=="d2kspipi") {
-//            if(*t=="mix") comb[*m][*c]["mix"][*a]->setRelation("slope",combs_slope_mix);
-//            //if(*t=="LL")  comb[*m][*c]["LL"][*a]->setRelation("slope",combs_slope_LL);
-//            //if(*t=="DD")  comb[*m][*c]["DD"][*a]->setRelation("slope",combs_slope_DD);
-//          }
-//          else
-//            comb[*m][*c][*t][*a]->setRelation("slope",combs_slope_mix_kskk);
-//
         }
       }
     }

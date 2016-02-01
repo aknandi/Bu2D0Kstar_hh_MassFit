@@ -1,10 +1,9 @@
 #include "Pdf_Gen.h"
-//#include "DoubleCrystalBall.h"
 //#include "KeysPdf.h"
 //#include "PartRecoDstKst.h"
 #include "Exponential.h"
 #include "RooFormulaVar.h"
-#include "myGaussian.h"
+#include "myCrystalBall.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
@@ -24,9 +23,8 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-          bu[*m][*c][*t][*a]  = new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal"));
-          //bu[*m][*c][*t][*a] = static_cast<myGaussian*>(new myGaussian(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal")));
-          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
+        	bu[*m][*c][*t][*a]  = new myCrystalBall(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal"));
+        	comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
            }
       }
     }
@@ -46,11 +44,25 @@ void Pdf_Gen::setRelations()
 
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
   
-  //Signal -- Double Crystal Ball
+  //Signal -- Crystal Ball
   RooRealVar* bu_mean = new RooRealVar("bu_mean","",relConfs.getD("bu_mean"),
                                        relConfs.getD("bu_mean_LimL"),relConfs.getD("bu_mean_LimU") );
   RooRealVar* bu_width = new RooRealVar("bu_width","",relConfs.getD("bu_width"),
                                         relConfs.getD("bu_width_LimL"),relConfs.getD("bu_width_LimU") );
+  RooRealVar* bu_alpha_LL = new RooRealVar("bu_alpha_LL","",relConfs.getD("bu_alpha_LL"),
+                                       relConfs.getD("bu_alpha_LL_LimL"),relConfs.getD("bu_alpha_LL_LimU") );
+  RooRealVar* bu_n_LL = new RooRealVar("bu_n_LL","",relConfs.getD("bu_n_LL"),
+                                        relConfs.getD("bu_n_LL_LimL"),relConfs.getD("bu_n_LL_LimU") );
+  RooRealVar* bu_alpha_DD = new RooRealVar("bu_alpha_DD","",relConfs.getD("bu_alpha_DD"),
+                                       relConfs.getD("bu_alpha_DD_LimL"),relConfs.getD("bu_alpha_DD_LimU") );
+  RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",relConfs.getD("bu_n_DD"),
+                                        relConfs.getD("bu_n_DD_LimL"),relConfs.getD("bu_n_DD_LimU") );
+
+  RooRealVar* bu_alpha_mix = new RooRealVar("bu_alpha_mix","",relConfs.getD("bu_alpha_mix"),
+                                       relConfs.getD("bu_alpha_mix_LimL"),relConfs.getD("bu_alpha_mix_LimU") );
+  RooRealVar* bu_n_mix = new RooRealVar("bu_n_mix","",relConfs.getD("bu_n_mix"),
+                                        relConfs.getD("bu_n_mix_LimL"),relConfs.getD("bu_n_mix_LimU") );
+
 
   RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
                                                    relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
@@ -64,10 +76,7 @@ void Pdf_Gen::setRelations()
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
   floatParams->push_back(bu_mean);
   floatParams->push_back(bu_width);
-  floatParams->push_back(combs_slope_mix);/*
-  floatParams->push_back(bs_frac010);
   floatParams->push_back(combs_slope_mix);
-  floatParams->push_back(combs_slope_mix_kskk);*/
 
   for (Int_t n_p = 0; n_p < (Int_t)floatParams->size(); ++n_p)
     {
@@ -80,12 +89,13 @@ void Pdf_Gen::setRelations()
   
   std::cout << std::endl << "PdfGen : fixed parameters " << std::endl;
   fixedParams = new std::vector <RooRealVar*>;
-/*
-  fixedParams->push_back(bs_alpha1);
-  fixedParams->push_back(bs_alpha2);
-  fixedParams->push_back(bs_n1);
-  fixedParams->push_back(bs_n2);
-  fixedParams->push_back(bs_frac1);*/
+  fixedParams->push_back(bu_alpha_LL);
+  fixedParams->push_back(bu_n_LL);
+  fixedParams->push_back(bu_alpha_DD);
+  fixedParams->push_back(bu_n_DD);
+  fixedParams->push_back(bu_alpha_mix);
+  fixedParams->push_back(bu_n_mix);
+
 
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
     {
@@ -109,16 +119,20 @@ void Pdf_Gen::setRelations()
           bu[*m][*c][*t][*a]->setMean(bu_mean);
           bu[*m][*c][*t][*a]->setWidth(bu_width);
 
-          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
-/*          //Comb
-          if(*m=="d2kspipi") {
-            if(*t=="mix") comb[*m][*c]["mix"][*a]->setRelation("slope",combs_slope_mix);
-            //if(*t=="LL")  comb[*m][*c]["LL"][*a]->setRelation("slope",combs_slope_LL);
-            //if(*t=="DD")  comb[*m][*c]["DD"][*a]->setRelation("slope",combs_slope_DD);
+          if(*t=="LL")  {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_LL);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_LL);
           }
-          else {
-            if(*t=="mix") comb[*m][*c]["mix"][*a]->setRelation("slope",combs_slope_mix_kskk);
-          }*/
+          else if(*t=="DD") {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_DD);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_DD);
+          }
+          else if(*t=="mix") {
+        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_mix);
+        	  bu[*m][*c][*t][*a]->setN(bu_n_mix);
+          }
+
+          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
         }
       }

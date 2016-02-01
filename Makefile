@@ -15,7 +15,7 @@ OBJDIR        = ${PWD}/obj/
 #Main program classes
 OBJS	      = $(OBJDIR)Main.o $(OBJDIR)Base.o $(OBJDIR)CommonTools.o $(OBJDIR)Fitting.o $(OBJDIR)InternalStorage.o $(OBJDIR)Model.o $(OBJDIR)Pdf_Base.o $(OBJDIR)Pdf_Fit.o $(OBJDIR)Pdf_Gen.o $(OBJDIR)Settings.o $(OBJDIR)Yields.o
 #PDF wrappers
-OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o 
+OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o $(OBJDIR)myCrystalBall.o
 #Low-mass analytic PDF classes
 #DATAOBJS      = $(SRCDIR)RooHILLdini.C #$(SRCDIR)RooHORNSdini.C  $(SRCDIR)RooLITTLEHORNSdini.C 
 
@@ -44,6 +44,9 @@ $(OBJDIR)Exponential.o :	$(SRCDIR)Exponential.C $(SRCDIR)Exponential.h
 
 $(OBJDIR)myGaussian.o :	$(SRCDIR)myGaussian.C $(SRCDIR)myGaussian.h
 				${CC} $(CXXFLAGS) -c $(SRCDIR)myGaussian.C -o $(OBJDIR)myGaussian.o
+
+$(OBJDIR)myCrystalBall.o :	$(SRCDIR)myCrystalBall.C $(SRCDIR)myCrystalBall.h
+				${CC} $(CXXFLAGS) -c $(SRCDIR)myCrystalBall.C -o $(OBJDIR)myCrystalBall.o
 
 $(OBJDIR)CommonTools.o : 	$(SRCDIR)CommonTools.C $(SRCDIR)CommonTools.h
 				${CC} $(CXXFLAGS) -c $(SRCDIR)CommonTools.C -o $(OBJDIR)CommonTools.o

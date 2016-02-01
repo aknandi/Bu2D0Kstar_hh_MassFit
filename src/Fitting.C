@@ -183,12 +183,12 @@ void Fitting::DefineRooCategories()
   //  charge.defineType(minus.c_str());
  
   // Define Ks track type categories - could be LL,DD or both
-  //trackList.push_back(LL);
-  //trackList.push_back(DD);
-  //track.defineType(LL.c_str());
-  //track.defineType(DD.c_str());
-  trackList.push_back(mix);
-  track.defineType(mix.c_str());
+  trackList.push_back(LL);
+  trackList.push_back(DD);
+  track.defineType(LL.c_str());
+  track.defineType(DD.c_str());
+  //trackList.push_back(mix);
+  //track.defineType(mix.c_str());
 
   runList.push_back(all);
   run.defineType(all.c_str());
