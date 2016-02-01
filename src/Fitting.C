@@ -249,38 +249,65 @@ int Fitting::LoadDataSet()
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++) {
     for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
 
-     std::string fullPathAndName_2012 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2012");
-     std::string fullPathAndName_2011 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2011");
+    	std::string fullPathAndName = dataSettings.get("pathToData_"+(*m)+"_"+(*t));
 
-      cout << "File path names are " << fullPathAndName_2012 << " and " << fullPathAndName_2011 << endl;
-      TFile* tfile_12 = TFile::Open(fullPathAndName_2012.c_str());
-      TFile* tfile_11 = TFile::Open(fullPathAndName_2011.c_str());
-      RooDataSet *ds_12=0;
-      RooDataSet *ds_11=0;
+    	cout << "File path name is " << fullPathAndName << endl;
+    	TFile* tfile = TFile::Open(fullPathAndName.c_str());
+    	RooDataSet *dataset=0;
 
-      RooDataSet *ds = (RooDataSet*)tfile_12->FindObjectAny("DS");
-      if(ds)
-      {
-        // RooDataSet 
-        tfile_12->cd();
-        ds_12 = FinalDataSet(*m, *t, (RooDataSet*)tfile_12->FindObjectAny("DS"));
-        tfile_11->cd();
-        ds_11 = FinalDataSet(*m, *t, (RooDataSet*)tfile_11->FindObjectAny("DS"));
-      }
-      else
-      {
-        // TTree
-        tfile_12->cd();
-        ds_12 = FinalDataSet(*m, *t, (TTree*)tfile_12->Get("BDKstarTuple"));
-        tfile_11->cd();
-        ds_11 = FinalDataSet(*m, *t, (TTree*)tfile_11->Get("BDKstarTuple"));
-      }
+    	RooDataSet *ds = (RooDataSet*)tfile->FindObjectAny("DS");
+    	      if(ds)
+    	      {
+    	        // RooDataSet
+    	    	  cout << "RooDataSet" <<endl;
+    	        tfile->cd();
+    	        dataset = FinalDataSet(*m, *t, (RooDataSet*)tfile->FindObjectAny("DS"));
+    	      }
+    	      else
+    	      {
+    	        // TTree
+    	    	  cout << "TTree" << endl;
+    	        tfile->cd();
+    	        dataset = FinalDataSet(*m, *t, (TTree*)tfile->Get("DecayTree"));
+    	      }
 
-      data->append(*ds_12);
-      data->append(*ds_11);
+    	      data->append(*dataset);
 
-      tfile_12->Close();
-      tfile_11->Close();
+    	      tfile->Close();
+
+
+//     std::string fullPathAndName_2012 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2012");
+//     std::string fullPathAndName_2011 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2011");
+
+//      cout << "File path names are " << fullPathAndName_2012 << " and " << fullPathAndName_2011 << endl;
+//      TFile* tfile_12 = TFile::Open(fullPathAndName_2012.c_str());
+//      TFile* tfile_11 = TFile::Open(fullPathAndName_2011.c_str());
+//      RooDataSet *ds_12=0;
+//      RooDataSet *ds_11=0;
+
+//      RooDataSet *ds = (RooDataSet*)tfile_12->FindObjectAny("DS");
+//      if(ds)
+//      {
+//        // RooDataSet
+//        tfile_12->cd();
+//        ds_12 = FinalDataSet(*m, *t, (RooDataSet*)tfile_12->FindObjectAny("DS"));
+//        tfile_11->cd();
+//        ds_11 = FinalDataSet(*m, *t, (RooDataSet*)tfile_11->FindObjectAny("DS"));
+//      }
+//      else
+//      {
+//        // TTree
+//        tfile_12->cd();
+//        ds_12 = FinalDataSet(*m, *t, (TTree*)tfile_12->Get("BDKstarTuple"));
+//        tfile_11->cd();
+//        ds_11 = FinalDataSet(*m, *t, (TTree*)tfile_11->Get("BDKstarTuple"));
+//      }
+//
+//      data->append(*ds_12);
+//      data->append(*ds_11);
+//
+//      tfile_12->Close();
+//      tfile_11->Close();
 
      }
 
@@ -330,7 +357,8 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   if (_genConfs->get("MCsimfit") == "true") exclusionString = "";
 
   std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl; */
-  std::string masscut = "B0_PVFit_M[0] > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M[0] <" + _genConfs->get("fit_limit_high");
+  std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M <" + _genConfs->get("fit_limit_high");
+  //std::string masscut = "B0_PVFit_M[0] > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M[0] <" + _genConfs->get("fit_limit_high");
   //exclusionString += masscut;
   exclusionString = masscut;
 
@@ -339,14 +367,16 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   TTree* reducedtree = (TTree*) tree->CopyTree(exclusionString);
   float bm[100];
   float cla(0);
-  reducedtree->SetBranchAddress("B0_PVFit_M",&bm);
-  reducedtree->SetBranchAddress("Classifier",&cla);
+  reducedtree->SetBranchAddress("Bu_D0constKS0constPVconst_M",&bm);
+  reducedtree->SetBranchAddress("BDTG",&cla);
+//  reducedtree->SetBranchAddress("B0_PVFit_M",&bm);
+//  reducedtree->SetBranchAddress("Classifier",&cla);
 
   TTree* newtree = new TTree("TTT","");
   float bm_new(0);
   float bdt(0);
-  newtree->Branch("B0_PVFit_M",&bm_new,"B0_PVFit_M/F");
-  newtree->Branch("BDT",&bdt,"BDT/F");
+  newtree->Branch("Bu_D0constKS0constPVconst_M",&bm_new,"Bu_D0constKS0constPVconst_M/F");
+  newtree->Branch("BDTG",&bdt,"BDTG/F");
   for(Long64_t n=0; n<reducedtree->GetEntries(); ++n) {
     reducedtree->GetEntry(n);
     bm_new = bm[0];

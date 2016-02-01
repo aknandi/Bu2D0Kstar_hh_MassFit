@@ -17,6 +17,14 @@ N_comb_d2kpi_both_mix 100.0
 N_comb_d2kk_both_mix 100.0
 N_comb_d2pipi_both_mix 100.0
 N_comb_d2pik_both_mix 100.0
+N_comb_d2kpi_both_LL 100.0
+N_comb_d2kk_both_LL 100.0
+N_comb_d2pipi_both_LL 100.0
+N_comb_d2pik_both_LL 100.0
+N_comb_d2kpi_both_DD 100.0
+N_comb_d2kk_both_DD 100.0
+N_comb_d2pipi_both_DD 100.0
+N_comb_d2pik_both_DD 100.0
 N_bd_d2kspipi_plus_mix 40.7225
 N_bd_d2kspipi_minus_mix 40.7225
 N_bs_d2kspipi_both_mix 190.428

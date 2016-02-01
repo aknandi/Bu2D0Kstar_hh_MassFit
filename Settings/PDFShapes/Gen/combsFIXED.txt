@@ -1,12 +1,39 @@
 d2kpi_exp_mix_combs_slope -0.00340902
 d2kpi_exp_mix_combs_slope_LimU -0.00340902
 d2kpi_exp_mix_combs_slope_LimL -0.00340902
+d2kpi_exp_LL_combs_slope -0.00340902
+d2kpi_exp_LL_combs_slope_LimU -0.00340902
+d2kpi_exp_LL_combs_slope_LimL -0.00340902
+d2kpi_exp_DD_combs_slope -0.00340902
+d2kpi_exp_DD_combs_slope_LimU -0.00340902
+d2kpi_exp_DD_combs_slope_LimL -0.00340902
+*
 d2kk_exp_mix_combs_slope -0.00524778
 d2kk_exp_mix_combs_slope_LimU -0.00524778
 d2kk_exp_mix_combs_slope_LimL -0.00524778
+d2kk_exp_LL_combs_slope -0.00524778
+d2kk_exp_LL_combs_slope_LimU -0.00524778
+d2kk_exp_LL_combs_slope_LimL -0.00524778
+d2kk_exp_DD_combs_slope -0.00524778
+d2kk_exp_DD_combs_slope_LimU -0.00524778
+d2kk_exp_DD_combs_slope_LimL -0.00524778
+*
 d2pipi_exp_mix_combs_slope -0.00524778
 d2pipi_exp_mix_combs_slope_LimU -0.00524778
 d2pipi_exp_mix_combs_slope_LimL -0.00524778
+d2pipi_exp_LL_combs_slope -0.00524778
+d2pipi_exp_LL_combs_slope_LimU -0.00524778
+d2pipi_exp_LL_combs_slope_LimL -0.00524778
+d2pipi_exp_DD_combs_slope -0.00524778
+d2pipi_exp_DD_combs_slope_LimU -0.00524778
+d2pipi_exp_DD_combs_slope_LimL -0.00524778
+*
 d2pik_exp_mix_combs_slope -0.00524778
 d2pik_exp_mix_combs_slope_LimU -0.00524778
 d2pik_exp_mix_combs_slope_LimL -0.00524778
+d2pik_exp_LL_combs_slope -0.00524778
+d2pik_exp_LL_combs_slope_LimU -0.00524778
+d2pik_exp_LL_combs_slope_LimL -0.00524778
+d2pik_exp_DD_combs_slope -0.00524778
+d2pik_exp_DD_combs_slope_LimU -0.00524778
+d2pik_exp_DD_combs_slope_LimL -0.00524778
