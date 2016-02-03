@@ -8,6 +8,7 @@
 #include "myGaussian.h"
 #include "myCrystalBall.h"
 #include "Exponential.h"
+#include "PartRecoDstKst.h"
 
 class Pdf_Gen
 {
@@ -34,7 +35,7 @@ class Pdf_Gen
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Exponential*> > > > comb;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bu_dstkst;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,PartRecoDstKst*> > > > bu_dstkst;
 
   std::vector<std::string> _modeList;
   std::vector<std::string> _chargeList;

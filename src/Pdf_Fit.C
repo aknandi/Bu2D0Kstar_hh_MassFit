@@ -49,6 +49,7 @@ void Pdf_Fit::setRelations()
   Settings relConfs("Pdf_Fit::SetRelations");
   relConfs.readPairStringsToMap(_fileList->get("fit_signal"));
   relConfs.readPairStringsToMap(_fileList->get("fit_combs"));
+  relConfs.readPairStringsToMap(_fileList->get("fit_partreco"));
 //  relConfs.readPairStringsToMap(_fileList->get("fit_drho"));
   relConfs.readPairStringsToMap(_fileList->get("gensettings"));
   Settings pdfGenConfs("pdfGenConfs");
@@ -86,6 +87,7 @@ void Pdf_Fit::setRelations()
   //  RooRealVar *combs_slope_DD = new RooRealVar("d2kspipi_exp_DD_combs_slope","",relConfs.getD("d2kspipi_exp_DD_combs_slope"),
   //                                                 relConfs.getD("d2kspipi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_DD_combs_slope_LimU") );
 
+  RooRealVar *bu_frac010 = new RooRealVar("frac010_bu","",relConfs.getD("frac010_bu"), 0.0, 1.0);
 
   //PartReco
   string limitlow = relConfs.get("fit_limit_low");
@@ -169,6 +171,7 @@ void Pdf_Fit::setRelations()
 
           comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
+          bu_dstkst[*m][*c][*t][*a]->setFraction(bu_frac010);
         }
       }
     }

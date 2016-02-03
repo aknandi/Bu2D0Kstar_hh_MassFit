@@ -10,7 +10,7 @@ class PartRecoDstKst : public Pdf_Base
 {
  public:
   PartRecoDstKst(RooRealVar*, std::string,std::string,std::string,std::string,std::string,std::string);
-		
+  void setFraction(RooAbsReal*);
   RooAbsPdf* getPdf();
  private:
   RooAbsPdf* pdf_g_001;

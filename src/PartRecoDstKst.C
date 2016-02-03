@@ -23,21 +23,7 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m,std::string p, std
   // Create any RooRealVars you'll need
   _intVars["frac010"] = 0;
 
-  // ------------------------------------
-  // Read in the KEYS low mass pdf -- comment this out if using parametric shapes
-  /*
-  KeysPdf* keys_g_001 = new KeysPdf(_mB, m,p+"_dgam_001",c,t,a,fileName);
-  KeysPdf* keys_g_010 = new KeysPdf(_mB, m,p+"_dgam_010",c,t,a,fileName);
-  KeysPdf* keys_pi_001 = new KeysPdf(_mB, m,p+"_dpi0_001",c,t,a,fileName);
-  KeysPdf* keys_pi_010 = new KeysPdf(_mB, m,p+"_dpi0_010",c,t,a,fileName);
-
-  pdf_g_001 = keys_g_001->getPdf();
-  pdf_g_010 = keys_g_010->getPdf();
-  pdf_pi_001 = keys_pi_001->getPdf();
-  pdf_pi_010 = keys_pi_010->getPdf();
-  */
-  // ------------------------------------
-  // Read in PARAMETRIC low mass pdf -- comment this out if using keys pdfs
+  // Read in PARAMETRIC low mass pdf
   PartRecoShapes* prs = new PartRecoShapes(_mB, true, t);
   pdf_g_001  = prs->pdf_DstKst_D0gamma_101[p];
   pdf_g_010  = prs->pdf_DstKst_D0gamma_010[p];
@@ -50,23 +36,8 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m,std::string p, std
     exit(1);
   }
 
-  // Fix the ratio between the gamma and pi0 comments from MC, separately for helamps
-  const double g_001 = mySettings.getD("BR_Dg")*mySettings.getD("effGen_Dg_001")*mySettings.getD("effSel_Dg_001_"+t)*mySettings.getD("integfrac_"+p+"_g001_"+fitlow);
-  const double g_010 = mySettings.getD("BR_Dg")*mySettings.getD("effGen_Dg_010")*mySettings.getD("effSel_Dg_010_"+t)*mySettings.getD("integfrac_"+p+"_g010_"+fitlow);
-  const double p_001 = mySettings.getD("BR_Dpi")*mySettings.getD("effGen_Dpi_001")*mySettings.getD("effSel_Dpi_001_"+t)*mySettings.getD("integfrac_"+p+"_pi001_"+fitlow);
-  const double p_010 = mySettings.getD("BR_Dpi")*mySettings.getD("effGen_Dpi_010")*mySettings.getD("effSel_Dpi_010_"+t)*mySettings.getD("integfrac_"+p+"_pi010_"+fitlow);
-
-  //std::cout << "g_001 " << g_001 << std::endl;
-  //std::cout << "p_001 " << p_001 << std::endl;
-  //std::cout << "g_010 " << g_010 << std::endl;
-  //std::cout << "p_010 " << p_010 << std::endl;
-
-  double G_001 = g_001 / (g_001+p_001);
-  double G_010 = g_010 / (g_010+p_010);
-
-  // Hard code Alexis' numbers (4900 MeV)
-  //if(t=="LL"){ G_001=0.37434; G_010=0.38006; }
-  //if(t=="DD"){ G_001=0.37633; G_010=0.38107; }
+  double G_001 = mySettings.getD("gamma_frac101_"+t);
+  double G_010 = mySettings.getD("gamma_frac010_"+t);
 
   std::cout << "PartRecoDstKst " << p << " " << t << std::endl;
   std::cout << " G_001 " << G_001 << "\n" << " G_010 " << G_010 << std::endl;
@@ -78,6 +49,11 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m,std::string p, std
   pdf_001 = new RooAddPdf((_name+"_001").c_str(),"",*pdf_g_001,*pdf_pi_001,*var_G_001);
   pdf_010 = new RooAddPdf((_name+"_010").c_str(),"",*pdf_g_010,*pdf_pi_010,*var_G_010);
 
+}
+
+void PartRecoDstKst::setFraction(RooAbsReal* newFraction)
+{
+	setRelation("frac010",newFraction);
 }
 
 RooAbsPdf* PartRecoDstKst::getPdf()
