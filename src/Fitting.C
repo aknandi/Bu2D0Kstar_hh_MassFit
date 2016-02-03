@@ -798,17 +798,11 @@ void Fitting::RunFullFit(bool draw=true)
               if(v_canRes[*t][*a]) {
                 hresid = plot[*c][*t][*a]->pullHist(); hresid->GetYaxis()->SetNdivisions(515);hresid->setYAxisLimits(-5,5);
               }
-/*              //Bd - Double CB
-              std::cout<<" plotting Bd "<<std::endl;
+              //Bu - CB
+              std::cout<<" plotting Bu "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("DoubleCrystalBall_%s_bd_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+                           RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
                            RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3)  );
-
-              //Bs - Double CB
-              std::cout<<" plotting Bs "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("DoubleCrystalBall_%s_bs_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kBlack), RooFit::LineWidth(3)  );
 
               // Combinatoric
               std::cout <<" plotting combinatoric "<<std::endl;
@@ -817,21 +811,15 @@ void Fitting::RunFullFit(bool draw=true)
                            RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3) );
 
               //Bs -> D*K* - regexp to pick up also version split by helamp
-              std::cout<<" plotting Bs -> D*K*  "<<std::endl;
+              std::cout<<" plotting Bu -> D*K*  "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("PartRecoDstKst_%s_bs*_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           //RooFit::Components(Form("PartRecoDstKst_%s_bs_001_%s_%s_%s, PartRecoDstKst_%s_bs_010_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+                           RooFit::Components(Form("PartRecoDstKst_%s_bu*_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+                           //RooFit::Components(Form("PartRecoDstKst_%s_bu_001_%s_%s_%s, PartRecoDstKst_%s_bu_010_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
                            //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
                            //),
                            RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3)  );
 
-              //Bd -> D*K*  
-              if(_genConfs->get("bd_dstkst")=="true"){ 
-              std::cout<<" plotting Bd -> D*K* "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("PartRecoDstKst_%s_bd_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kDashed),RooFit::LineColor(kRed), RooFit::LineWidth(3)  );
-              }*/
+            }
 
               //plot total PDF again
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
@@ -851,7 +839,7 @@ void Fitting::RunFullFit(bool draw=true)
                   std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
                 }
               
-              }
+
               // Make inverse bin label. Want to plot B+ bin i here but B- in bin -i
               std::string inverseBinLabel=*a; 
               if( inverseBinLabel.find("m")==3 ) {inverseBinLabel=inverseBinLabel.replace(3,1,"p");}
@@ -894,7 +882,7 @@ void Fitting::RunFullFit(bool draw=true)
               // TLatex *latex_purity= new TLatex(5450,plot[*p][*c][*t][*a]->GetMaximum()*0.55,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
               // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
               plot[*c][*t][*a]->SetTitle("");
-              plot[*c][*t][*a]->SetXTitle("m(DK^{#pm}#pi^{#mp}) [MeV/#it{c}^{2}]");
+              plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
               double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
               plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
               //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
@@ -911,7 +899,7 @@ void Fitting::RunFullFit(bool draw=true)
               leg->SetTextFont(132);
               //Int_t legstart = 1;
               Int_t legstart = 0;
-              for (Int_t n_p = legstart; n_p <= 8; ++n_p)
+              for (Int_t n_p = legstart; n_p <= 2; ++n_p)
                 {
                   std::stringstream hname; hname << "hdummy_" << n_p << "_" << *m << "_" << "_" << *c << "_" << *t << "_" << *a;
                   TH1F *hdummy = new TH1F(hname.str().c_str(), hname.str().c_str(), 100, 0, 1);
@@ -920,62 +908,25 @@ void Fitting::RunFullFit(bool draw=true)
                     {
                       hdummy->SetLineColor(kRed);
                       hdummy->SetLineStyle(kSolid);
-                      dataname = "B_{d} #rightarrow DK^{*0}";
+                      dataname = "B_{u} #rightarrow DK^{*}";
                     }
                   else if (n_p == 1)
                     {
                       hdummy->SetLineColor(kBlack);
-                      hdummy->SetLineStyle(kSolid);
-                      dataname = "B_{s} #rightarrow DK^{*0}";
+                      hdummy->SetLineStyle(kDashed);
+                      dataname = "B_{u} #rightarrow D^{*}K^{*}";
                     }
                   else if (n_p == 2)
-                    {
-                      hdummy->SetLineColor(kRed);
-                      hdummy->SetLineStyle(kDashed);
-                      dataname = "B_{d} #rightarrow D^{*0}K^{*0}";
-                    }
-                  else if (n_p == 3)
-                    {
-                      hdummy->SetLineColor(kBlack);
-                      hdummy->SetLineStyle(kDashed);
-                      dataname = "B_{s} #rightarrow D^{*0}K^{*0}";
-                    }
-                  else if (n_p == 4)
-                    {
-                      hdummy->SetLineColor(kGreen);
-                      hdummy->SetLineStyle(kSolid);
-                      dataname = "B_{d} #rightarrow D^{0}#rho^{0}";
-                    }
-                  else if (n_p == 5)
                     {
                       hdummy->SetLineColor(kMagenta);
                       hdummy->SetLineStyle(kDotted);
                       dataname = "Combinatorial";
-                    }
-                  else if (n_p == 6)
-                    {
-                      hdummy->SetLineColor(kOrange);
-                      hdummy->SetLineStyle(kSolid);
-                      dataname = "DK#pi#pi";
-                    }
-                  else if (n_p == 7)
-                    {
-                      hdummy->SetLineColor(kOrange);
-                      hdummy->SetLineStyle(kDashed);
-                      dataname = "D#pi#pi#pi";
-                    }
-                  else if (n_p == 8)
-                    {
-                      hdummy->SetLineColor(kViolet);
-                      hdummy->SetLineStyle(kSolid);
-                      dataname = "#Lambda_{b} #rightarrow Dp#pi";
                     }
 
 
                   hdummy->SetLineWidth(3);
                   if(n_p==6 && _genConfs->get("bu_dkpipi")!="true") continue;
                   else if(n_p==7 && _genConfs->get("bu_dpipipi")!="true") continue;
-                  else if(n_p==2 && _genConfs->get("bd_dstkst")!="true") continue;
                   else if(n_p==8 && _genConfs->get("lb_dppi")!="true") continue;
                   else leg->AddEntry(hdummy, dataname.c_str(), "L");
                 }

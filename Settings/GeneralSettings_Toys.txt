@@ -9,8 +9,8 @@ fit_limit_low 4900
 fit_limit_high 5600
 *
 * PDFS
-bd_drho true
-bs_dstkst true
+bd_drho false
+bs_dstkst false
 bd_dstkst false
 bu_dkpipi false
 bu_dpipipi false

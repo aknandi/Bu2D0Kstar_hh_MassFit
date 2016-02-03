@@ -67,7 +67,7 @@ RooAbsPdf* myCrystalBall::getPdf()
               << std::endl;
   }
 
-  RooCBShape* cb = new RooCBShape(Form("%s_cb",_name.c_str()),"",*_mB,*_intVars["mean"],*_intVars["width"],*_intVars["alpha"],*_intVars["n"]);
+  RooCBShape* cb = new RooCBShape(_name.c_str(),"",*_mB,*_intVars["mean"],*_intVars["width"],*_intVars["alpha"],*_intVars["n"]);
 
   return cb;
 }
