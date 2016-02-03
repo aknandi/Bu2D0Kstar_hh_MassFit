@@ -4,6 +4,7 @@
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "myCrystalBall.h"
+#include "PartRecoDstKst.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
@@ -30,8 +31,8 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
       for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           bu[*m][*c][*t][*a]  = new myCrystalBall(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_signal"));
-          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
-
+          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("fit_combs"));
+          bu_dstkst[*m][*c][*t][*a]    = new PartRecoDstKst(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_partreco"));
         }
       }
     }
@@ -50,8 +51,8 @@ void Pdf_Fit::setRelations()
   relConfs.readPairStringsToMap(_fileList->get("fit_combs"));
 //  relConfs.readPairStringsToMap(_fileList->get("fit_drho"));
   relConfs.readPairStringsToMap(_fileList->get("gensettings"));
-  //Settings pdfGenConfs("pdfGenConfs");
-  //pdfGenConfs.readPairStringsToMap(_fileList->get("gen_partreco"));
+  Settings pdfGenConfs("pdfGenConfs");
+  pdfGenConfs.readPairStringsToMap(_fileList->get("gen_partreco"));
 
 
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
@@ -181,6 +182,7 @@ void Pdf_Fit::setRelations()
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           roopdf_bu[*m][*c][*t][*a]     = bu[*m][*c][*t][*a]->getPdf();
           roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
+          roopdf_bu_dstkst[*m][*c][*t][*a]  = bu_dstkst[*m][*c][*t][*a]->getPdf();
         }
       }
     }

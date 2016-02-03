@@ -4,6 +4,7 @@
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "myCrystalBall.h"
+#include "PartRecoDstKst.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
@@ -25,6 +26,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
         	bu[*m][*c][*t][*a]  = new myCrystalBall(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_signal"));
         	comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("gen_combs"));
+        	bu_dstkst[*m][*c][*t][*a]    = new PartRecoDstKst(pmB, *m,"bu",*c,*t,*a,_fileList->get("gen_partreco"));
            }
       }
     }
@@ -40,6 +42,7 @@ void Pdf_Gen::setRelations()
   Settings relConfs("Pdf_Gen::SetRelations");
   relConfs.readPairStringsToMap(_fileList->get("gen_signal"));
   relConfs.readPairStringsToMap(_fileList->get("gen_combs"));
+  relConfs.readPairStringsToMap(_fileList->get("gen_partreco"));
 
 
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
@@ -71,6 +74,8 @@ void Pdf_Gen::setRelations()
   //                                                 relConfs.getD("d2kspipi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_LL_combs_slope_LimU") );
   //  RooRealVar *combs_slope_DD = new RooRealVar("d2kspipi_exp_DD_combs_slope","",relConfs.getD("d2kspipi_exp_DD_combs_slope"),
   //                                                 relConfs.getD("d2kspipi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_DD_combs_slope_LimU") );
+
+
 
   std::cout << std::endl << "PdfGen : floating parameters " << std::endl;
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
@@ -147,7 +152,7 @@ void Pdf_Gen::setRelations()
         for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
           roopdf_bu[*m][*c][*t][*a]     = bu[*m][*c][*t][*a]->getPdf();
           roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
-
+          roopdf_bu_dstkst[*m][*c][*t][*a]  = bu_dstkst[*m][*c][*t][*a]->getPdf();
         }
       }
     }

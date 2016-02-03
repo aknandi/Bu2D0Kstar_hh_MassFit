@@ -2,6 +2,9 @@ bin/*
 obj/*
 figs/*
 output/*
+TOYS/*
+EventDict.C
+EventDict_rdict.pcm
 .cproject
 .project
 .svn/

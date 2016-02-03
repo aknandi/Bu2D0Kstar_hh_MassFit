@@ -223,7 +223,7 @@ integfrac_bs_g001_5000 0.983852
 integfrac_bd_g001_5000 0.76988
 integfrac_bs_g001_5010 0.968305
 integfrac_bd_g001_5010 0.744726
-integfrac_bs_g001_5020 0.945465
+integfrac_bu_g001_5020 0.945465
 integfrac_bd_g001_5020 0.720293
 integfrac_bs_g001_5030 0.918258
 integfrac_bd_g001_5030 0.697263
@@ -260,7 +260,7 @@ integfrac_bd_g001_5180 0.259341
 integfrac_bs_g001_5190 0.520596
 integfrac_bd_g001_5190 0.214674
 integfrac_bs_g001_5200 0.493679
-integfrac_bd_g001_5200 0.167491
+integfrac_bu_g001_5200 0.167491
 integfrac_bs_g010_4900 1
 integfrac_bd_g010_4900 0.997086
 integfrac_bs_g010_4910 0.99981
@@ -322,7 +322,7 @@ integfrac_bd_g010_5180 0.0884745
 integfrac_bs_g010_5190 0.41452
 integfrac_bd_g010_5190 0.0611129
 integfrac_bs_g010_5200 0.364454
-integfrac_bd_g010_5200 0.0391195
+integfrac_bu_g010_5200 0.0391195
 integfrac_bs_pi001_4900 1
 integfrac_bd_pi001_4900 0.998157
 integfrac_bs_pi001_4910 0.99988
@@ -384,7 +384,7 @@ integfrac_bd_pi001_5180 0.00140209
 integfrac_bs_pi001_5190 0.116263
 integfrac_bd_pi001_5190 0.00113169
 integfrac_bs_pi001_5200 0.0515869
-integfrac_bd_pi001_5200 0.000961433
+integfrac_bu_pi001_5200 0.000961433
 integfrac_bs_pi010_4900 1
 integfrac_bd_pi010_4900 0.998118
 integfrac_bs_pi010_4910 0.99992
@@ -446,4 +446,4 @@ integfrac_bd_pi010_5180 0.00202245
 integfrac_bs_pi010_5190 0.327777
 integfrac_bd_pi010_5190 0.00158191
 integfrac_bs_pi010_5200 0.19827
-integfrac_bd_pi010_5200 0.00133161
+integfrac_bu_pi010_5200 0.00133161

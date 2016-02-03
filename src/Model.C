@@ -75,10 +75,13 @@ RooSimultaneous* Model::getGenPdf()
             // Combinatorics
             pdflist.add(*(genPdf.roopdf_comb[*m][*c][*t][*a]));
             nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
- /*           // Part Reco
-            if(_genConfs->get("bd_dstkst")=="true"){
-              pdflist.add(*(genPdf.roopdf_bd_dstkst[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_bd_dstkst_gen[*m][*c][*t][*a]));
+            // DstKst
+            pdflist.add(*(genPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
+            nevents.add(*(yields->n_bu_dstkst_gen[*m][*c][*t][*a]));
+            // Part Reco
+ /*           if(_genConfs->get("bd_dstkst")=="true"){
+              pdflist.add(*(genPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
+              nevents.add(*(yields->n_bu_dstkst_gen[*m][*c][*t][*a]));
             }
             if(_genConfs->get("bs_dstkst")=="true"){
               pdflist.add(*(genPdf.roopdf_bs_dstkst[*m][*c][*t][*a]));
@@ -143,10 +146,13 @@ RooSimultaneous* Model::getFitPdf()
               // Combinatorics
               pdflist.add(*(fitPdf.roopdf_comb[*m][*c][*t][*a]));
               nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
-/*              // Part Reco
-              if(_genConfs->get("bd_dstkst")=="true"){
-                pdflist.add(*(fitPdf.roopdf_bd_dstkst[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_bd_dstkst[*m][*c][*t][*a]));
+              // DstKst
+              pdflist.add(*(fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
+              nevents.add(*(yields->n_bu_dstkst[*m][*c][*t][*a]));
+             // Part Reco
+ /*             if(_genConfs->get("bs_dstkst")=="true"){
+                pdflist.add(*(fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
+                nevents.add(*(yields->n_bu_dstkst[*m][*c][*t][*a]));
               }
               if(_genConfs->get("bs_dstkst")=="true"){
                 pdflist.add(*(fitPdf.roopdf_bs_dstkst[*m][*c][*t][*a]));
@@ -178,7 +184,7 @@ RooSimultaneous* Model::getFitPdf()
             }
           
           // --- No Gaussian Constraints --- 
-          //RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
+          RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
 
           // --- The Gaussian Constraints --- 
           RooAddPdf* addpdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
@@ -250,7 +256,7 @@ RooSimultaneous* Model::getFitPdf()
           }
 
           constpdfset.Print("v");
-          RooAbsPdf* pdf = new RooProdPdf(Form("CONSTFITpdf_%s",tag.c_str()),"",constpdfset);
+          //RooAbsPdf* pdf = new RooProdPdf(Form("CONSTFITpdf_%s",tag.c_str()),"",constpdfset);
 
           // --- Add to simultaneous pdf ---
           sim->addPdf(*pdf,Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str()));
