@@ -30,7 +30,7 @@ $(OBJDIR)EventDict.o : 		${DATAOBJS}
 				@echo "Generating dictionary ..."
 				@rm -f ${SRCDIR}EventDict.C ${SRCDIR}EventDict.h
 				@rootcint ${SRCDIR}EventDict.C -c ${DATAOBJS}
-				${CC} $(CXXFLAGS) -I /home/nandia/Bu2D0KsPi_D2hh_Ks2PiPi/Bu2D0Kstar_hh_MassFit -c ${SRCDIR}EventDict.C -o $(OBJDIR)EventDict.o
+				${CC} $(CXXFLAGS) -I ${PWD} -c ${SRCDIR}EventDict.C -o $(OBJDIR)EventDict.o
 
 $(OBJDIR)Main.o : 		$(SRCDIR)Main.C
 				@mkdir -p bin

@@ -13,14 +13,14 @@ class PartRecoDstKst : public Pdf_Base
   void setFraction(RooAbsReal*);
   RooAbsPdf* getPdf();
  private:
-  RooAbsPdf* pdf_g_001;
+  RooAbsPdf* pdf_g_101;
   RooAbsPdf* pdf_g_010;
-	RooAbsPdf* pdf_pi_001;
+	RooAbsPdf* pdf_pi_101;
   RooAbsPdf* pdf_pi_010;
 
-  RooRealVar* var_G_001;
+  RooRealVar* var_G_101;
   RooRealVar* var_G_010;
-  RooAbsPdf* pdf_001;
+  RooAbsPdf* pdf_101;
   RooAbsPdf* pdf_010;
   double _frac010;
 };

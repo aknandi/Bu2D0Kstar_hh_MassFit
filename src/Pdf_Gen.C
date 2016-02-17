@@ -81,7 +81,6 @@ void Pdf_Gen::setRelations()
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
   floatParams->push_back(bu_mean);
   floatParams->push_back(bu_width);
-  floatParams->push_back(combs_slope_mix);
   floatParams->push_back(bu_frac010);
 
   for (Int_t n_p = 0; n_p < (Int_t)floatParams->size(); ++n_p)
@@ -99,8 +98,10 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
-  fixedParams->push_back(bu_alpha_mix);
-  fixedParams->push_back(bu_n_mix);
+  //fixedParams->push_back(bu_alpha_mix);
+  //fixedParams->push_back(bu_n_mix);
+  fixedParams->push_back(combs_slope_LL);
+  fixedParams->push_back(combs_slope_DD);
 
 
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
@@ -128,18 +129,20 @@ void Pdf_Gen::setRelations()
           if(*t=="LL")  {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_LL);
         	  bu[*m][*c][*t][*a]->setN(bu_n_LL);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_LL);
 
           }
           else if(*t=="DD") {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_DD);
         	  bu[*m][*c][*t][*a]->setN(bu_n_DD);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_DD);
           }
           else if(*t=="mix") {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_mix);
         	  bu[*m][*c][*t][*a]->setN(bu_n_mix);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
           }
 
-          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
           bu_dstkst[*m][*c][*t][*a]->setFraction(bu_frac010);
         }

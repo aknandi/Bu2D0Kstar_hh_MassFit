@@ -82,10 +82,10 @@ void Pdf_Fit::setRelations()
   RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
                                                    relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
 
-  //  RooRealVar *combs_slope_LL = new RooRealVar("d2kspipi_exp_LL_combs_slope","",relConfs.getD("d2kspipi_exp_LL_combs_slope"),
-  //                                                 relConfs.getD("d2kspipi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_LL_combs_slope_LimU") );
-  //  RooRealVar *combs_slope_DD = new RooRealVar("d2kspipi_exp_DD_combs_slope","",relConfs.getD("d2kspipi_exp_DD_combs_slope"),
-  //                                                 relConfs.getD("d2kspipi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kspipi_exp_DD_combs_slope_LimU") );
+  RooRealVar *combs_slope_LL = new RooRealVar("d2kpi_exp_LL_combs_slope","",relConfs.getD("d2kpi_exp_LL_combs_slope"),
+                                                 relConfs.getD("d2kpi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kpi_exp_LL_combs_slope_LimU") );
+  RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
+                                                 relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
   RooRealVar *bu_frac010 = new RooRealVar("frac010_bu","",relConfs.getD("frac010_bu"), 0.0, 1.0);
 
@@ -159,17 +159,18 @@ void Pdf_Fit::setRelations()
           if(*t=="LL")  {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_LL);
         	  bu[*m][*c][*t][*a]->setN(bu_n_LL);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_LL);
           }
           else if(*t=="DD") {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_DD);
         	  bu[*m][*c][*t][*a]->setN(bu_n_DD);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_DD);
           }
           else if(*t=="mix") {
         	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_mix);
         	  bu[*m][*c][*t][*a]->setN(bu_n_mix);
+        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
           }
-
-          comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
 
           bu_dstkst[*m][*c][*t][*a]->setFraction(bu_frac010);
         }

@@ -14,8 +14,8 @@ frac010 0.2
 frac010_LimL 0.0
 frac010_LimU 1.0
 frac010_bu 0.76
-frac010_bu_LimU 0.76
-frac010_bu_LimL 0.76
+frac010_bu_LimU 0.5
+frac010_bu_LimL 1.0
 gamma_frac010_LL 0.53
 gamma_frac101_LL 0.53
 gamma_frac010_DD 0.50

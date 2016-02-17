@@ -33,7 +33,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
 
   //myMaps.Initialize(fileList, modeList,chargeList,trackList,binList);
 
-  genscale = 1.; // scale yields for generation
+  genscale = 5.; // scale yields for generation
   limitlow = _genConfs->get("fit_limit_low");
   unblind=_genConfs->get("UNBLIND");
 
@@ -229,7 +229,7 @@ void Yields::SetYieldsGenandFit()
           n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,-10.,10000.);
  //         n_bs_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0.,10000.);
           n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000.);
-          n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0.,1000.);
+          n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0.,10000.);
         }
       }
     }
