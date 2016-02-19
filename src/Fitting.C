@@ -51,9 +51,9 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   , inputlist("contents of Final ntuple")
   , fulllist("contents, including categories")
   , reducedlist("reduced content")
-  , mB("B0_PVFit_M","m(B)",genConfs->getD("fit_limit_low"),genConfs->getD("fit_limit_high"),"MeV/c^{2}")
+  , mB("Bu_D0constKS0constPVconst_M","m(B)",genConfs->getD("fit_limit_low"),genConfs->getD("fit_limit_high"),"MeV/c^{2}")
   , assignedCharge("KstK_Q","KstK charge",-1,1.0)
-  , BDTGresponse("BDT","BDT",0.7,1)
+  //, BDTGresponse("BDT","BDT",0.7,1)
   , mode("mode","D^{0} decay mode")
   , run("run","Data set")
   , charge("charge","bachelor charge")
@@ -168,7 +168,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2kpi);
   modeList.push_back(d2kk);
   modeList.push_back(d2pipi);
-  modeList.push_back(d2pik);
+  //modeList.push_back(d2pik);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());
@@ -208,7 +208,7 @@ void Fitting::DefineRooCategories()
   }
 
   reducedlist.add(mB);
-  reducedlist.add(BDTGresponse);
+  //reducedlist.add(BDTGresponse);
   //RooRealVars created above
   reducedlist.add(mode);
   reducedlist.add(run);
@@ -275,40 +275,6 @@ int Fitting::LoadDataSet()
 
     	      tfile->Close();
 
-
-//     std::string fullPathAndName_2012 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2012");
-//     std::string fullPathAndName_2011 = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_2011");
-
-//      cout << "File path names are " << fullPathAndName_2012 << " and " << fullPathAndName_2011 << endl;
-//      TFile* tfile_12 = TFile::Open(fullPathAndName_2012.c_str());
-//      TFile* tfile_11 = TFile::Open(fullPathAndName_2011.c_str());
-//      RooDataSet *ds_12=0;
-//      RooDataSet *ds_11=0;
-
-//      RooDataSet *ds = (RooDataSet*)tfile_12->FindObjectAny("DS");
-//      if(ds)
-//      {
-//        // RooDataSet
-//        tfile_12->cd();
-//        ds_12 = FinalDataSet(*m, *t, (RooDataSet*)tfile_12->FindObjectAny("DS"));
-//        tfile_11->cd();
-//        ds_11 = FinalDataSet(*m, *t, (RooDataSet*)tfile_11->FindObjectAny("DS"));
-//      }
-//      else
-//      {
-//        // TTree
-//        tfile_12->cd();
-//        ds_12 = FinalDataSet(*m, *t, (TTree*)tfile_12->Get("BDKstarTuple"));
-//        tfile_11->cd();
-//        ds_11 = FinalDataSet(*m, *t, (TTree*)tfile_11->Get("BDKstarTuple"));
-//      }
-//
-//      data->append(*ds_12);
-//      data->append(*ds_11);
-//
-//      tfile_12->Close();
-//      tfile_11->Close();
-
      }
 
   }
@@ -324,62 +290,27 @@ int Fitting::LoadDataSet()
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, TTree* tree) //, TH2F &_h_diagnose)
 {
   if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
-  // Need to exclude events falling outside the D0 phasespace. Do this on the basis of the binning histograms (depending on the binning, this *could* be different
-  // Note this routine just reads the file names; it doesn't open the actual binning histograms (which can be found in Bu2D0H_KSHH_BinnedFit2013)
-  TString exclusionString;
-/*  TString histName;
-  if (s_mode == "d2kspipi")
-    {
-      histName = _genConfs->get("binningHistName");
-      if      (histName.Contains("dkpp_babar.root"))     exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_equal != 0 && ";
-      else if (histName.Contains("dkpp_blur.root"))      exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_optimal != 0 && ";
-      else if (histName.Contains("Optimdkpp_blur.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_modopt != 0 && ";
-      else
-        {
-          exclusionString = "xxx";
-          cout << "PROBLEM, filename for binning histogram not recognised in Fitting::FinalDataSet" << endl;
-          exit(0);
-        }
-    }
-  else
-    {
-      histName = _genConfs->get("binningHistName_KsKK");
-      if      (histName.Contains("KsKK_2bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_2bins != 0 && ";
-      else if (histName.Contains("KsKK_3bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_3bins != 0 && ";
-      else if (histName.Contains("KsKK_4bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_4bins != 0 && ";
-      else
-        {
-          exclusionString = "xxx";
-          cout << "PROBLEM, filename for KsKK binning histogram not recognised in Fitting::FinalDataSet" << endl;
-          exit(0);
-        }
-    }
-  if (_genConfs->get("MCsimfit") == "true") exclusionString = "";
 
-  std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl; */
-  std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M <" + _genConfs->get("fit_limit_high");
-  //std::string masscut = "B0_PVFit_M[0] > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M[0] <" + _genConfs->get("fit_limit_high");
-  //exclusionString += masscut;
+  TString exclusionString;
+  std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
   exclusionString = masscut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
   
   TTree* reducedtree = (TTree*) tree->CopyTree(exclusionString);
-  float bm[100];
-  float cla(0);
+  double bm(0);
+  double cla(0);
   reducedtree->SetBranchAddress("Bu_D0constKS0constPVconst_M",&bm);
   reducedtree->SetBranchAddress("BDTG",&cla);
-//  reducedtree->SetBranchAddress("B0_PVFit_M",&bm);
-//  reducedtree->SetBranchAddress("Classifier",&cla);
 
   TTree* newtree = new TTree("TTT","");
-  float bm_new(0);
-  float bdt(0);
-  newtree->Branch("Bu_D0constKS0constPVconst_M",&bm_new,"Bu_D0constKS0constPVconst_M/F");
-  newtree->Branch("BDTG",&bdt,"BDTG/F");
+  double bm_new(0);
+  double bdt(0);
+  newtree->Branch("Bu_D0constKS0constPVconst_M",&bm_new,"Bu_D0constKS0constPVconst_M/D");
+  newtree->Branch("BDTG",&bdt,"BDTG/D");
   for(Long64_t n=0; n<reducedtree->GetEntries(); ++n) {
     reducedtree->GetEntry(n);
-    bm_new = bm[0];
+    bm_new = bm;
     bdt = cla;
     newtree->Fill();
   }
@@ -392,7 +323,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   // Now loop over the entries in the dataset and make sure all the types are assigned 
   int numEntries = input->numEntries();
   std::cout << "Number of entries in input file: " << tree->GetEntries() << std::endl;
-  std::cout << "Number of entries after exclusion: " << numEntries << std::endl;
+  std::cout << "Number of entries after exclusion: " << reducedtree->GetEntries() << " or " << numEntries << std::endl;
 
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
@@ -421,42 +352,9 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
       return 0;
     }
 
-  // Need to exclude events falling outside the D0 phasespace. Do this on the basis of the binning histograms (depending on the binning, this *could* be different
-  // Note this routine just reads the file names; it doesn't open the actual binning histograms (which can be found in Bu2D0H_KSHH_BinnedFit2013)
   TString exclusionString;
-/*  TString histName;
-  if (s_mode == "d2kspipi")
-    {
-      histName = _genConfs->get("binningHistName");
-      if      (histName.Contains("dkpp_babar.root"))     exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_equal != 0 && ";
-      else if (histName.Contains("dkpp_blur.root"))      exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_optimal != 0 && ";
-      else if (histName.Contains("Optimdkpp_blur.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsPiPi_modopt != 0 && ";
-      else
-        {
-          exclusionString = "xxx";
-          cout << "PROBLEM, filename for binning histogram not recognised in Fitting::FinalDataSet" << endl;
-          exit(0);
-        }
-    }
-  else
-    {
-      histName = _genConfs->get("binningHistName_KsKK");
-      if      (histName.Contains("KsKK_2bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_2bins != 0 && ";
-      else if (histName.Contains("KsKK_3bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_3bins != 0 && ";
-      else if (histName.Contains("KsKK_4bins.root")) exclusionString = "B0_D0constKS0constPVconst_Bin_KsKK_4bins != 0 && ";
-      else
-        {
-          exclusionString = "xxx";
-          cout << "PROBLEM, filename for KsKK binning histogram not recognised in Fitting::FinalDataSet" << endl;
-          exit(0);
-        }
-    }
-  if (_genConfs->get("MCsimfit") == "true") exclusionString = "";
 
-  std::cout << "NEED TO RE-INSERT THE CUT ON EVENTS FALLING OUSIDE THE DALITZ PLOTS" << std::endl;
-  std::cout << "AND CHECK FINALDATASET() FOR TREES" << std::endl; */
   std::string masscut = "B0_PVFit_M > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M<" + _genConfs->get("fit_limit_high");
-  //exclusionString += masscut;
   exclusionString = masscut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
@@ -548,21 +446,17 @@ void Fitting::RunFullFit(bool draw=true)
       std::vector< RooRealVar* > listlowcomb = model->getMyLowComb();
 
       std::cout << "About to actually run 'fitTo' " << std::endl;
-      result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended());
+      //result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended());
       //RooFitResult* result = sim->fitTo(*dataBinned, RooFit::Save(), RooFit::Extended());
       //, RooFit::Hesse(false), RooFit::InitialHesse(true));//,RooFit::Strategy(0),RooFit::PrintLevel(1),RooFit::Warnings(true));
       //result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended(), RooFit::Minos(true));
       result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended(), RooFit::Minos(true), RooFit::Strategy(2));
 
 
-      //std::cout << "Second fitTo" << std::endl;
-      //result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended());
-      ////result = sim->fitTo(*dataBinned, RooFit::Save(), RooFit::Extended());
-      ////, RooFit::Hesse(false), RooFit::InitialHesse(true));//,RooFit::Strategy(0),RooFit::PrintLevel(1),RooFit::Warnings(true));
-
       std::cout << "End fitTo" << std::endl;
+
+      // Need to sort out printYieldsAndPurities in Model.C
 /*
-   
       // Get mean in order to calculate yields and purities in Bd, Bs region
       RooArgList allPars = result->floatParsFinal();
       int listindex = allPars.index("bs_mean");
@@ -577,7 +471,6 @@ void Fitting::RunFullFit(bool draw=true)
       integ_limit_high = _genConfs->getD("fit_limit_high");
       model->printYieldsAndPurities("full",integ_limit_low,integ_limit_high);
       model->printYieldsAndPurities("binnedfit",5200,5800);
-
 */
 
       std::cout <<"\n-------- FULL FIT, ALL FLOATING ---------"<< std::endl;
@@ -732,9 +625,7 @@ void Fitting::RunFullFit(bool draw=true)
 
   std::cout<<" going to draw projections "<<std::endl;
 
-  //draw pulls underneath fits?
   bool drawpulls = false;
-  //bool drawpulls = true;
 
   //create canvases
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++)
