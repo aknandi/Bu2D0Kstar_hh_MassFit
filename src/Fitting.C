@@ -535,86 +535,6 @@ void Fitting::RunFullFit(bool draw=true)
           f_fitOutput->Close();
         }
 
-      //a lot of the below is not used any more and may need to be updated
-
-/*      // parameter files:
-      ofstream parFile_combs("output/combsFIXED.txt");
-      ifstream parFileTemplate_combs("output/combs_template.txt");
-      ofstream parFile_signal("output/signalFIXED.txt");
-      ifstream parFileTemplate_signal("output/signal_template.txt");
-      ofstream parFile_partreco("output/partrecoFIXED.txt");
-      ifstream parFileTemplate_partreco("output/partreco_template.txt");
-      ofstream parFile_ratios("output/ratiosFIXED_"+_genConfs->get("fit_limit_low")+".txt");
-      ifstream parFileTemplate_ratios("output/ratios_template.txt");
-      
-      char ch;
-      while(parFileTemplate_partreco && parFileTemplate_partreco.get(ch) ) parFile_partreco.put(ch);
-      while(parFileTemplate_signal && parFileTemplate_signal.get(ch) ) parFile_signal.put(ch);
-      while(parFileTemplate_combs && parFileTemplate_combs.get(ch) ) parFile_combs.put(ch);
-      while(parFileTemplate_ratios && parFileTemplate_ratios.get(ch) ) parFile_ratios.put(ch);
-
-      // Store variable results after fit	
-      std::string textfile = _genConfs->get("toyLocation")+"/fittodatares.txt";
-      ofstream resfile(textfile.c_str());
-
-      RooArgList allpars = result->floatParsFinal();
-      RooArgList allconst = result->constPars();
-      allpars.add(allconst);
-      //TIter finalPar(result->floatParsFinal().createIterator());
-      TIter finalPar(allpars.createIterator());
-      RooRealVar * par;
-      while ((par = (RooRealVar *)finalPar()))
-        {
-          TString varName = par->GetName();
-
-          if(varName.Contains("n_")!=0) continue;
-          if(varName.Contains("combs")!=0) {
-            parFile_combs << par->GetName() << ' ' << par->getVal() << '\n';
-            parFile_combs << par->GetName() << "_LimU " << par->getVal() << '\n';
-            parFile_combs << par->GetName() << "_LimL " << par->getVal() << '\n';
-          }
-          else if(varName.Contains("frac0")!=0) {
-            parFile_partreco << par->GetName() << ' ' << par->getVal() << '\n';
-            parFile_partreco << par->GetName() << "_LimU " << par->getVal() << '\n';
-            parFile_partreco << par->GetName() << "_LimL " << par->getVal() << '\n';
-          }
-         else if(varName.Contains("ratio")!=0 && varName.Contains("low_ratio")==0) {
-            parFile_ratios << par->GetName() << ' ' << par->getVal() << '\n';
-            parFile_ratios << par->GetName() << "_LimU " << par->getVal() << '\n';
-            parFile_ratios << par->GetName() << "_LimL " << par->getVal() << '\n';
-          }
-          else if(varName.Contains("bs")!=0) {
-            parFile_signal << par->GetName() << ' ' << par->getVal() << '\n';
-            parFile_signal << par->GetName() << "_LimU " << par->getVal() << '\n';
-            parFile_signal << par->GetName() << "_LimL " << par->getVal() << '\n';
-          }
-
-        }
-      parFile_combs.close();
-      parFile_signal.close();
-      parFile_partreco.close();
-      parFile_ratios.close();
-      resfile.close();
-
-      // now output all floating parameters
-      ofstream parFile_allvals("output/values_"+_genConfs->get("fit_limit_low")+".txt");
-      ofstream parFile_allerrs("output/errors_"+_genConfs->get("fit_limit_low")+".txt");
-
-      //number of actually floating parameters (by default, 'floating' includes those with zero uncertainty due to lower limit = upper limit)
-      TIter itfloatpars(result->floatParsFinal().createIterator());
-      RooRealVar* floatpar;
-      while ((floatpar = (RooRealVar*)itfloatpars()))
-        {
-          if (floatpar->getError() > 1e-10) ++nFloatParams;
-          parFile_allvals << floatpar->GetName() << ' ' << floatpar->getVal() << '\n';
-          parFile_allerrs << floatpar->GetName() << ' ' << floatpar->getAsymErrorLo() << " " << floatpar->getAsymErrorHi() << " " << 0.5*(-1*floatpar->getAsymErrorLo()+floatpar->getAsymErrorHi()) << '\n';
-        }
-      std::cout << "Found " << nFloatParams << " actually floating parameters" << std::endl;
-      std::cout << "result->floatParsFinal().getSize() is " << result->floatParsFinal().getSize() << std::endl;
-      
-      parFile_allvals.close();
-      parFile_allerrs.close();*/
-
     } // end of doFit = true
 
   if (!draw) return;
@@ -693,13 +613,13 @@ void Fitting::RunFullFit(bool draw=true)
               std::cout<<" plotting Bu "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3)  );
+                           RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
 
               // Combinatoric
               std::cout <<" plotting combinatoric "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3) );
+                           RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
 
               //Bs -> D*K* - regexp to pick up also version split by helamp
               std::cout<<" plotting Bu -> D*K*  "<<std::endl;
@@ -708,7 +628,7 @@ void Fitting::RunFullFit(bool draw=true)
                            //RooFit::Components(Form("PartRecoDstKst_%s_bu_001_%s_%s_%s, PartRecoDstKst_%s_bu_010_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
                            //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
                            //),
-                           RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3)  );
+                           RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
 
             }
 
@@ -788,39 +708,15 @@ void Fitting::RunFullFit(bool draw=true)
               leg->SetFillStyle(0);
               leg->SetBorderSize(0);
               leg->SetTextFont(132);
-              //Int_t legstart = 1;
-              Int_t legstart = 0;
-              for (Int_t n_p = legstart; n_p <= 2; ++n_p)
-                {
-                  std::stringstream hname; hname << "hdummy_" << n_p << "_" << *m << "_" << "_" << *c << "_" << *t << "_" << *a;
-                  TH1F *hdummy = new TH1F(hname.str().c_str(), hname.str().c_str(), 100, 0, 1);
-                  std::string dataname;
-                  if (n_p == 0)
-                    {
-                      hdummy->SetLineColor(kRed);
-                      hdummy->SetLineStyle(kSolid);
-                      dataname = "B_{u} #rightarrow DK^{*}";
-                    }
-                  else if (n_p == 1)
-                    {
-                      hdummy->SetLineColor(kBlack);
-                      hdummy->SetLineStyle(kDashed);
-                      dataname = "B_{u} #rightarrow D^{*}K^{*}";
-                    }
-                  else if (n_p == 2)
-                    {
-                      hdummy->SetLineColor(kMagenta);
-                      hdummy->SetLineStyle(kDotted);
-                      dataname = "Combinatorial";
-                    }
+
+              leg->AddEntry((TObject*)0,"","");
+              leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
+              leg->AddEntry((TObject*)0,"","");
+              leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B_{u} #rightarrow D^{*}K^{*}","l");
+              leg->AddEntry((TObject*)0,"","");
+              leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
 
 
-                  hdummy->SetLineWidth(3);
-                  if(n_p==6 && _genConfs->get("bu_dkpipi")!="true") continue;
-                  else if(n_p==7 && _genConfs->get("bu_dpipipi")!="true") continue;
-                  else if(n_p==8 && _genConfs->get("lb_dppi")!="true") continue;
-                  else leg->AddEntry(hdummy, dataname.c_str(), "L");
-                }
               //do not draw legend if a log plot or pulls are drawn
               //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
               if(_genConfs->get("setLogScale")!="true") leg->Draw();

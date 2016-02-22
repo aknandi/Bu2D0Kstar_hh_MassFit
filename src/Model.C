@@ -64,13 +64,10 @@ RooSimultaneous* Model::getGenPdf()
           RooArgSet pdflist;
           RooArgSet nevents;
 
-          // Bd
+          // Bu
           pdflist.add(*(genPdf.roopdf_bu[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bu_gen[*m][*c][*t][*a]));
 
-/*          // Bs
-          pdflist.add(*(genPdf.roopdf_bs[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bs_gen[*m][*c][*t][*a]));*/
           if(_genConfs->get("MCsimfit")!="true") {
             // Combinatorics
             pdflist.add(*(genPdf.roopdf_comb[*m][*c][*t][*a]));
@@ -78,20 +75,6 @@ RooSimultaneous* Model::getGenPdf()
             // DstKst
             pdflist.add(*(genPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
             nevents.add(*(yields->n_bu_dstkst_gen[*m][*c][*t][*a]));
-            // Part Reco
- /*           if(_genConfs->get("bd_dstkst")=="true"){
-              pdflist.add(*(genPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_bu_dstkst_gen[*m][*c][*t][*a]));
-            }
-            if(_genConfs->get("bs_dstkst")=="true"){
-              pdflist.add(*(genPdf.roopdf_bs_dstkst[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_bs_dstkst_gen[*m][*c][*t][*a]));
-            }
-            // Drho
-            if(_genConfs->get("bd_drho")=="true"){
-              pdflist.add(*(genPdf.roopdf_drho[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_drho_gen[*m][*c][*t][*a]));
-            }*/
           }
 
 
@@ -134,13 +117,10 @@ RooSimultaneous* Model::getFitPdf()
           RooArgSet pdflist;
           RooArgSet nevents;
 
-          // Bd
+          // Bu
           pdflist.add(*(fitPdf.roopdf_bu[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bu_fit[*m][*c][*t][*a]));
 
- /*         // Bs
-          pdflist.add(*(fitPdf.roopdf_bs[*m][*c][*t][*a]));
-          nevents.add(*(yields->n_bs_fit[*m][*c][*t][*a]));*/
           if(_genConfs->get("MCsimfit")!="true")
             {
               // Combinatorics
@@ -149,38 +129,6 @@ RooSimultaneous* Model::getFitPdf()
               // DstKst
               pdflist.add(*(fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
               nevents.add(*(yields->n_bu_dstkst[*m][*c][*t][*a]));
-             // Part Reco
- /*             if(_genConfs->get("bs_dstkst")=="true"){
-                pdflist.add(*(fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_bu_dstkst[*m][*c][*t][*a]));
-              }
-              if(_genConfs->get("bs_dstkst")=="true"){
-                pdflist.add(*(fitPdf.roopdf_bs_dstkst[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_bs_dstkst[*m][*c][*t][*a]));
-                //pdflist.add(*(fitPdf.roopdf_bs_dstkst_010[*m][*c][*t][*a]));
-                //nevents.add(*(yields->n_bs_dstkst_010[*m][*c][*t][*a]));
-                //pdflist.add(*(fitPdf.roopdf_bs_dstkst_001[*m][*c][*t][*a]));
-                //nevents.add(*(yields->n_bs_dstkst_001[*m][*c][*t][*a]));
-              }
-              // Drho
-              if(_genConfs->get("bd_drho")=="true"){
-                pdflist.add(*(fitPdf.roopdf_drho[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_drho[*m][*c][*t][*a]));
-              }
-              // Lambda
-              if(_genConfs->get("lb_dppi")=="true"){ 
-                pdflist.add(*(fitPdf.roopdf_lambda[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_lambda[*m][*c][*t][*a]));
-              }
-              // D3h
-              if(_genConfs->get("bu_dkpipi")=="true"){ 
-                pdflist.add(*(fitPdf.roopdf_dkpipi[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_dkpipi[*m][*c][*t][*a]));
-              }
-              if(_genConfs->get("bu_dpipipi")=="true"){ 
-                pdflist.add(*(fitPdf.roopdf_dpipipi[*m][*c][*t][*a]));
-                nevents.add(*(yields->n_dpipipi[*m][*c][*t][*a]));
-              }*/
             }
           
           // --- No Gaussian Constraints --- 
@@ -273,9 +221,9 @@ RooSimultaneous* Model::getFitPdf()
 
 void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high)
 {
-/*
-  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
 
+  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
+  /*
   // --- for manual integration of RooKeysPdf ---
   RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
   RooDataSet *bd_dstkst_integEvents = fitPdf.roopdf_bd_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
@@ -284,10 +232,11 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
   //RooDataSet *bs_dstkst_001_integEvents = fitPdf.roopdf_bs_dstkst_001[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
   RooDataSet *lambda_integEvents = 0;
   if(_genConfs->get("lb_dppi")=="true") lambda_integEvents = fitPdf.roopdf_lambda[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+*/
 
   std::string integRange = Form("%s>%f && %s<%f",mB->GetName(), integ_limit_low, mB->GetName(), integ_limit_high);
   std::string fitRange = Form("%s>%f && %s<%f",mB->GetName(), _genConfs->getD("fit_limit_low"), mB->GetName(),_genConfs->getD("fit_limit_high"));
-
+/*
   // --- output yields to a text file --- 
   string ofilename="";
   if(b=="Bs")   ofilename="output/GenTotals_bs_"+_genConfs->get("fit_limit_low")+".txt";
@@ -307,12 +256,10 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           //////////////////////////////////////////////////////////////////////
           // Integrals in signal window
           //////////////////////////////////////////////////////////////////////
-          double integral_bd  = fitPdf.roopdf_bd[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
-          double integral_bs  = fitPdf.roopdf_bs[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
+          double integral_bu  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_comb   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           // integration of RooKeysPdf needs to be done by hand 
-          double integral_drho    = drho_integEvents->sumEntries(integRange.c_str())/drho_integEvents->sumEntries(fitRange.c_str());
-          double integral_bd_dstkst    = bd_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
+          double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
           double integral_bs_dstkst    = bs_dstkst_integEvents->sumEntries(integRange.c_str())/bs_dstkst_integEvents->sumEntries(fitRange.c_str());
           double integral_lambda = 0;
           if(_genConfs->get("lb_dppi")=="true") integral_lambda    = lambda_integEvents->sumEntries(integRange.c_str())/lambda_integEvents->sumEntries(fitRange.c_str());
@@ -351,11 +298,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           //integyield_bs_dstkst = integyield_bs_dstkst_010 + integyield_bs_dstkst_001;
           //integyield_bs_dstkst_err = sqrt( pow(integyield_bs_dstkst_010_err,2) + pow(integyield_bs_dstkst_001_err,2));
 
-          // Set to zero any yields of pdfs that are not in fit
-          if(_genConfs->get("bd_dstkst")!="true") { integyield_bd_dstkst=0; integyield_bd_dstkst_err=0; }
-          if(_genConfs->get("lb_dppi")!="true") { integyield_lambda=0; integyield_lambda_err=0; }
-
-          //////////////////////////////////////////////////////////////////////
+         //////////////////////////////////////////////////////////////////////
           // Print out yields in mass window
           //////////////////////////////////////////////////////////////////////
           cout.setf(ios::fixed);
