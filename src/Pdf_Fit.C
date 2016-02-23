@@ -26,13 +26,13 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
 
   // Initialise the PDFs
   // Note that if you uncomment that KeysPdfs but don't use them they use up unnecessary memory!
-  for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
-    for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
-      for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
-        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-          bu[*m][*c][*t][*a]  = new myCrystalBall(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_signal"));
-          comb[*m][*c][*t][*a]   = new Exponential(pmB, *m,"exp",*c,*t,*a,_fileList->get("fit_combs"));
-          bu_dstkst[*m][*c][*t][*a]    = new PartRecoDstKst(pmB, *m,"bu",*c,*t,*a,_fileList->get("fit_partreco"));
+  for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
+    for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
+      for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
+        for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
+          bu[*mode][*charge][*trackType][*run]  = new myCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
+          comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
+          bu_dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_partreco"));
         }
       }
     }
@@ -147,32 +147,32 @@ void Pdf_Fit::setRelations()
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
 	
   // Now loop over the pdfs and set the shared variables which you've just defined
-  for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
-    for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
-      for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
-        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
+  for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
+    for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
+      for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
+        for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
 
           //Signal
-          bu[*m][*c][*t][*a]->setMean(bu_mean);
-          bu[*m][*c][*t][*a]->setWidth(bu_width);
+          bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
+          bu[*mode][*charge][*trackType][*run]->setWidth(bu_width);
 
-          if(*t=="LL")  {
-        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_LL);
-        	  bu[*m][*c][*t][*a]->setN(bu_n_LL);
-        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_LL);
+          if(*trackType=="LL")  {
+        	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
+        	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
+        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
           }
-          else if(*t=="DD") {
-        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_DD);
-        	  bu[*m][*c][*t][*a]->setN(bu_n_DD);
-        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_DD);
+          else if(*trackType=="DD") {
+        	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
+        	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
+        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
           }
-          else if(*t=="mix") {
-        	  bu[*m][*c][*t][*a]->setAlpha(bu_alpha_mix);
-        	  bu[*m][*c][*t][*a]->setN(bu_n_mix);
-        	  comb[*m][*c][*t][*a]->setSlope(combs_slope_mix);
+          else if(*trackType=="mix") {
+        	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
+        	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
+        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
           }
 
-          bu_dstkst[*m][*c][*t][*a]->setFraction(bu_frac010);
+          bu_dstkst[*mode][*charge][*trackType][*run]->setFraction(bu_frac010);
         }
       }
     }
@@ -180,13 +180,13 @@ void Pdf_Fit::setRelations()
 
 
   // Finally, create map of RooPdfs to return
-  for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
-    for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
-      for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
-        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-          roopdf_bu[*m][*c][*t][*a]     = bu[*m][*c][*t][*a]->getPdf();
-          roopdf_comb[*m][*c][*t][*a]      = comb[*m][*c][*t][*a]->getPdf();
-          roopdf_bu_dstkst[*m][*c][*t][*a]  = bu_dstkst[*m][*c][*t][*a]->getPdf();
+  for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
+    for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
+      for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
+        for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
+          roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
+          roopdf_comb[*mode][*charge][*trackType][*run]      = comb[*mode][*charge][*trackType][*run]->getPdf();
+          roopdf_bu_dstkst[*mode][*charge][*trackType][*run]  = bu_dstkst[*mode][*charge][*trackType][*run]->getPdf();
         }
       }
     }

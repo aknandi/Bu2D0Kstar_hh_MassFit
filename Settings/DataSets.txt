@@ -9,6 +9,15 @@ pathToData_d2pipi_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_
 pathToData_d2pik_LL /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_LL_PiPi.root
 pathToData_d2pik_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_PiPi.root
 *
+pathToData_d2kpi_LL_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_LL_KPi_2015.root
+pathToData_d2kpi_DD_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_KPi_2015.root
+pathToData_d2kk_LL_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_LL_KK_2015.root
+pathToData_d2kk_DD_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_KK_2015.root
+pathToData_d2pipi_LL_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_LL_PiPi_2015.root
+pathToData_d2pipi_DD_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_PiPi_2015.root
+pathToData_d2pik_LL_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_LL_PiPi_2015.root
+pathToData_d2pik_DD_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fullSel_DD_PiPi_2015.root
+*
 *pathToData_d2kpi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstPiPi_Final_0.75.root
 *pathToData_d2kk_mix_2011 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20r1_BDKstPiPi_Final_0.75.root
 *pathToData_d2pipi_mix_2012 /data/lhcb/users/cheungs/B02DKstar_Kshh_data/Alexis/RooDataSets/Data_s20_BDKstKK_Final_0.75.root

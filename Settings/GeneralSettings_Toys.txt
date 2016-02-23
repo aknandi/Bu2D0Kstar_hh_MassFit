@@ -4,17 +4,11 @@ drawProjections true
 * INTEGRATION RANGES
 integ_range_low 25
 integ_range_high 25
-bdbs_diff 87.19
 fit_limit_low 4900
 fit_limit_high 5600
 *
 * PDFS
-bd_drho false
-bs_dstkst false
-bd_dstkst false
-bu_dkpipi false
-bu_dpipipi false
-lb_dppi false
+* bu_dksk false
 *
 batchMode true 
 setLogScale false
@@ -42,3 +36,8 @@ makeCorrelationMatrix false
 MCsimfit false
 *
 UNBLIND true
+* 
+* CATEGORIES
+chargeSeparated false
+trackSeparated true
+runSeparated false

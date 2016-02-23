@@ -174,24 +174,47 @@ void Fitting::DefineRooCategories()
       mode.defineType((*m).c_str());
     }
 
-  // Define charge categories - could be minus,plus or both
-  chargeList.push_back(both);
-  charge.defineType(both.c_str());
-  //  chargeList.push_back(minus);
-  //  chargeList.push_back(plus);
-  //  charge.defineType(plus.c_str());
-  //  charge.defineType(minus.c_str());
- 
-  // Define Ks track type categories - could be LL,DD or both
-  trackList.push_back(LL);
-  trackList.push_back(DD);
-  track.defineType(LL.c_str());
-  track.defineType(DD.c_str());
-  //trackList.push_back(mix);
-  //track.defineType(mix.c_str());
+  // Define charge categories - could be minus, plus or both
+  if(_genConfs->get("chargeSeparated")=="true") {
+	  chargeList.push_back(minus);
+	  chargeList.push_back(plus);
+  }
+  else {
+	  chargeList.push_back(both);
+  }
+  for (std::vector<std::string>::iterator c = chargeList.begin(); c != chargeList.end(); c++)
+    {
+      charge.defineType((*c).c_str());
+    }
 
-  runList.push_back(all);
-  run.defineType(all.c_str());
+ 
+  // Define Ks track type categories - could be LL, DD or both
+  if(_genConfs->get("trackSeparated")=="true") {
+	  trackList.push_back(LL);
+	  trackList.push_back(DD);
+  }
+  else {
+	  trackList.push_back(mix);
+  }
+  for (std::vector<std::string>::iterator t = trackList.begin(); t != trackList.end(); t++)
+    {
+      track.defineType((*t).c_str());
+    }
+
+  // Define run categories - could be run1, run2 or both
+  if(_genConfs->get("runSeparated")=="true") {
+	  runList.push_back(run1);
+	  runList.push_back(run2);
+  }
+  else {
+	  runList.push_back(all);
+  }
+
+  for (std::vector<std::string>::iterator a = runList.begin(); a != runList.end(); a++)
+    {
+      run.defineType((*a).c_str());
+    }
+
 
   catNew = new RooCategory("catNew", "catNew");
   std::string catNewLabel;
@@ -297,12 +320,14 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
   
+  gROOT->cd();		// Copy the TTree into memory otherwise new tree will try to write to the old file
   TTree* reducedtree = (TTree*) tree->CopyTree(exclusionString);
   double bm(0);
   double cla(0);
   reducedtree->SetBranchAddress("Bu_D0constKS0constPVconst_M",&bm);
   reducedtree->SetBranchAddress("BDTG",&cla);
 
+  /*
   TTree* newtree = new TTree("TTT","");
   double bm_new(0);
   double bdt(0);
@@ -314,16 +339,17 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
     bdt = cla;
     newtree->Fill();
   }
+  */
 
   RooDataSet *input = new RooDataSet(Form("%s_%s",s_mode.c_str(),s_track.c_str()),
                                      Form("Final %s %s",s_mode.c_str(),s_track.c_str()),
-                                     (TTree*)newtree,inputlist); //,exclusionString);
+                                     (TTree*)reducedtree,inputlist); //,exclusionString);
   RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,run,track,charge,*catNew));
   
   // Now loop over the entries in the dataset and make sure all the types are assigned 
   int numEntries = input->numEntries();
   std::cout << "Number of entries in input file: " << tree->GetEntries() << std::endl;
-  std::cout << "Number of entries after exclusion: " << reducedtree->GetEntries() << " or " << numEntries << std::endl;
+  std::cout << "Number of entries after exclusion: " << numEntries << std::endl;
 
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
@@ -354,7 +380,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 
   TString exclusionString;
 
-  std::string masscut = "B0_PVFit_M > " + _genConfs->get("fit_limit_low") + " && B0_PVFit_M<" + _genConfs->get("fit_limit_high");
+  std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
   exclusionString = masscut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
@@ -799,23 +825,23 @@ void Fitting::RunFullFit(bool draw=true)
           if(_genConfs->get("setLogScale")=="true")
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvas[*t][*a]->GetName()));
+              //v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvas[*t][*a]->GetName()));
+              //v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvas[*t][*a]->GetName()));
               v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvas[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.pdf",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.eps",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.png",v_canRes[*t][*a]->GetName()));
+              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.eps",v_canRes[*t][*a]->GetName()));
+              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.png",v_canRes[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.C",v_canRes[*t][*a]->GetName()));
             }
           else
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.pdf",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s.png",v_canvas[*t][*a]->GetName()));
+              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
+              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.png",v_canvas[*t][*a]->GetName()));
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.C",v_canvas[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.pdf",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.eps",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.png",v_canRes[*t][*a]->GetName()));
+              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.eps",v_canRes[*t][*a]->GetName()));
+              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.png",v_canRes[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.C",v_canRes[*t][*a]->GetName()));
             }
         }
@@ -835,8 +861,8 @@ void Fitting::RunFullFit(bool draw=true)
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
         for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvaslog[*t][*a]->GetName()));
-          v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvaslog[*t][*a]->GetName()));
-          v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvaslog[*t][*a]->GetName()));
+          //v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvaslog[*t][*a]->GetName()));
+          //v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvaslog[*t][*a]->GetName()));
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvaslog[*t][*a]->GetName()));
         }
       }
