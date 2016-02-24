@@ -14,7 +14,7 @@ using namespace RooFit;
 
 class InternalStorage;
 
-Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allbinList, std::string unblind)
+Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allrunList, std::string unblind)
 {
   _genConfs = genConfs;
   _fileList = fileList;
@@ -23,7 +23,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   modeList=allmodeList;
   chargeList=allchargeList;
   trackList=alltrackList;
-  binList=allbinList;
+  runList=allrunList;
 
   input = new Settings("SetRatios");
   input->readPairStringsToMap(_fileList->get("PathnameToRatios"));
@@ -41,44 +41,9 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   std::cout << "Initialising yields ... " << std::endl;
   SetOtherBkgs(); // this has to come before setyieldsGenandfit()
   SetDstKstGenandFit();
-  SetDrhoGenandFit();
   SetYieldsGenandFit(); // must be last
 
   std::cout<<" Yields done "<<std::endl;
-
-}
-
-void Yields::SetDrhoGenandFit()
-{
-/*  for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
-    for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
-      for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
-
-        double drho_ratio=0.;
-        if(_genConfs->get("genToys")=="false"){ 
-          drho_ratio = input->getD(Form("Bd_Drho_ratio_to_Bs_%s",limitlow.c_str())) * input->getD("Drho_Swave_factor");
-        }
-        else {
-          // 1. Calculated value
-          // drho_ratio = input->getD(Form("Bd_Drho_ratio_to_Bs_%s",limitlow.c_str())) * input->getD("Drho_Swave_factor");
-          // 2. Fit value
-          drho_ratio = input->getD(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * input->getD("Drho_Swave_factor");
-        }
-
-        double drho_ratio_err = input->getD(Form("Bd_Drho_ratio_to_Bs_%s_err",limitlow.c_str())) * input->getD("Drho_Swave_factor");
-
-        // Hard code Alexis' numbers
-        //if(*t=="LL") { drho_ratio = 0.0392; drho_ratio_err=0.0096; }
-        //if(*t=="DD") { drho_ratio = 0.0381; drho_ratio_err=0.0093; }
-
-        ratio_bs_drho[*c][*t][*a] = new RooRealVar(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()),"",drho_ratio,0.0,1.0);
-        std::cout << ratio_bs_drho[*c][*t][*a]->GetName() << " " << drho_ratio << " +- " << drho_ratio_err << std::endl;
-        // Gaussian constrain
-        gausratio_bs_drho[*c][*t][*a] = new RooGaussian(Form("gausratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str()), "", *ratio_bs_drho[*c][*t][*a], RooFit::RooConst(drho_ratio), RooFit::RooConst(drho_ratio_err));
-      }
-    }
-  }*/
-
 
 }
 
@@ -190,14 +155,12 @@ void Yields::SetYieldsGenandFit()
 {
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
     for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
-      for(std::vector<std::string>::iterator a=binList.begin(); a!=binList.end();a++){
+      for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
         for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
 
           // --- Gen yields ---
           double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,0,10000);
-     /*     double N_bs   = input->getD(Form("N_bs_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          n_bs_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0,10000);*/
           double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000);
 
@@ -218,16 +181,13 @@ void Yields::SetYieldsGenandFit()
           //
           // 3. If you want to generate directly with yields
           //
-//          double N_drho = input->getD(Form("N_drho_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           double N_bu_dstkst = input->getD(Form("N_bu_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-//          double N_bd_dstkst = input->getD(Form("N_bd_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
           //////////////////////
 
           n_bu_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0,10000);
 
           // --- Fit yields ---
           n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,-10.,10000.);
- //         n_bs_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bs_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bs,0.,10000.);
           n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000.);
           n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0.,10000.);
         }

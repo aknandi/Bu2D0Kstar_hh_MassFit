@@ -31,7 +31,6 @@ class Yields
   void SetYieldsGenandFit();
   void SetOtherBkgs();
   void SetDstKstGenandFit();
-  void SetDrhoGenandFit();
   
   double genscale;
   std::string limitlow;
@@ -75,7 +74,7 @@ class Yields
   std::vector<std::string> pidList;
   std::vector<std::string> trackList;
   std::vector<std::string> chargeList;
-  std::vector<std::string> binList;
+  std::vector<std::string> runList;
 
 
 
