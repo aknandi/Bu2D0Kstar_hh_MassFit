@@ -13,7 +13,7 @@
 class Pdf_Fit
 {
  public :
-  Pdf_Fit();
+  Pdf_Fit(){};
   Pdf_Fit(Settings*,Settings*,RooRealVar*, std::vector<std::string>, std::vector<std::string>, std::vector<std::string> , std::vector<std::string>, int systematicFactor=0, std::string MCsimfit="");
   void setRelations();
   // PDFs to return

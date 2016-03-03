@@ -13,7 +13,7 @@
 class Pdf_Gen
 {
  public :
-  Pdf_Gen();
+  Pdf_Gen(){};
   Pdf_Gen(Settings*,RooRealVar*, std::vector<std::string>, std::vector<std::string>, std::vector<std::string> , std::vector<std::string>);
   void setRelations();
   // PDFs to return

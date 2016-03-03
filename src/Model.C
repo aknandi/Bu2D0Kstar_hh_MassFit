@@ -223,24 +223,17 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 {
 
   mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
-  /*
+
   // --- for manual integration of RooKeysPdf ---
-  RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bd_dstkst_integEvents = fitPdf.roopdf_bd_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bs_dstkst_integEvents = fitPdf.roopdf_bs_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  //RooDataSet *bs_dstkst_010_integEvents = fitPdf.roopdf_bs_dstkst_010[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  //RooDataSet *bs_dstkst_001_integEvents = fitPdf.roopdf_bs_dstkst_001[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *lambda_integEvents = 0;
-  if(_genConfs->get("lb_dppi")=="true") lambda_integEvents = fitPdf.roopdf_lambda[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-*/
+  //RooDataSet *bu_dstkst_integEvents = fitPdf.roopdf_bu_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
+
 
   std::string integRange = Form("%s>%f && %s<%f",mB->GetName(), integ_limit_low, mB->GetName(), integ_limit_high);
   std::string fitRange = Form("%s>%f && %s<%f",mB->GetName(), _genConfs->getD("fit_limit_low"), mB->GetName(),_genConfs->getD("fit_limit_high"));
-/*
+
   // --- output yields to a text file --- 
   string ofilename="";
-  if(b=="Bs")   ofilename="output/GenTotals_bs_"+_genConfs->get("fit_limit_low")+".txt";
-  if(b=="Bd")   ofilename="output/GenTotals_reduced_"+_genConfs->get("fit_limit_low")+".txt";
+  if(b=="Bu")   ofilename="output/GenTotals_bu_"+_genConfs->get("fit_limit_low")+".txt";
   if(b=="full") ofilename="output/GenTotals_"+_genConfs->get("fit_limit_low")+".txt";
   if(b=="binnedfit") ofilename="output/GenTotals_binnedfit_"+_genConfs->get("fit_limit_low")+".txt";
 
@@ -248,7 +241,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
   GenTotals << "* 2013 (2011 + 2012)" << std::endl;
   GenTotals << "*" << std::endl;
   GenTotals << "DEBUG_runInHighStatsMode 0" << std::endl;
-
+/*
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
@@ -258,35 +251,21 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           //////////////////////////////////////////////////////////////////////
           double integral_bu  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_comb   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
+          double integral_bu_dstkst   = fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           // integration of RooKeysPdf needs to be done by hand 
           double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
-          double integral_bs_dstkst    = bs_dstkst_integEvents->sumEntries(integRange.c_str())/bs_dstkst_integEvents->sumEntries(fitRange.c_str());
-          double integral_lambda = 0;
-          if(_genConfs->get("lb_dppi")=="true") integral_lambda    = lambda_integEvents->sumEntries(integRange.c_str())/lambda_integEvents->sumEntries(fitRange.c_str());
-
           //////////////////////////////////////////////////////////////////////
           // Integrated yields
           //////////////////////////////////////////////////////////////////////
           //std::cout << "Normalised integrals" << std::endl;
-          double integyield_bd     = integral_bd * yields->n_bd_fit[*m][*c][*t][*a]->getVal();
-          double integyield_bs     = integral_bs * yields->n_bs_fit[*m][*c][*t][*a]->getVal();
+          double integyield_bu     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getVal();
           double integyield_comb   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getVal();
-          double integyield_bd_dstkst  = integral_bd_dstkst * yields->n_bd_dstkst[*m][*c][*t][*a]->getVal();
-          double integyield_bs_dstkst   = integral_bs_dstkst * yields->n_bs_fit[*m][*c][*t][*a]->getVal() * yields->ratio_bs_dstkst[*c][*t][*a]->getVal();
-          double integyield_drho   = integral_drho * yields->n_bs_fit[*m][*c][*t][*a]->getVal() * yields->ratio_bs_drho[*c][*t][*a]->getVal();
-          double integyield_lambda   = 0;
-          if(_genConfs->get("lb_dppi")=="true") integyield_lambda = integral_lambda * yields->n_bs_fit[*m][*c][*t][*a]->getVal() * yields->ratio_bs_lambda[*c][*t][*a]->getVal();
+          double integyield_bu_dstkst  = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getVal();
 
           // Errors
-          double integyield_bd_err     = integral_bd * yields->n_bd_fit[*m][*c][*t][*a]->getError();
-          double integyield_bs_err     = integral_bs * yields->n_bs_fit[*m][*c][*t][*a]->getError();
+          double integyield_bu_err     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getError();
           double integyield_comb_err   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getError();
-          //double integyield_bd_dstkst_err = integral_bd_dstkst * yields->n_bd_dstkst[*m][*c][*t][*a]->getError();
-          double integyield_bd_dstkst_err   = integyield_bd_dstkst * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bd_dstkst[*c][*t][*a]->getError()/yields->ratio_bd_dstkst[*c][*t][*a]->getVal(),2) ); 
-          double integyield_bs_dstkst_err   = integyield_bs_dstkst * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bs_dstkst[*c][*t][*a]->getError()/yields->ratio_bs_dstkst[*c][*t][*a]->getVal(),2) ); 
-          double integyield_drho_err   = integyield_drho * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bs_drho[*c][*t][*a]->getError()/yields->ratio_bs_drho[*c][*t][*a]->getVal(),2) ); 
-          double integyield_lambda_err = 0;
-          if(_genConfs->get("lb_dppi")=="true") integyield_lambda_err = integyield_lambda * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bs_lambda[*c][*t][*a]->getError()/yields->ratio_bs_lambda[*c][*t][*a]->getVal(),2) ); 
+          double integyield_bu_dstkst_err = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getError();
 
           // --- If Bs->D*K* yields split by helamp ---
           //double integral_bs_dstkst_010    = bs_dstkst_010_integEvents->sumEntries(integRange.c_str())/bs_dstkst_010_integEvents->sumEntries(fitRange.c_str());
