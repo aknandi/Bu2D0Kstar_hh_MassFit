@@ -2,8 +2,8 @@ doFit true
 drawProjections true
 *
 * INTEGRATION RANGES
-integ_range_low 25
-integ_range_high 25
+integ_range_low 30
+integ_range_high 30
 fit_limit_low 4900
 fit_limit_high 5600
 *

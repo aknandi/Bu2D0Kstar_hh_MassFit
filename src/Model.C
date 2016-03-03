@@ -235,13 +235,13 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
   string ofilename="";
   if(b=="Bu")   ofilename="output/GenTotals_bu_"+_genConfs->get("fit_limit_low")+".txt";
   if(b=="full") ofilename="output/GenTotals_"+_genConfs->get("fit_limit_low")+".txt";
-  if(b=="binnedfit") ofilename="output/GenTotals_binnedfit_"+_genConfs->get("fit_limit_low")+".txt";
+  //if(b=="binnedfit") ofilename="output/GenTotals_binnedfit_"+_genConfs->get("fit_limit_low")+".txt";
 
   ofstream GenTotals(ofilename);
   GenTotals << "* 2013 (2011 + 2012)" << std::endl;
   GenTotals << "*" << std::endl;
   GenTotals << "DEBUG_runInHighStatsMode 0" << std::endl;
-/*
+
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
@@ -253,7 +253,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double integral_comb   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_bu_dstkst   = fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           // integration of RooKeysPdf needs to be done by hand 
-          double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
+          //double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
           //////////////////////////////////////////////////////////////////////
           // Integrated yields
           //////////////////////////////////////////////////////////////////////
@@ -285,124 +285,55 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 
           cout << "//////////////////////////////////////////////////////////////////////\n// Integrated yields in " << b << " window (" << integ_limit_low << " - " << integ_limit_high << ")\n/////////////////////////////////////////////////////////" << endl;
           cout<<"In bin : "<<*m<<", "<<*c<<", "<<*t<<", "<<*a<<endl;
-          cout << "Bd signal: " << integyield_bd << " +/- " << integyield_bd_err << std::endl;
-          cout << "Bs:        " << integyield_bs << " +/- " << integyield_bs_err << std::endl;
+          cout << "Bu signal: " << integyield_bu << " +/- " << integyield_bu_err << std::endl;
           cout << "Combs:     " << integyield_comb << " +/- " << integyield_comb_err << std::endl;
-          cout << "D0rho0:    " << integyield_drho << " +/- " << integyield_drho_err << std::endl;
-          cout << "Bs D*K*:   " << integyield_bs_dstkst << " +/- " << integyield_bs_dstkst_err << std::endl;
-          cout << "Bd D*K*:   " << integyield_bd_dstkst << " +/- " << integyield_bd_dstkst_err << std::endl;
-          cout << "Lambda:    " << integyield_lambda << " +/- " << integyield_lambda_err << std::endl;
+          cout << "Bu D*K*:   " << integyield_bu_dstkst << " +/- " << integyield_bu_dstkst_err << std::endl;
           cout << "/////////////////////////////////////////////////////////////////" << endl;
-          double total = integyield_bd + integyield_bs + integyield_comb + integyield_drho + integyield_bd_dstkst + integyield_bs_dstkst;
-          double nS = (b == "Bd" ? integyield_bd : integyield_bs);
-          double nSerr = (b == "Bd" ? integyield_bd_err : integyield_bs_err);
+          double total = integyield_bu + integyield_comb + integyield_bu_dstkst;
+          double nS = integyield_bu;
+          double nSerr = integyield_bu_err;
           double nB = total - nS;
-          double nBerr =sqrt( pow(integyield_bs,2) + pow(integyield_comb,2) + pow(integyield_drho,2) + pow(integyield_bd_dstkst,2) + pow(integyield_bs_dstkst,2) );
+          double nBerr =sqrt( pow(integyield_comb,2) + pow(integyield_bu_dstkst,2) );
           double purity = nS/total;
           double purity_err = sqrt( (nS*nS*nBerr*nBerr + nB*nB*nSerr*nSerr)/pow(nS+nB,4));
+          // Not sure if the yield give should be in the B mass region or the total yield of signal peak
+          // nS and nSerr- inside or outside the if statement?
+          if(b!="full") {
+          plotNums[*m][*c][*t][*a]["val"]= nS;
+          plotNums[*m][*c][*t][*a]["err"]= nSerr;
           plotNums[*m][*c][*t][*a]["purity_val"]=purity;
           plotNums[*m][*c][*t][*a]["purity_err"]=purity_err;
-          if(b!="full") cout << "PURITY: " << purity << " +- " << purity_err << endl;
-
+          cout << "PURITY: " << purity << " +- " << purity_err << endl;
+          }
+/*
           //////////////////////////////////////////////////////////////////////
           // Latex style
           //////////////////////////////////////////////////////////////////////
           cout << "\\begin{tabular}{l r c l}" << endl;
           cout << "\\hline" << endl;
           cout << b << " window & & & \\\\" << endl;
-          cout << "$B^0 \\to D^{0} K^{\\ast 0}$ & $" << integyield_bd << "$ & $\\pm$ & $" << integyield_bd_err << "$ \\\\ " << endl;
-          cout << "$B_s^0 \\to D^{0} K^{\\ast 0}$ & $" << integyield_bs << "$ & $\\pm$ & $" << integyield_bs_err << "$ \\\\ " << endl;
+          cout << "$B^+ \\to D^{0} K^{\\ast +}$ & $" << integyield_bu << "$ & $\\pm$ & $" << integyield_bu_err << "$ \\\\ " << endl;
           cout << "$\\mathrm{Combinatoric}$ & $" << integyield_comb << "$ & $\\pm$ & $" << integyield_comb_err << "$ \\\\ " << endl;
-          cout << "$B^0 \\to D^{0} \\rho^{0}$ & $" << integyield_drho << "$ & $\\pm$ & $" << integyield_drho_err << "$ \\\\ " << endl;
-          cout << "$B_s^0 \\to D^{\\ast 0} K^{\\ast 0}$ & $" << integyield_bs_dstkst << "$ & $\\pm$ & $" << integyield_bs_dstkst_err << "$ \\\\ " << endl;
-          cout << "$B^0 \\to D^{\\ast 0} K^{\\ast 0}$ & $" << integyield_bd_dstkst << "$ & $\\pm$ & $" << integyield_bd_dstkst_err << "$ \\\\ " << endl;
+          cout << "$B^+ \\to D^{\\ast 0} K^{\\ast +}$ & $" << integyield_bu_dstkst << "$ & $\\pm$ & $" << integyield_bu_dstkst_err << "$ \\\\ " << endl;
           cout << "\\hline"  << endl;
           cout << "\\end{tabular}"  << endl;
-
+*/
           //////////////////////////////////////////////////////////////////////
           // Output to text files
           //////////////////////////////////////////////////////////////////////
-          GenTotals << "N_bd_" << *m << "_both_" << *t << " " << integyield_bd << std::endl;
-          GenTotals << "N_bd_" << *m << "_plus_" << *t << " " << integyield_bd/2.0 << std::endl;
-          GenTotals << "N_bd_" << *m << "_minus_" << *t << " " << integyield_bd/2.0 << std::endl;
-          GenTotals << "N_bs_" << *m << "_both_" << *t << " " << integyield_bs << std::endl;
-          GenTotals << "N_bs_" << *m << "_plus_" << *t << " " << integyield_bs/2.0 << std::endl;
-          GenTotals << "N_bs_" << *m << "_minus_" << *t << " " << integyield_bs/2.0 << std::endl;
+          GenTotals << "N_bu_" << *m << "_both_" << *t << " " << integyield_bu << std::endl;
+          GenTotals << "N_bu_" << *m << "_plus_" << *t << " " << integyield_bu/2.0 << std::endl;
+          GenTotals << "N_bu_" << *m << "_minus_" << *t << " " << integyield_bu/2.0 << std::endl;
           GenTotals << "N_comb_" << *m << "_both_" << *t << " " << integyield_comb << std::endl;
           GenTotals << "N_comb_" << *m << "_plus_" << *t << " " << integyield_comb/2.0 << std::endl;
           GenTotals << "N_comb_" << *m << "_minus_" << *t << " " << integyield_comb/2.0 << std::endl;
-          GenTotals << "N_drho_" << *m << "_both_" << *t << " " << integyield_drho << std::endl;
-          GenTotals << "N_drho_" << *m << "_plus_" << *t << " " << integyield_drho/2.0 << std::endl;
-          GenTotals << "N_drho_" << *m << "_minus_" << *t << " " << integyield_drho/2.0 << std::endl;
-          GenTotals << "N_bs_dstkst_" << *m << "_both_" << *t << " " << integyield_bs_dstkst << std::endl;
-          GenTotals << "N_bs_dstkst_" << *m << "_plus_" << *t << " " << integyield_bs_dstkst/2.0 << std::endl;
-          GenTotals << "N_bs_dstkst_" << *m << "_minus_" << *t << " " << integyield_bs_dstkst/2.0 << std::endl;
-          GenTotals << "N_bd_dstkst_" << *m << "_both_" << *t << " " << integyield_bd_dstkst << std::endl;
-          GenTotals << "N_bd_dstkst_" << *m << "_plus_" << *t << " " << integyield_bd_dstkst/2.0 << std::endl;
-          GenTotals << "N_bd_dstkst_" << *m << "_minus_" << *t << " " << integyield_bd_dstkst/2.0 << std::endl;
+          GenTotals << "N_bu_dstkst_" << *m << "_both_" << *t << " " << integyield_bu_dstkst << std::endl;
+          GenTotals << "N_bu_dstkst_" << *m << "_plus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
+          GenTotals << "N_bu_dstkst_" << *m << "_minus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
 
         }
       }
     }
   }
-
-  GenTotals.close();*/
-
+  GenTotals.close();
 }
-/*
-void Model::printYields()
-{
-   
-
-
-  // need to integrate RooKeysPdf manually
-  RooDataSet *drho_integEvents = fitPdf.roopdf_drho[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bd_dstkst_integEvents = fitPdf.roopdf_bd_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  RooDataSet *bs_dstkst_integEvents = fitPdf.roopdf_bs_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_binList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-  std::string integRange = Form("%s>%f && %s<%f",mB->GetName(), _genConfs->getD("integ_limit_low_Bd"), mB->GetName(),_genConfs->getD("integ_limit_high_Bd"));
-  std::string fitRange = Form("%s>%f && %s<%f",mB->GetName(), _genConfs->getD("fit_limit_low"), mB->GetName(),_genConfs->getD("fit_limit_high"));
-
-  for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
-    for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
-      for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
-        for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-          //////////////////////////////////////////////////////////////////////
-          // Write out yields to text files
-          //////////////////////////////////////////////////////////////////////
-          GenTotals_full << "Nsignal_" << *m << "_fail_plus_" << *t << " " << integyield_full_dpi_sig/2.0 << std::endl;
-          GenTotals_full << "Nsignal_" << *m << "_fail_minus_" << *t << " " << integyield_full_dpi_sig/2.0 << std::endl;
-          GenTotals_full << "Nsignal_" << *m << "_pass_plus_" << *t << " " << integyield_full_dk_sig/2.0 << std::endl;
-          GenTotals_full << "Nsignal_" << *m << "_pass_minus_" << *t << " " << integyield_full_dk_sig/2.0 << std::endl;
-          
-          GenTotals_full << "NLow_" << *m << "_fail_plus_" << *t << " " << integyield_full_dpi_lowmass/2.0 << std::endl;
-          GenTotals_full << "NLow_" << *m << "_fail_minus_" << *t << " " << integyield_full_dpi_lowmass/2.0 << std::endl;
-          GenTotals_full << "NLow_" << *m << "_pass_plus_" << *t << " " << integyield_full_dk_lowmass/2.0 << std::endl;
-          GenTotals_full << "NLow_" << *m << "_pass_minus_" << *t << " " << integyield_full_dk_lowmass/2.0 << std::endl;
-          
-          GenTotals_full << "NComb_" << *m << "_fail_plus_" << *t << " " << integyield_full_dpi_comb/2.0 << std::endl;
-          GenTotals_full << "NComb_" << *m << "_fail_minus_" << *t << " " << integyield_full_dpi_comb/2.0 << std::endl;
-          GenTotals_full << "NComb_" << *m << "_pass_plus_" << *t << " " << integyield_full_dk_comb/2.0 << std::endl;
-          GenTotals_full << "NComb_" << *m << "_pass_minus_" << *t << " " << integyield_full_dk_comb/2.0 << std::endl;
-
-          GenTotals_reduced << "Nsignal_" << *m << "_fail_plus_" << *t << " " << integyield_reduced_dpi_sig/2.0 << std::endl;
-          GenTotals_reduced << "Nsignal_" << *m << "_fail_minus_" << *t << " " << integyield_reduced_dpi_sig/2.0 << std::endl;
-          GenTotals_reduced << "Nsignal_" << *m << "_pass_plus_" << *t << " " << integyield_reduced_dk_sig/2.0 << std::endl;
-          GenTotals_reduced << "Nsignal_" << *m << "_pass_minus_" << *t << " " << integyield_reduced_dk_sig/2.0 << std::endl;
-          
-          GenTotals_reduced << "NLow_" << *m << "_fail_plus_" << *t << " " << integyield_reduced_dpi_lowmass/2.0 << std::endl;
-          GenTotals_reduced << "NLow_" << *m << "_fail_minus_" << *t << " " << integyield_reduced_dpi_lowmass/2.0 << std::endl;
-          GenTotals_reduced << "NLow_" << *m << "_pass_plus_" << *t << " " << integyield_reduced_dk_lowmass/2.0 << std::endl;
-          GenTotals_reduced << "NLow_" << *m << "_pass_minus_" << *t << " " << integyield_reduced_dk_lowmass/2.0 << std::endl;
-          
-          GenTotals_reduced << "NComb_" << *m << "_fail_plus_" << *t << " " << integyield_reduced_dpi_comb/2.0 << std::endl;
-          GenTotals_reduced << "NComb_" << *m << "_fail_minus_" << *t << " " << integyield_reduced_dpi_comb/2.0 << std::endl;
-          GenTotals_reduced << "NComb_" << *m << "_pass_plus_" << *t << " " << integyield_reduced_dk_comb/2.0 << std::endl;
-          GenTotals_reduced << "NComb_" << *m << "_pass_minus_" << *t << " " << integyield_reduced_dk_comb/2.0 << std::endl;
-        }
-      }
-    }
-  }
-
-}
-*/
-

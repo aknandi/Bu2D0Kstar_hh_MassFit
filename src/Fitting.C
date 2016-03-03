@@ -481,23 +481,19 @@ void Fitting::RunFullFit(bool draw=true)
 
       std::cout << "End fitTo" << std::endl;
 
-      // Need to sort out printYieldsAndPurities in Model.C
-/*
-      // Get mean in order to calculate yields and purities in Bd, Bs region
+
+      // Get mean in order to calculate yields and purities in Bu region
       RooArgList allPars = result->floatParsFinal();
-      int listindex = allPars.index("bs_mean");
+      int listindex = allPars.index("bu_mean");
       double mean = ((RooRealVar*)allPars.at(listindex))->getVal();
       double integ_limit_low  = mean - _genConfs->getD("integ_range_low");
       double integ_limit_high = mean + _genConfs->getD("integ_range_high");
-      model->printYieldsAndPurities("Bs",integ_limit_low,integ_limit_high);
-      integ_limit_low  -= _genConfs->getD("bdbs_diff");
-      integ_limit_high -= _genConfs->getD("bdbs_diff");
-      model->printYieldsAndPurities("Bd",integ_limit_low,integ_limit_high);
+      model->printYieldsAndPurities("Bu",integ_limit_low,integ_limit_high);
       integ_limit_low = _genConfs->getD("fit_limit_low");
       integ_limit_high = _genConfs->getD("fit_limit_high");
       model->printYieldsAndPurities("full",integ_limit_low,integ_limit_high);
-      model->printYieldsAndPurities("binnedfit",5200,5800);
-*/
+      //model->printYieldsAndPurities("binnedfit",5200,5800);
+
 
       std::cout <<"\n-------- FULL FIT, ALL FLOATING ---------"<< std::endl;
       std::cout <<"\n-------- minNLL = " << double(result->minNll()) << std::endl;
@@ -647,7 +643,7 @@ void Fitting::RunFullFit(bool draw=true)
                            RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
                            RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
 
-              //Bs -> D*K* - regexp to pick up also version split by helamp
+              //Bu -> D*K* - regexp to pick up also version split by helamp
               std::cout<<" plotting Bu -> D*K*  "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("PartRecoDstKst_%s_bu*_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
@@ -714,9 +710,9 @@ void Fitting::RunFullFit(bool draw=true)
               sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_val"]*100); TString ts_purity(num);
               sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_err"]*100); TString ts_purityerr(num);
               //write signal yield and purity on plots (not done by default)
-              // TLatex *latex_yield = new TLatex(5450,plot[*p][*c][*t][*a]->GetMaximum()*0.65,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
+              // TLatex *latex_yield = new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.70,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
               // if(_genConfs->get("setLogScale")!="true") latex_yield->Draw();
-              // TLatex *latex_purity= new TLatex(5450,plot[*p][*c][*t][*a]->GetMaximum()*0.55,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
+              // TLatex *latex_purity= new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.60,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
               // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
               plot[*c][*t][*a]->SetTitle("");
               plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
@@ -729,7 +725,7 @@ void Fitting::RunFullFit(bool draw=true)
               //draw legend
               //- hardcoded order
               //Double_t legtop = 0.62;
-              Double_t legtop = 0.71;
+              Double_t legtop = 0.60;
               TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
               leg->SetFillStyle(0);
               leg->SetBorderSize(0);
@@ -825,23 +821,15 @@ void Fitting::RunFullFit(bool draw=true)
           if(_genConfs->get("setLogScale")=="true")
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvas[*t][*a]->GetName()));
-              //v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvas[*t][*a]->GetName()));
-              //v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvas[*t][*a]->GetName()));
               v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvas[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.pdf",v_canRes[*t][*a]->GetName()));
-              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.eps",v_canRes[*t][*a]->GetName()));
-              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.png",v_canRes[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.C",v_canRes[*t][*a]->GetName()));
             }
           else
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.pdf",v_canvas[*t][*a]->GetName()));
-              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
-              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.png",v_canvas[*t][*a]->GetName()));
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.C",v_canvas[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.pdf",v_canRes[*t][*a]->GetName()));
-              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.eps",v_canRes[*t][*a]->GetName()));
-              //if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.png",v_canRes[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.C",v_canRes[*t][*a]->GetName()));
             }
         }
@@ -861,8 +849,6 @@ void Fitting::RunFullFit(bool draw=true)
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
         for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvaslog[*t][*a]->GetName()));
-          //v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.eps",v_canvaslog[*t][*a]->GetName()));
-          //v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.png",v_canvaslog[*t][*a]->GetName()));
           v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvaslog[*t][*a]->GetName()));
         }
       }
