@@ -977,7 +977,7 @@ void Fitting::NewOrderToys(int n)
   int nEvtsPerSample=(int)genPdf->expectedEvents(*catNew);
   
   std::cout<<"Generating "<<n<<" toys of "<<nEvtsPerSample<<" events."<<std::endl;
- /* 
+
   // ========= Using RooMCStudy ============= 
   mcstudy->generateAndFit(n,nEvtsPerSample,true);
   fittedPars->Print("v");
@@ -998,14 +998,22 @@ void Fitting::NewOrderToys(int n)
   {
     TString vname = fitpar->GetName();
     if(vname.Contains("catNew")) continue;
+    // Yields produced error so for the moment pulls are not being plotted
+    if(vname.Contains("n_bu")) continue;
+    if(vname.Contains("n_comb")) continue;
     bool isfixed=0;
+    // Do not want to work out pulls for fixed params
+    // All parameters relating to partreco are fixed but not included in fixedParams
+    if(vname.Contains("gamma_frac")) isfixed=1;
+    if(vname.Contains("Bu_DstKst")) isfixed=1;
+    if(vname.Contains("HORNS")) isfixed=1;
+    if(vname.Contains("HILL")) isfixed=1;
+    if(vname.Contains("low")) isfixed=1;
+    if(vname.Contains("MC")) isfixed=1;
+    // Set parameters in fixedParams to fixed
     for(int n=0; n<(int)fixedParams->size(); ++n){
       TString myvar = fixedParams->at(n)->GetName();
       if(vname==myvar) isfixed=1;
-      if(vname.Contains("gamma_frac")) isfixed=1;
-      //if(vname=="bs_gamma_frac010") isfixed=1;
-      //if(vname=="bs_gamma_frac001") isfixed=1;
-      //if(vname=="d2kspipi_exp_mix_combs_slope") isfixed=1;
     }
     if (!isfixed) {
       TCanvas* cvar = new TCanvas("cvar","",1200,400);
@@ -1027,9 +1035,9 @@ void Fitting::NewOrderToys(int n)
     }
   }
   // =========== End using RooMCStudy =============
- */ 
 
-  mcstudy->generate(n,nEvtsPerSample,true);
+
+ /* mcstudy->generate(n,nEvtsPerSample,true);
   if(1==n&&!DB){
     data=(RooDataSet*)mcstudy->genData(n-1);
   }
@@ -1132,7 +1140,8 @@ void Fitting::NewOrderToys(int n)
         ctoy->SaveAs(filename.c_str());
         delete ctoy;
         delete frame;
-      }/*
+      }
+
       if(i==0) {
         std::cout << "Now making a plot" << std::endl;
         catNew->setLabel(Form("%s_%s_%s_%s","d2kpi","both","LL","all"));
@@ -1148,7 +1157,7 @@ void Fitting::NewOrderToys(int n)
         ctoy->SaveAs(filename.c_str());
         delete ctoy;
         delete frame;
-      }*/
+      }
 
       std::cout<<" now going to delete some stuff" << std::endl;
 
@@ -1162,7 +1171,7 @@ void Fitting::NewOrderToys(int n)
     }
     resfile.close();	
     //gDirectory->ls();
-  }
+  } */
   delete mcstudy;
 }
 
