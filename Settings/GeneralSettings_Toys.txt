@@ -16,7 +16,7 @@ doMinosErrors_xy false
 *
 * TOYS
 startSeed 100
-nToys 100
+nToys 1000
 genToys true
 readToys false
 readData false

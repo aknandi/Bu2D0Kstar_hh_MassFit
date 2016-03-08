@@ -672,33 +672,26 @@ void Fitting::RunFullFit(bool draw=true)
                   std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
                 }
               
-
-              // Make inverse bin label. Want to plot B+ bin i here but B- in bin -i
-              std::string inverseBinLabel=*a; 
-              if( inverseBinLabel.find("m")==3 ) {inverseBinLabel=inverseBinLabel.replace(3,1,"p");}
-              else if( inverseBinLabel.find("p")==3 ) inverseBinLabel=inverseBinLabel.replace(3,1,"m");
-
               int ipad = 0;
               if(*c==both)
                 {
-                  ipad = 1;//+(p-pidList.begin());
+                  ipad = 1;
                   v_canvas[*t][*a]->cd(ipad);
                   if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();  
                   gPad->SetTicks(1, 1);//upper and right-hand ticks
                   //resize pad if drawing pulls (makes pads too small if not drawing pulls)
-//                  if (drawpulls) gPad->SetPad(Form("fit_%s_%s_%s",p->c_str(),t->c_str(),a->c_str()),"",0.5*(p-pidList.begin()),0.3,0.5+0.5*(p-pidList.begin()),1,0,0,-1);
                   if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
 
                 }
               if(*c==plus)
                 {
-                  ipad = 1;//+(p-pidList.begin());
+                  ipad = 1;
                   v_canvas[*t][*a]->cd(ipad);
                 }
               if(*c==minus)
                 {
-                  ipad = 3;//+(p-pidList.begin());
-                  v_canvas[*t][inverseBinLabel]->cd(ipad);
+                  ipad = 3;
+                  v_canvas[*t][*a]->cd(ipad);
                 }
               plot[*c][*t][*a]->SetMinimum(0.1);
               //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
@@ -761,7 +754,6 @@ void Fitting::RunFullFit(bool draw=true)
               if(hresid && drawpulls)
                 {
                   v_canvas[*t][*a]->cd(ipad+1);
-                  //gPad->SetPad(Form("fit_%s_%s_%s",p->c_str(),t->c_str(),a->c_str()),"",0.5*(p-pidList.begin()),0.0,0.5+0.5*(p-pidList.begin()),0.7,0,0,-1);
                   gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
                   RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
                   frame->GetYaxis()->SetNdivisions(515);//,kTrue);
@@ -783,20 +775,20 @@ void Fitting::RunFullFit(bool draw=true)
               ipad = 0;
               if(*c==both)
                 {
-                  ipad = 1;//+(p-pidList.begin());
+                  ipad = 1;
                   v_canvaslog[*t][*a]->cd(ipad);
                   gPad->SetLogy();  
                   gPad->SetTicks(1, 1);//upper and right-hand ticks
                 }
               if(*c==plus)
                 {
-                  ipad = 1;//+(p-pidList.begin());
+                  ipad = 1;
                   v_canvaslog[*t][*a]->cd(ipad);
                 }
               if(*c==minus)
                 {
-                  ipad = 3;//+(p-pidList.begin());
-                  v_canvaslog[*t][inverseBinLabel]->cd(ipad);
+                  ipad = 3;
+                  v_canvaslog[*t][*a]->cd(ipad);
                 }
               plot[*c][*t][*a]->Draw();
             }
@@ -998,9 +990,6 @@ void Fitting::NewOrderToys(int n)
   {
     TString vname = fitpar->GetName();
     if(vname.Contains("catNew")) continue;
-    // Yields produced error so for the moment pulls are not being plotted
-    if(vname.Contains("n_bu")) continue;
-    if(vname.Contains("n_comb")) continue;
     bool isfixed=0;
     // Do not want to work out pulls for fixed params
     // All parameters relating to partreco are fixed but not included in fixedParams
@@ -1026,10 +1015,11 @@ void Fitting::NewOrderToys(int n)
       errframe->Draw();
       cvar->cd(3);
       // Plotting the pulls will only work if you have the exact same parameters (and param names) in the genPdf
-      //if (!(vname.Contains("n_")) && !(vname.Contains("ratio_"))){
-      RooPlot* pullframe = mcstudy->plotPull(*fitpar, RooFit::Bins(30)); //,-5,5,30); //,kTRUE);
+      // Note that Contains("n_") includes tail parameter of cb (does not matter as it is fixed anyway
+      if (!(vname.Contains("n_")) && !(vname.Contains("ratio_"))){
+      RooPlot* pullframe = mcstudy->plotPull(*fitpar,-5,5,30,kTRUE);//RooFit::Bins(30)); //,-5,5,30); //,kTRUE);
       pullframe->Draw();
-      //}
+      }
       cvar->SaveAs("TOYS/"+vname+".pdf");
       delete cvar;
     }

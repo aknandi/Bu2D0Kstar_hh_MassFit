@@ -4,6 +4,7 @@ figs/*
 output/*
 TOYS/*
 output.txt
+outputToys.txt
 EventDict.C
 EventDict_rdict.pcm
 .cproject
