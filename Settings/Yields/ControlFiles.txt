@@ -1,5 +1,5 @@
 * Default - KsPiPi + KsKK, 5200
-PathnameToTotals Settings/Yields/GenTotals_5200.txt
+PathnameToTotals Settings/Yields/GenTotals_4900.txt
 PathnameToFitRatios Settings/Yields/ratiosFIXED_5200.txt
 *
 * KsPiPi only
