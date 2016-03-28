@@ -37,7 +37,7 @@ class Fitting : public Base
   void RunManyToys();
   void DefineRooCategories();
   void DisplayToys();
-  RooDataSet *FinalDataSet(const std::string, const std::string, TTree*);
+  RooDataSet *FinalDataSet(const std::string, const std::string, const std::string, const std::string, TTree*);
   RooDataSet *FinalDataSet(const std::string, const std::string, RooDataSet* DS);
   void PrintDataSet(bool=false);
   void Fit();

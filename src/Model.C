@@ -222,7 +222,7 @@ RooSimultaneous* Model::getFitPdf()
 void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high)
 {
 
-  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
+/*  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
 
   // --- for manual integration of RooKeysPdf ---
   //RooDataSet *bu_dstkst_integEvents = fitPdf.roopdf_bu_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
@@ -305,7 +305,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           plotNums[*m][*c][*t][*a]["purity_err"]=purity_err;
           cout << "PURITY: " << purity << " +- " << purity_err << endl;
           }
-/*
+
           //////////////////////////////////////////////////////////////////////
           // Latex style
           //////////////////////////////////////////////////////////////////////
@@ -317,7 +317,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           cout << "$B^+ \\to D^{\\ast 0} K^{\\ast +}$ & $" << integyield_bu_dstkst << "$ & $\\pm$ & $" << integyield_bu_dstkst_err << "$ \\\\ " << endl;
           cout << "\\hline"  << endl;
           cout << "\\end{tabular}"  << endl;
-*/
+
           //////////////////////////////////////////////////////////////////////
           // Output to text files
           //////////////////////////////////////////////////////////////////////
@@ -335,5 +335,5 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
       }
     }
   }
-  GenTotals.close();
+  GenTotals.close();*/
 }

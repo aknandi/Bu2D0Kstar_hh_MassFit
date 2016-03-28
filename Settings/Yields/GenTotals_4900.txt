@@ -73,3 +73,4 @@ N_comb_d2pik_minus_DD 41.5303
 N_bu_dstkst_d2pik_both_DD 30.4903
 N_bu_dstkst_d2pik_plus_DD 15.2452
 N_bu_dstkst_d2pik_minus_DD 15.2452
+N_bu_d2kpi_both 1000.00

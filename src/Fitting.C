@@ -168,7 +168,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2kpi);
   modeList.push_back(d2kk);
   modeList.push_back(d2pipi);
-  modeList.push_back(d2pik);
+  //modeList.push_back(d2pik);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());
@@ -207,6 +207,7 @@ void Fitting::DefineRooCategories()
 	  runList.push_back(run2);
   }
   else {
+	  // Do not have combined Ntuples yet. For one run category, just use run 1 (change all->run1)
 	  runList.push_back(all);
   }
 
@@ -271,35 +272,39 @@ int Fitting::LoadDataSet()
   // which is where the types and flags are assigned.
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++) {
     for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
+    	for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++) {
+    		for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
 
-    	std::string fullPathAndName = dataSettings.get("pathToData_"+(*m)+"_"+(*t));
+				std::string fullPathAndName = dataSettings.get("pathToData_"+(*m)+"_"+(*t)+"_"+(*c)+"_"+(*a));
 
-    	cout << "File path name is " << fullPathAndName << endl;
-    	TFile* tfile = TFile::Open(fullPathAndName.c_str());
-    	RooDataSet *dataset=0;
+				cout << "File path name is " << fullPathAndName << endl;
+				TFile* tfile = TFile::Open(fullPathAndName.c_str());
+				RooDataSet *dataset=0;
 
-    	RooDataSet *ds = (RooDataSet*)tfile->FindObjectAny("DS");
-    	      if(ds)
-    	      {
-    	        // RooDataSet
-    	    	  cout << "RooDataSet" <<endl;
-    	        tfile->cd();
-    	        dataset = FinalDataSet(*m, *t, (RooDataSet*)tfile->FindObjectAny("DS"));
-    	      }
-    	      else
-    	      {
-    	        // TTree
-    	    	  cout << "TTree" << endl;
-    	        tfile->cd();
-    	        dataset = FinalDataSet(*m, *t, (TTree*)tfile->Get("DecayTree"));
-    	      }
+				// IS this what you want it to do? What about when it is not charge separated? Will it still be fine?
+				// Make RooDataSet the same if it is correct
+				RooDataSet *ds = (RooDataSet*)tfile->FindObjectAny("DS");
+					  if(ds)
+					  {
+						// RooDataSet
+						  cout << "RooDataSet" <<endl;
+						tfile->cd();
+						dataset = FinalDataSet(*m, *t, (RooDataSet*)tfile->FindObjectAny("DS"));
+					  }
+					  else
+					  {
+						// TTree
+						  cout << "TTree" << endl;
+						tfile->cd();
+						dataset = FinalDataSet(*m, *t, *c, *a, (TTree*)tfile->Get("DecayTree"));
+					  }
 
-    	      data->append(*dataset);
+					  data->append(*dataset);
 
-    	      tfile->Close();
-
-     }
-
+					  tfile->Close();
+    		}
+    	}
+    }
   }
   
   cout << "DataSetSize: " << data->numEntries() << endl;
@@ -310,9 +315,9 @@ int Fitting::LoadDataSet()
 }
 
 //version passed a TTree
-RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, TTree* tree) //, TH2F &_h_diagnose)
+RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, const std::string s_charge, const std::string s_run, TTree* tree) //, TH2F &_h_diagnose)
 {
-  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << std::endl; return 0; }
+  if(!tree){ std::cout << "\n THE TREE IS A ZERO POINTER IN "<< s_mode <<" "<< s_track << " "<< s_charge << " " <<  s_run << std::endl; return 0; }
 
   TString exclusionString;
   std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
@@ -341,8 +346,8 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   }
   */
 
-  RooDataSet *input = new RooDataSet(Form("%s_%s",s_mode.c_str(),s_track.c_str()),
-                                     Form("Final %s %s",s_mode.c_str(),s_track.c_str()),
+  RooDataSet *input = new RooDataSet(Form("%s_%s_%s_%s",s_mode.c_str(),s_track.c_str(),s_charge.c_str(),s_run.c_str()),
+                                     Form("Final %s %s %s %s",s_mode.c_str(),s_track.c_str(),s_charge.c_str(),s_run.c_str()),
                                      (TTree*)reducedtree,inputlist); //,exclusionString);
   RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,run,track,charge,*catNew));
   
@@ -353,14 +358,14 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
-  charge.setLabel(both.c_str());
-  run.setLabel("all");
+  charge.setLabel(s_charge.c_str());
+  run.setLabel(s_run.c_str());
   RooArgSet datadetails(mode, run, track, charge, *catNew);
 
   std::string catNewLabel;
   for(int i = 0; i < input->numEntries(); i++)
     {
-      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "all";
+      catNewLabel = s_mode + "_" + s_charge + "_" + s_track + "_" + s_run;
       catNew->setLabel(catNewLabel.c_str());
       extra->add(datadetails);
     }
@@ -372,7 +377,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 //version passed a RooDataSet
 RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, RooDataSet* DS)
 {
-  if (!DS)
+/*  if (!DS)
     {
       std::cout << "\n THE DATASET IS A ZERO POINTER IN " << s_mode << " " << s_track << std::endl;
       return 0;
@@ -408,7 +413,7 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
     }
   
   input->merge(extra);
-  return input;
+  return input;*/
 }
 
 
@@ -690,7 +695,8 @@ void Fitting::RunFullFit(bool draw=true)
                 }
               if(*c==minus)
                 {
-                  ipad = 3;
+            	  // Need to make this different whether pulls are plotted or not
+                  ipad = 2;
                   v_canvas[*t][*a]->cd(ipad);
                 }
               plot[*c][*t][*a]->SetMinimum(0.1);

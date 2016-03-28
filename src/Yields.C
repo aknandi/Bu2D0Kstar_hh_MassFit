@@ -33,7 +33,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
 
   //myMaps.Initialize(fileList, modeList,chargeList,trackList,binList);
 
-  genscale = 5.; // scale yields for generation
+  genscale = 1.; // scale yields for generation
   limitlow = _genConfs->get("fit_limit_low");
   unblind=_genConfs->get("UNBLIND");
 
@@ -41,6 +41,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   std::cout << "Initialising yields ... " << std::endl;
   SetOtherBkgs(); // this has to come before setyieldsGenandfit()
   SetDstKstGenandFit();
+  SetYieldRatios();
   SetYieldsGenandFit(); // must be last
 
   std::cout<<" Yields done "<<std::endl;
@@ -150,6 +151,28 @@ void Yields::SetDstKstGenandFit()
 
 }
 
+void::Yields::SetYieldRatios()
+{
+   	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
+
+	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",0.5,0.0,1.0);
+
+	    if (*m != "d2kpi") {
+	    	R[*m] = new RooRealVar(Form("R_%s",(*m).c_str()),"",0.5,0.0,1.0);
+	    }
+	    else {
+	        for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+	          for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
+
+	       		  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",0,100000);
+
+	          }
+	        }
+	    }
+	  }
+
+}
+
 
 void Yields::SetYieldsGenandFit()
 {
@@ -158,38 +181,56 @@ void Yields::SetYieldsGenandFit()
       for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
         for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
 
-          // --- Gen yields ---
-          double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,0,10000);
-          double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000);
+        	const char* identifier = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
 
-          ///////////////////////
-          // The all-important ratios
-          //
-          // 1. If you want to generate with the calculated values of ratios:
-          //
-          //double N_drho = ratio_bs_drho[*c][*t][*a]->getVal() * N_bs;
-          //double N_bs_dstkst = ratio_bs_dstkst[*c][*t][*a]->getVal() * N_bs;
-          //double N_bd_dstkst = ratio_bd_dstkst[*c][*t][*a]->getVal() * N_bs;
-          //
-          // 2. If you want to generate with the FITTED central value of ratios:
-          //
-          //double N_drho = input->getD(Form("ratio_bs_drho_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
-          //double N_bs_dstkst = input->getD(Form("ratio_bs_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
-          //double N_bd_dstkst = input->getD(Form("ratio_bd_dstkst_%s_%s_%s",(*c).c_str(), (*t).c_str(), (*a).c_str())) * N_bs;
-          //
-          // 3. If you want to generate directly with yields
-          //
-          double N_bu_dstkst = input->getD(Form("N_bu_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-          //////////////////////
+			// If fit is charge separated fit to the asymmetries
+			// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
+			if(_genConfs->get("chargeSeparated")=="true")
+			{
+				if(*m == "d2kpi") {
+					if(*c == "plus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+					}
+					else if (*c == "minus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+					}
+				}
+				else {
+					if(*c == "plus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+					}
+					else if (*c == "minus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+					}
+				}
 
-          n_bu_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_gen_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0,10000);
+			}
 
-          // --- Fit yields ---
-          n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu,-10.,10000.);
-          n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s_%s_%s_%s",(*m).c_str(), (*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_comb,0,10000.);
-          n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(), (*t).c_str(), (*a).c_str()),"",N_bu_dstkst,0.,10000.);
+			// If fit is not charge separated fit to the signal yields
+			if(_genConfs->get("chargeSeparated")=="false")
+			{
+			  double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			  n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0,10000);
+
+			  n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,-10.,10000.);
+			}
+
+			// The rest of the pdf shapes are always fitted for yields
+			// --- Gen yields ---
+			double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,0,10000);
+			double N_bu_dstkst = input->getD(Form("N_bu_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			n_bu_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_gen_%s",identifier),"",N_bu_dstkst,0,10000);
+
+			// --- Fit yields ---
+			n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0,10000.);
+			n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s",identifier),"",N_bu_dstkst,0.,10000.);
+
+
         }
       }
     }

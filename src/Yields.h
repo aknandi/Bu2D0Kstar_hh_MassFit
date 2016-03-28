@@ -31,18 +31,23 @@ class Yields
   void SetYieldsGenandFit();
   void SetOtherBkgs();
   void SetDstKstGenandFit();
+  void SetYieldRatios();
   
   double genscale;
   std::string limitlow;
 
   // Yields can be accessed by Model.
-  // Bs 
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_gen;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_fit;
+  // Bu
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsArg*> > > > n_bu_gen;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsArg*> > > > n_bu_fit;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb_gen;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_dstkst_gen;
+
+  std::map<std::string, RooRealVar*> A;
+  std::map<std::string, RooRealVar*> R;
+  std::map<std::string, std::map<std::string, RooAbsReal*> > N_kpi;
 
   //std::map<std::string, std::map<std::string, std::map<std::string,  RooRealVar*> > >n_totsigs; //no pid & no bins
   //std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooFormulaVar*> > > > stdBinFracs; //no pid part
