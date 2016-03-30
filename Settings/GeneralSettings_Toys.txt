@@ -38,6 +38,6 @@ MCsimfit false
 UNBLIND true
 * 
 * CATEGORIES
-chargeSeparated false
+chargeSeparated true
 trackSeparated true
 runSeparated true

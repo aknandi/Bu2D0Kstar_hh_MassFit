@@ -188,7 +188,7 @@ void Fitting::DefineRooCategories()
     }
 
  
-  // Define Ks track type categories - could be LL, DD or both
+  // Define Ks track type categories - could be LL, DD or mix
   if(_genConfs->get("trackSeparated")=="true") {
 	  trackList.push_back(LL);
 	  trackList.push_back(DD);
@@ -201,7 +201,7 @@ void Fitting::DefineRooCategories()
       track.defineType((*t).c_str());
     }
 
-  // Define run categories - could be run1, run2 or both
+  // Define run categories - could be run1, run2 or all
   if(_genConfs->get("runSeparated")=="true") {
 	  runList.push_back(run1);
 	  runList.push_back(run2);
@@ -582,41 +582,45 @@ void Fitting::RunFullFit(bool draw=true)
       std::map< std::string, std::map<std::string, TCanvas* > > v_canvaslog;
       for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
         for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
-          TCanvas* canvas=new TCanvas(Form("canvas_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),
-                                      30,30,(chargeList.size()*500),350);
 
-          if (drawpulls) canvas->Divide(1,chargeList.size()*2);
-          else           canvas->Divide(1,chargeList.size());
-          v_canvas[*t][*a]=canvas;
-          TCanvas* canRes=0;
-          //if(doFit=="true"){
-            canRes = new TCanvas(Form("canres_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),
-                                 30,30,(chargeList.size()*500),350);
-            canRes->Divide(1,chargeList.size());
-            v_canRes[*t][*a]=canRes;
-            
-          //}
-          TCanvas* canvaslog=new TCanvas(Form("canvaslog_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),
-                                         30,30,(chargeList.size()*500),350);
-          canvaslog->Divide(1,chargeList.size());
-          v_canvaslog[*t][*a]=canvaslog;
+        	const char* identifier = Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str());
+
+        	// create canvas for normal data and fit
+        	TCanvas* canvas = new TCanvas(Form("canvas_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+        	if (drawpulls) canvas->Divide(1,chargeList.size()*2);
+        	else           canvas->Divide(1,chargeList.size());
+        	v_canvas[*t][*a] = canvas;
+
+        	// create canvas for residual distributions- these are actually not plotted at the moment
+        	// Are they really needed if they can be chosen to be plotted on the fits canvas?
+        	TCanvas* canRes = 0;
+        	if(doFit=="true"){
+				canRes = new TCanvas(Form("canres_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+				canRes->Divide(1,chargeList.size());
+				v_canRes[*t][*a] = canRes;
+        	}
+
+        	// create canvas for log plot of data and fit
+        	TCanvas* canvaslog = new TCanvas(Form("canvaslog_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+        	canvaslog->Divide(1,chargeList.size());
+        	v_canvaslog[*t][*a] = canvaslog;
         }
       }
 
 
       std::cout<<" canvases made "<<std::endl;
 
-      RooHist* hresid=0;
-      float maxH=0.;
+      RooHist* residualHist = 0;
+      float maxH = 0.;
       std::map<std::string,std::map<std::string,std::map<std::string,RooPlot*> > > plot;
 
       //draw each fit
       for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
         for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
           for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
-            int numbins=40;
+
+            int numbins = 40;
             plot[*c][*t][*a] = mB.frame(RooFit::Bins(numbins));
-            //cat->setLabel(Form("{%s;%s;%s;%s}",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str()));
             std::string tag = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
             catNew->setLabel(tag.c_str());
 
@@ -634,7 +638,8 @@ void Fitting::RunFullFit(bool draw=true)
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                              RooFit::LineWidth(3) );
               if(v_canRes[*t][*a]) {
-                hresid = plot[*c][*t][*a]->pullHist(); hresid->GetYaxis()->SetNdivisions(515);hresid->setYAxisLimits(-5,5);
+            	  cout << "Make residuals: " <<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+                residualHist = plot[*c][*t][*a]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
               }
               //Bu - CB
               std::cout<<" plotting Bu "<<std::endl;
@@ -659,147 +664,148 @@ void Fitting::RunFullFit(bool draw=true)
 
             }
 
-              //plot total PDF again
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::LineWidth(3) );
-              //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
-              
-              if (result)
-                {
-                  Double_t chisquareperDoF = plot[*c][*t][*a]->chiSquare(nFloatParams);
-                  Int_t nBins = plot[*c][*t][*a]->GetNbinsX();
-                  Int_t nDoF = nBins - nFloatParams;
-                  Double_t chisquare = chisquareperDoF * (Double_t)nDoF;
-                  std::cout << "RooPlot chi^2/DoF: " << chisquareperDoF << std::endl;
-                  std::cout << "Number of bins: " << nBins << std::endl;
-                  std::cout << "Number of degrees of freedom: " << nDoF << std::endl;
-                  std::cout << "chi^2: " << chisquare << std::endl;
-                  std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
-                }
-              
-              int ipad = 0;
-              if(*c==both)
-                {
-                  ipad = 1;
-                  v_canvas[*t][*a]->cd(ipad);
-                  if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();  
-                  gPad->SetTicks(1, 1);//upper and right-hand ticks
-                  //resize pad if drawing pulls (makes pads too small if not drawing pulls)
-                  if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
+            //plot total PDF again
+            sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            		RooFit::LineWidth(3) );
+            //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
 
-                }
-              if(*c==plus)
-                {
-                  ipad = 1;
-                  v_canvas[*t][*a]->cd(ipad);
-                }
-              if(*c==minus)
-                {
-            	  // Need to make this different whether pulls are plotted or not
-                  ipad = 2;
-                  v_canvas[*t][*a]->cd(ipad);
-                }
-              plot[*c][*t][*a]->SetMinimum(0.1);
-              //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
-              plot[*c][*t][*a]->Draw();
-              // Add yields and purities to the plots
-              char num[100];
-              sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["val"]); TString ts_yield(num);
-              sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["err"]); TString ts_yielderr(num);
-              sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_val"]*100); TString ts_purity(num);
-              sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_err"]*100); TString ts_purityerr(num);
-              //write signal yield and purity on plots (not done by default)
-              // TLatex *latex_yield = new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.70,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
-              // if(_genConfs->get("setLogScale")!="true") latex_yield->Draw();
-              // TLatex *latex_purity= new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.60,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
-              // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
-              plot[*c][*t][*a]->SetTitle("");
-              plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
-              double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
-              plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
-              //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
-              plot[*c][*t][*a]->GetXaxis()->SetTitleOffset(1.05);
-              plot[*c][*t][*a]->GetYaxis()->SetTitleOffset(1.3);
+            if (result)
+            {
+            	Double_t chisquareperDoF = plot[*c][*t][*a]->chiSquare(nFloatParams);
+            	Int_t nBins = plot[*c][*t][*a]->GetNbinsX();
+            	Int_t nDoF = nBins - nFloatParams;
+            	Double_t chisquare = chisquareperDoF * (Double_t)nDoF;
+            	std::cout << "RooPlot chi^2/DoF: " << chisquareperDoF << std::endl;
+            	std::cout << "Number of bins: " << nBins << std::endl;
+            	std::cout << "Number of degrees of freedom: " << nDoF << std::endl;
+            	std::cout << "chi^2: " << chisquare << std::endl;
+            	std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
+            }
 
-              //draw legend
-              //- hardcoded order
-              //Double_t legtop = 0.62;
-              Double_t legtop = 0.60;
-              TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
-              leg->SetFillStyle(0);
-              leg->SetBorderSize(0);
-              leg->SetTextFont(132);
+            int ipad = 0;
+            if(*c==both)
+            {
+            	ipad = 1;
+            	v_canvas[*t][*a]->cd(ipad);
+            	if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();
+            	gPad->SetTicks(1, 1);//upper and right-hand ticks
+            	//resize pad if drawing pulls (makes pads too small if not drawing pulls)
+            	//if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
 
-              leg->AddEntry((TObject*)0,"","");
-              leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
-              leg->AddEntry((TObject*)0,"","");
-              leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B_{u} #rightarrow D^{*}K^{*}","l");
-              leg->AddEntry((TObject*)0,"","");
-              leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
+            }
+            if(*c==plus)
+            {
+            	ipad = 1;
+            	v_canvas[*t][*a]->cd(ipad);
+            }
+            if(*c==minus)
+            {
+            	// Need to make this different whether pulls are plotted or not
+            	ipad = 2;
+            	if(drawpulls) ipad = 3;
+            	v_canvas[*t][*a]->cd(ipad);
+            }
+            plot[*c][*t][*a]->SetMinimum(0.1);
+            //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
+            plot[*c][*t][*a]->Draw();
+            // Add yields and purities to the plots
+            // Cannot do yet as yields are of type RooAbsArg so cannot call getVal()
+            char num[100];
+            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["val"]); TString ts_yield(num);
+            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["err"]); TString ts_yielderr(num);
+            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_val"]*100); TString ts_purity(num);
+            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_err"]*100); TString ts_purityerr(num);
+            //write signal yield and purity on plots (not done by default)
+            // TLatex *latex_yield = new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.70,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
+            // if(_genConfs->get("setLogScale")!="true") latex_yield->Draw();
+            // TLatex *latex_purity= new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.60,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
+            // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
+            plot[*c][*t][*a]->SetTitle("");
+            plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
+            double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
+            plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
+            //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
+            plot[*c][*t][*a]->GetXaxis()->SetTitleOffset(1.05);
+            plot[*c][*t][*a]->GetYaxis()->SetTitleOffset(1.3);
+
+            //draw legend
+            Double_t legtop = 0.60;
+            TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
+            leg->SetFillStyle(0);
+            leg->SetBorderSize(0);
+            leg->SetTextFont(132);
+            leg->AddEntry((TObject*)0,"","");
+            leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
+            leg->AddEntry((TObject*)0,"","");
+            leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B_{u} #rightarrow D^{*}K^{*}","l");
+            leg->AddEntry((TObject*)0,"","");
+            leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
 
 
-              //do not draw legend if a log plot or pulls are drawn
-              //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
-              if(_genConfs->get("setLogScale")!="true") leg->Draw();
-            
-              //do not draw title
-              /*
+            //do not draw legend if a log plot or pulls are drawn
+            //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
+            if(_genConfs->get("setLogScale")!="true") leg->Draw();
+
+            //do not draw title
+            /*
                 TPaveLabel *pav = new TPaveLabel(0.13,0.9,0.97,0.99,title[*m][*c][*t][*a].c_str(),"NDC");
                 pav->SetBorderSize(0); pav->SetFillStyle(0);
                 pav->SetTextFont(132); pav->SetTextSize(0.8);
                 pav->Draw();
-              */
-              if(genToys=="false") lhcbpreliminary->Draw();
-              if(plot[*c][*t][*a]->GetMaximum()>maxH)
-                {
-                  maxH=plot[*c][*t][*a]->GetMaximum();
-                }
-            
-              //draw pulls (or not)
-
-              if(hresid && drawpulls)
-                {
-                  v_canvas[*t][*a]->cd(ipad+1);
-                  gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
-                  RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
-                  frame->GetYaxis()->SetNdivisions(515);//,kTrue);
-                  frame->SetXTitle("");//#it{m}(DK^{#pm}#pi^{#mp}) (MeV/c^{2})");
-                  hresid->SetFillColor(4);
-                  hresid->SetLineColor(4);
-                  frame->addPlotable(hresid,"BEX0");
-                  frame->Draw();
-                  frame->SetTitle("");
-                }
-
-              // Save data and pdf to draw projections in external macro
-              saveOutputForPlottingMacro->cd();
-              //if(*t=="LL") plot_combLLDD[*c][*a]->Write(Form("%s_%s_comb_%s",m->c_str(),c->c_str(),a->c_str()));
-              plot[*c][*t][*a]->Write(Form("%s_%s_%s_%s",m->c_str(),c->c_str(),t->c_str(),a->c_str()));
-
-              //=== log plots ===//
-
-              ipad = 0;
-              if(*c==both)
-                {
-                  ipad = 1;
-                  v_canvaslog[*t][*a]->cd(ipad);
-                  gPad->SetLogy();  
-                  gPad->SetTicks(1, 1);//upper and right-hand ticks
-                }
-              if(*c==plus)
-                {
-                  ipad = 1;
-                  v_canvaslog[*t][*a]->cd(ipad);
-                }
-              if(*c==minus)
-                {
-                  ipad = 3;
-                  v_canvaslog[*t][*a]->cd(ipad);
-                }
-              plot[*c][*t][*a]->Draw();
+             */
+            if(genToys=="false") lhcbpreliminary->Draw();
+            if(plot[*c][*t][*a]->GetMaximum()>maxH)
+            {
+            	maxH=plot[*c][*t][*a]->GetMaximum();
             }
+
+            // Draw pulls
+            if(residualHist && drawpulls)
+            {
+            	std::cout<<" plotting pulls: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+            	v_canvas[*t][*a]->cd(ipad+1);
+            	//gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
+            	RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
+            	frame->GetYaxis()->SetNdivisions(515);//,kTrue);
+            	frame->SetXTitle("");//#it{m}(DK^{#pm}#pi^{#mp}) (MeV/c^{2})");
+            	residualHist->SetFillColor(4);
+            	residualHist->SetLineColor(4);
+            	frame->addPlotable(residualHist,"BEX0");
+            	frame->Draw();
+            	frame->SetTitle("");
+            }
+
+            // Save data and pdf to draw projections in external macro
+            saveOutputForPlottingMacro->cd();
+            //if(*t=="LL") plot_combLLDD[*c][*a]->Write(Form("%s_%s_comb_%s",m->c_str(),c->c_str(),a->c_str()));
+            plot[*c][*t][*a]->Write(Form("%s_%s_%s_%s",m->c_str(),c->c_str(),t->c_str(),a->c_str()));
+
+            //=== log plots ===//
+
+            ipad = 0;
+            if(*c==both)
+            {
+            	ipad = 1;
+            	v_canvaslog[*t][*a]->cd(ipad);
+            	gPad->SetLogy();
+            	gPad->SetTicks(1, 1);//upper and right-hand ticks
+            }
+            if(*c==plus)
+            {
+            	ipad = 1;
+            	v_canvaslog[*t][*a]->cd(ipad);
+            	gPad->SetLogy();
+            }
+            if(*c==minus)
+            {
+            	ipad = 2;
+            	v_canvaslog[*t][*a]->cd(ipad);
+            	gPad->SetLogy();
+            }
+            plot[*c][*t][*a]->Draw();
           }
         }
+      }
 
       //fonts and y-axis minimum
       for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
