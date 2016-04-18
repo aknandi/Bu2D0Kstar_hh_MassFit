@@ -97,6 +97,10 @@ int Settings::getI(std::string requestedKey)
 {
   return atoi(get(requestedKey).c_str());
 }
+
+bool Settings::isChargeSeparated() {
+	return get("chargeSeparated") == "true";
+}
  
 bool Settings::contains(std::string requestedKey)
 {

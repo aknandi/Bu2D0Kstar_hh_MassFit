@@ -173,7 +173,6 @@ void::Yields::SetYieldRatios()
 
 }
 
-
 void Yields::SetYieldsGenandFit()
 {
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
@@ -185,8 +184,9 @@ void Yields::SetYieldsGenandFit()
 
 			// If fit is charge separated fit to the asymmetries
 			// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
-			if(_genConfs->get("chargeSeparated")=="true")
+			if(_genConfs->isChargeSeparated())
 			{
+
 				if(*m == "d2kpi") {
 					if(*c == "plus") {
 						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
@@ -211,12 +211,13 @@ void Yields::SetYieldsGenandFit()
 			}
 
 			// If fit is not charge separated fit to the signal yields
-			if(_genConfs->get("chargeSeparated")=="false")
+			if(!_genConfs->isChargeSeparated())
 			{
-			  double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			  n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0,10000);
 
-			  n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,-10.,10000.);
+				double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+				n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0,10000);
+
+				n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,-10.,10000.);
 			}
 
 			// The rest of the pdf shapes are always fitted for yields

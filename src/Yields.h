@@ -47,7 +47,7 @@ class Yields
 
   std::map<std::string, RooRealVar*> A;
   std::map<std::string, RooRealVar*> R;
-  std::map<std::string, std::map<std::string, RooAbsReal*> > N_kpi;
+  std::map<std::string, std::map<std::string, RooRealVar*> > N_kpi;
 
   //std::map<std::string, std::map<std::string, std::map<std::string,  RooRealVar*> > >n_totsigs; //no pid & no bins
   //std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooFormulaVar*> > > > stdBinFracs; //no pid part

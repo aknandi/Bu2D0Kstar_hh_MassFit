@@ -1,62 +1,134 @@
-** Data sets **
+** TTrees **
 *
 * Run 1 data (2011 + 2012)
-pathToData_d2kpi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_plus.root
-pathToData_d2kpi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_minus.root
-pathToData_d2kpi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_both.root
-pathToData_d2kpi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_plus.root
-pathToData_d2kpi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_minus.root
-pathToData_d2kpi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_both.root
-pathToData_d2kk_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_plus.root
-pathToData_d2kk_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_minus.root
-pathToData_d2kk_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_both.root
-pathToData_d2kk_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_plus.root
-pathToData_d2kk_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_minus.root
-pathToData_d2kk_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_both.root
-pathToData_d2pipi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus.root
-pathToData_d2pipi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus.root
-pathToData_d2pipi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both.root
-pathToData_d2pipi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus.root
-pathToData_d2pipi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus.root
-pathToData_d2pipi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both.root
-pathToData_d2pik_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus.root
-pathToData_d2pik_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus.root
-pathToData_d2pik_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both.root
-pathToData_d2pik_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus.root
-pathToData_d2pik_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus.root
-pathToData_d2pik_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both.root
+*  pathToData_d2kpi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_plus.root
+*  pathToData_d2kpi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_minus.root
+*  pathToData_d2kpi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_both.root
+*  pathToData_d2kpi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_plus.root
+*  pathToData_d2kpi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_minus.root
+*  pathToData_d2kpi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_both.root
+*  pathToData_d2kk_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_plus.root
+*  pathToData_d2kk_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_minus.root
+*  pathToData_d2kk_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_both.root
+*  pathToData_d2kk_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_plus.root
+*  pathToData_d2kk_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_minus.root
+*  pathToData_d2kk_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_both.root
+*  pathToData_d2pipi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus.root
+*  pathToData_d2pipi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus.root
+*  pathToData_d2pipi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both.root
+*  pathToData_d2pipi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus.root
+*  pathToData_d2pipi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus.root
+*  pathToData_d2pipi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both.root
+*  pathToData_d2pik_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus.root
+*  pathToData_d2pik_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus.root
+*  pathToData_d2pik_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both.root
+*  pathToData_d2pik_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus.root
+*  pathToData_d2pik_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus.root
+*  pathToData_d2pik_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both.root
 *
 * Run 2 data (2015)
-pathToData_d2kpi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_plus_2015.root
-pathToData_d2kpi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_minus_2015.root
-pathToData_d2kpi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_both_2015.root
-pathToData_d2kpi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_plus_2015.root
-pathToData_d2kpi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_minus_2015.root
-pathToData_d2kpi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_both_2015.root
-pathToData_d2kk_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_plus_2015.root
-pathToData_d2kk_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_minus_2015.root
-pathToData_d2kk_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_both_2015.root
-pathToData_d2kk_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_plus_2015.root
-pathToData_d2kk_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_minus_2015.root
-pathToData_d2kk_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_both_2015.root
-pathToData_d2pipi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus_2015.root
-pathToData_d2pipi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus_2015.root
-pathToData_d2pipi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both_2015.root
-pathToData_d2pipi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus_2015.root
-pathToData_d2pipi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus_2015.root
-pathToData_d2pipi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both_2015.root
-pathToData_d2pik_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus_2015.root
-pathToData_d2pik_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus_2015.root
-pathToData_d2pik_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both_2015.root
-pathToData_d2pik_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus_2015.root
-pathToData_d2pik_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus_2015.root
-pathToData_d2pik_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both_2015.root
+*  pathToData_d2kpi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_plus_2015.root
+*  pathToData_d2kpi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_minus_2015.root
+*  pathToData_d2kpi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KPi_both_2015.root
+*  pathToData_d2kpi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_plus_2015.root
+*  pathToData_d2kpi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_minus_2015.root
+*  pathToData_d2kpi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KPi_both_2015.root
+*  pathToData_d2kk_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_plus_2015.root
+*  pathToData_d2kk_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_minus_2015.root
+*  pathToData_d2kk_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_KK_both_2015.root
+*  pathToData_d2kk_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_plus_2015.root
+*  pathToData_d2kk_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_minus_2015.root
+*  pathToData_d2kk_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_KK_both_2015.root
+*  pathToData_d2pipi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus_2015.root
+*  pathToData_d2pipi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus_2015.root
+*  pathToData_d2pipi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both_2015.root
+*  pathToData_d2pipi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus_2015.root
+*  pathToData_d2pipi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus_2015.root
+*  pathToData_d2pipi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both_2015.root
+*  pathToData_d2pik_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_plus_2015.root
+*  pathToData_d2pik_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_minus_2015.root
+*  pathToData_d2pik_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_LL_PiPi_both_2015.root
+*  pathToData_d2pik_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_plus_2015.root
+*  pathToData_d2pik_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_minus_2015.root
+*  pathToData_d2pik_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/fullSel_DD_PiPi_both_2015.root
 *
-* pathToData_d2kpi_LL /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_LL_KPi.root
-* pathToData_d2kpi_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_DD_KPi.root
-* pathToData_d2kk_LL /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_LL_KK.root
-* pathToData_d2kk_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_DD_KK.root
-* pathToData_d2pipi_LL /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_LL_PiPi.root
-* pathToData_d2pipi_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_DD_PiPi.root
-* pathToData_d2pik_LL /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_LL_PiPi.root
-* pathToData_d2pik_DD /data/lhcb/users/nandia/B2DKstar/reducedNtuples/RooDataSets/RooDataSet_DD_PiPi.root
+** RooDataSets **
+*
+* Run 1 data (2011 + 2012)
+pathToData_d2kpi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_plus.root
+pathToData_d2kpi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_minus.root
+pathToData_d2kpi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_both.root
+pathToData_d2kpi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_plus.root
+pathToData_d2kpi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_minus.root
+pathToData_d2kpi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_both.root
+pathToData_d2kk_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_plus.root
+pathToData_d2kk_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_minus.root
+pathToData_d2kk_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_both.root
+pathToData_d2kk_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_plus.root
+pathToData_d2kk_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_minus.root
+pathToData_d2kk_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_both.root
+pathToData_d2pipi_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus.root
+pathToData_d2pipi_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus.root
+pathToData_d2pipi_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both.root
+pathToData_d2pipi_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus.root
+pathToData_d2pipi_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus.root
+pathToData_d2pipi_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both.root
+pathToData_d2pik_LL_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus.root
+pathToData_d2pik_LL_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus.root
+pathToData_d2pik_LL_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both.root
+pathToData_d2pik_DD_plus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus.root
+pathToData_d2pik_DD_minus_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus.root
+pathToData_d2pik_DD_both_run1 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both.root
+*
+* Run 2 data (2015)
+pathToData_d2kpi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_plus_2015.root
+pathToData_d2kpi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_minus_2015.root
+pathToData_d2kpi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_both_2015.root
+pathToData_d2kpi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_plus_2015.root
+pathToData_d2kpi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_minus_2015.root
+pathToData_d2kpi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_both_2015.root
+pathToData_d2kk_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_plus_2015.root
+pathToData_d2kk_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_minus_2015.root
+pathToData_d2kk_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_both_2015.root
+pathToData_d2kk_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_plus_2015.root
+pathToData_d2kk_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_minus_2015.root
+pathToData_d2kk_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_both_2015.root
+pathToData_d2pipi_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus_2015.root
+pathToData_d2pipi_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus_2015.root
+pathToData_d2pipi_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both_2015.root
+pathToData_d2pipi_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus_2015.root
+pathToData_d2pipi_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus_2015.root
+pathToData_d2pipi_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both_2015.root
+pathToData_d2pik_LL_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus_2015.root
+pathToData_d2pik_LL_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus_2015.root
+pathToData_d2pik_LL_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both_2015.root
+pathToData_d2pik_DD_plus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus_2015.root
+pathToData_d2pik_DD_minus_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus_2015.root
+pathToData_d2pik_DD_both_run2 /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both_2015.root
+*
+* Run 1 & 2 data (2011 + 2012 + 2015)
+pathToData_d2kpi_LL_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_plus_all.root
+pathToData_d2kpi_LL_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_minus_all.root
+pathToData_d2kpi_LL_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KPi_both_all.root
+pathToData_d2kpi_DD_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_plus_all.root
+pathToData_d2kpi_DD_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_minus_all.root
+pathToData_d2kpi_DD_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KPi_both_all.root
+pathToData_d2kk_LL_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_plus_all.root
+pathToData_d2kk_LL_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_minus_all.root
+pathToData_d2kk_LL_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_KK_both_all.root
+pathToData_d2kk_DD_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_plus_all.root
+pathToData_d2kk_DD_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_minus_all.root
+pathToData_d2kk_DD_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_KK_both_all.root
+pathToData_d2pipi_LL_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus_all.root
+pathToData_d2pipi_LL_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus_all.root
+pathToData_d2pipi_LL_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both_all.root
+pathToData_d2pipi_DD_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus_all.root
+pathToData_d2pipi_DD_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus_all.root
+pathToData_d2pipi_DD_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both_all.root
+pathToData_d2pik_LL_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_plus_all.root
+pathToData_d2pik_LL_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_minus_all.root
+pathToData_d2pik_LL_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_LL_PiPi_both_all.root
+pathToData_d2pik_DD_plus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_plus_all.root
+pathToData_d2pik_DD_minus_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_minus_all.root
+pathToData_d2pik_DD_both_all /data/lhcb/users/nandia/B2DKstar/reducedNtuples/fitInputData/RooDataSets/fullSel_DD_PiPi_both_all.root
+* 

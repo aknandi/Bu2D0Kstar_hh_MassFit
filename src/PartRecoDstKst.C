@@ -25,12 +25,15 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m,std::string p, std
 
   // Read in PARAMETRIC low mass pdf
   PartRecoShapes* prs = new PartRecoShapes(_mB, true, t);
+  // If this is called for Bu and Bd there will be extra shapes for Bd that are not used
+  // Also the ratios may not be easy to implement that way
+  // Should all low mass pdfs be in the same class
   pdf_g_101  = prs->pdf_DstKst_D0gamma_101[p];
   pdf_g_010  = prs->pdf_DstKst_D0gamma_010[p];
   pdf_pi_101 = prs->pdf_DstKst_D0pi0_101[p];
   pdf_pi_010 = prs->pdf_DstKst_D0pi0_010[p];
   // ------------------------------------
-  
+
   if(!pdf_g_101 || !pdf_g_010 || !pdf_pi_101 || !pdf_pi_010) {
     std::cout << "Problem obtaining " << p << " Low Mass Pdfs!" << std::endl;
     exit(1);
@@ -41,13 +44,14 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m,std::string p, std
 
   std::cout << "PartRecoDstKst " << p << " " << t << std::endl;
   std::cout << " G_101 " << G_101 << "\n" << " G_010 " << G_010 << std::endl;
-  var_G_101 = new RooRealVar((p+"_"+t+"_gamma_frac001").c_str(),"",G_101);
+  var_G_101 = new RooRealVar((p+"_"+t+"_gamma_frac101").c_str(),"",G_101);
   var_G_010 = new RooRealVar((p+"_"+t+"_gamma_frac010").c_str(),"",G_010);
   //var_G_001->setConstant(kTRUE);
   //var_G_010->setConstant(kTRUE);
 
   pdf_101 = new RooAddPdf((_name+"_001").c_str(),"",*pdf_g_101,*pdf_pi_101,*var_G_101);
   pdf_010 = new RooAddPdf((_name+"_010").c_str(),"",*pdf_g_010,*pdf_pi_010,*var_G_010);
+
 
 }
 

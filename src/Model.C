@@ -219,10 +219,10 @@ RooSimultaneous* Model::getFitPdf()
 }
 
 
-void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high)
+void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high, RooFitResult* result)
 {
 
-/*  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
+  mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
 
   // --- for manual integration of RooKeysPdf ---
   //RooDataSet *bu_dstkst_integEvents = fitPdf.roopdf_bu_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
@@ -242,6 +242,39 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
   GenTotals << "*" << std::endl;
   GenTotals << "DEBUG_runInHighStatsMode 0" << std::endl;
 
+
+  if(_genConfs->isChargeSeparated()) {
+	  double A, A_error;
+	  double R, R_error;
+	  double N_kpi, N_kpi_error;
+
+	  for(std::vector<std::string>::iterator m=_modeList.begin(); m!=_modeList.end();m++){
+
+		  A = yields->A[*m]->getVal();
+		  A_error = yields->A[*m]->getError();
+
+		  if (*m != "d2kpi") {
+			  R = yields->R[*m]->getVal();
+			  R_error = yields->R[*m]->getError();
+		  }
+		  else {
+			  for(std::vector<std::string>::iterator t=_trackList.begin(); t!=_trackList.end(); t++){
+				  for(std::vector<std::string>::iterator a=_runList.begin(); a!=_runList.end();a++){
+
+					  N_kpi = yields->N_kpi[*t][*a]->getVal();
+					  N_kpi_error = yields->N_kpi[*t][*a]->getError();
+			          GenTotals << "N_bu_" << *m << "_" << *a << "_" << *t << " " << N_kpi << std::endl;
+				  }
+			  }
+		  }
+          GenTotals << "A_" << *m << " " << A << std::endl;
+          GenTotals << "R_" << *m << " " << R << std::endl;
+
+	  }
+
+  }
+
+
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
       for(std::vector<std::string>::iterator t=_trackList.begin();t!=_trackList.end();t++){
@@ -258,12 +291,24 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           // Integrated yields
           //////////////////////////////////////////////////////////////////////
           //std::cout << "Normalised integrals" << std::endl;
-          double integyield_bu     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getVal();
+          double integyield_bu;
+          double integyield_bu_err;
+          if(_genConfs->isChargeSeparated()) {
+        	  RooFormulaVar* n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+        	  integyield_bu = integral_bu * n_bu_fit_asRooFormulaVar->getVal();
+        	  integyield_bu_err = integral_bu * n_bu_fit_asRooFormulaVar->getPropagatedError(*result);
+          }
+          if(!_genConfs->isChargeSeparated()) {
+              RooRealVar* n_bu_fit_asRooRealVar = static_cast<RooRealVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+              integyield_bu = integral_bu * n_bu_fit_asRooRealVar->getVal();
+              integyield_bu_err = integral_bu * n_bu_fit_asRooRealVar->getError();
+          }
+          //double integyield_bu     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getVal();
           double integyield_comb   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getVal();
           double integyield_bu_dstkst  = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getVal();
 
           // Errors
-          double integyield_bu_err     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getError();
+          //double integyield_bu_err     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getError();
           double integyield_comb_err   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getError();
           double integyield_bu_dstkst_err = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getError();
 
@@ -282,6 +327,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           //////////////////////////////////////////////////////////////////////
           cout.setf(ios::fixed);
           cout.precision(2);
+
 
           cout << "//////////////////////////////////////////////////////////////////////\n// Integrated yields in " << b << " window (" << integ_limit_low << " - " << integ_limit_high << ")\n/////////////////////////////////////////////////////////" << endl;
           cout<<"In bin : "<<*m<<", "<<*c<<", "<<*t<<", "<<*a<<endl;
@@ -331,9 +377,10 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           GenTotals << "N_bu_dstkst_" << *m << "_plus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
           GenTotals << "N_bu_dstkst_" << *m << "_minus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
 
+
         }
       }
     }
   }
-  GenTotals.close();*/
+  GenTotals.close();
 }

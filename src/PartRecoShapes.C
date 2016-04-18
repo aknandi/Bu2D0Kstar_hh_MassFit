@@ -25,7 +25,9 @@ PartRecoShapes::PartRecoShapes(RooRealVar *x,bool f, std::string _t)
 
 void PartRecoShapes::buildShapes(RooRealVar *x)
 {
-  /////////////////////
+	// Problem with so many parameters
+	// Which ones are the same. Different for LL and DD
+	/////////////////////
   // Endpoints are allowed to vary within range +-TOLERANCE
   double TOLERANCE = 0;
   /////////////////////
@@ -37,12 +39,8 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   double Min_Bu_DstKst_D0pi0  =5020+smearshift;
   double Max_Bu_DstKst_D0pi0  =5120+smearshift;
 
-/*
-  double Min_Bd_Dst0Kst0_D0pi0  =5020.901+smearshift;
-  double Max_Bd_Dst0Kst0_D0pi0  =5117.039+smearshift;
-  double Min_Bd_Dst0Kst0_D0gamma=4918.666+smearshift;
-  double Max_Bd_Dst0Kst0_D0gamma=5225.373+smearshift;
-*/
+  double Min_Bd_DstKst_D0pi0  =5020.901+smearshift;
+  double Max_Bd_DstKst_D0pi0  =5117.039+smearshift;
 
   // Kinematic endpoints /////////////////
   a_Bu_DstKst_D0pi0  = new RooRealVar("low_a_Bu_DstKst_D0pi0"  ,"a_Bu_DstKst_D0pi0"  , Min_Bu_DstKst_D0pi0  , Min_Bu_DstKst_D0pi0  -TOLERANCE, Min_Bu_DstKst_D0pi0  +TOLERANCE);
@@ -50,10 +48,8 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   a_Bu_DstKst_D0gamma= new RooRealVar("low_a_Bu_DstKst_D0gamma","a_Bu_DstKst_D0gamma", Min_Bu_DstKst_D0gamma, Min_Bu_DstKst_D0gamma-TOLERANCE, Min_Bu_DstKst_D0gamma+TOLERANCE);
   b_Bu_DstKst_D0gamma= new RooRealVar("low_b_Bu_DstKst_D0gamma","b_Bu_DstKst_D0gamma", Max_Bu_DstKst_D0gamma, Max_Bu_DstKst_D0gamma-TOLERANCE, Max_Bu_DstKst_D0gamma+TOLERANCE);
 
-//  a_Bu_DstKst_D0pi0  = new RooRealVar("low_a_Bd_Dst0Kst0_D0pi0"  ,"a_Bu_DstKst_D0pi0"  , Min_Bd_Dst0Kst0_D0pi0  , Min_Bd_Dst0Kst0_D0pi0  -TOLERANCE, Min_Bd_Dst0Kst0_D0pi0  +TOLERANCE);
-//  b_Bu_DstKst_D0pi0  = new RooRealVar("low_b_Bd_Dst0Kst0_D0pi0"  ,"b_Bu_DstKst_D0pi0"  , Max_Bd_Dst0Kst0_D0pi0  , Max_Bd_Dst0Kst0_D0pi0  -TOLERANCE, Max_Bd_Dst0Kst0_D0pi0  +TOLERANCE);
-//  a_Bu_DstKst_D0gamma= new RooRealVar("low_a_Bd_Dst0Kst0_D0gamma","a_Bu_DstKst_D0gamma", Min_Bd_Dst0Kst0_D0gamma, Min_Bd_Dst0Kst0_D0gamma-TOLERANCE, Min_Bd_Dst0Kst0_D0gamma+TOLERANCE);
-//  b_Bu_DstKst_D0gamma= new RooRealVar("low_b_Bd_Dst0Kst0_D0gamma","b_Bu_DstKst_D0gamma", Max_Bd_Dst0Kst0_D0gamma, Max_Bd_Dst0Kst0_D0gamma-TOLERANCE, Max_Bd_Dst0Kst0_D0gamma+TOLERANCE);
+  a_Bd_DstKst_D0pi0  = new RooRealVar("low_a_Bd_Dst0Kst0_D0pi0"  ,"a_Bd_DstKst_D0pi0"  , Min_Bd_DstKst_D0pi0  , Min_Bd_DstKst_D0pi0  -TOLERANCE, Min_Bd_DstKst_D0pi0  +TOLERANCE);
+  b_Bd_DstKst_D0pi0  = new RooRealVar("low_b_Bd_Dst0Kst0_D0pi0"  ,"b_Bd_DstKst_D0pi0"  , Max_Bd_DstKst_D0pi0  , Max_Bd_DstKst_D0pi0  -TOLERANCE, Max_Bd_DstKst_D0pi0  +TOLERANCE);
 
   // Efficiency effects: fixed value based on MC
   // Initial values from individual fits
@@ -85,11 +81,9 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   pdf_DstKst_D0gamma_101["bu"] = new RooLITTLEHORNSdini("Bu_DstKst_D0gamma_101" ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_LITTLEHORNS,*low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
 
   //-----------------------------------------------------------------------------------------------------------------------------------
-  // Low Mass Shapes : Bs 
-//  pdf_DstKst_D0pi0_010["bs"]   = new RooHORNSdini("Bs_Dst0Kst0_D0pi0_010"         ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-//  pdf_DstKst_D0gamma_010["bs"] = new RooHILLdini("Bs_Dst0Kst0_D0gamma_010"        ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_HILLg,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-//  pdf_DstKst_D0pi0_101["bs"]   = new RooHILLdini("Bs_Dst0Kst0_D0pi0_001"          ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-//  pdf_DstKst_D0gamma_101["bs"] = new RooLITTLEHORNSdini("Bs_Dst0Kst0_D0gamma_001" ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_LITTLEHORNS,*low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  // Low Mass Shapes : Bd
+  pdf_DstKst_D0pi0_010["bd"]   = new RooHORNSdini("Bd_DstKst_D0pi0_010"         ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_DstKst_D0pi0_101["bd"]   = new RooHILLdini("Bd_DstKst_D0pi0_101"          ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
 
   //-----------------------------------------------------------------------------------------------------------------------------------
 
@@ -103,10 +97,8 @@ void PartRecoShapes::fix()
   a_Bu_DstKst_D0gamma->setConstant();
   b_Bu_DstKst_D0gamma->setConstant();
 
-  a_Bu_DstKst_D0pi0->setConstant();
-  b_Bu_DstKst_D0pi0->setConstant();
-  a_Bu_DstKst_D0gamma->setConstant();
-  b_Bu_DstKst_D0gamma->setConstant();
+  a_Bd_DstKst_D0pi0->setConstant();
+  b_Bd_DstKst_D0pi0->setConstant();
 
   csi_HORNS->setConstant();
   csi_LITTLEHORNS->setConstant();

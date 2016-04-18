@@ -289,7 +289,7 @@ int Fitting::LoadDataSet()
 						// RooDataSet
 						  cout << "RooDataSet" <<endl;
 						tfile->cd();
-						dataset = FinalDataSet(*m, *t, (RooDataSet*)tfile->FindObjectAny("DS"));
+						dataset = FinalDataSet(*m, *t, *c, *a, (RooDataSet*)tfile->FindObjectAny("DS"));
 					  }
 					  else
 					  {
@@ -375,11 +375,11 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 }
 
 //version passed a RooDataSet
-RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, RooDataSet* DS)
+RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_track, const std::string s_charge, const std::string s_run, RooDataSet* DS)
 {
-/*  if (!DS)
+  if (!DS)
     {
-      std::cout << "\n THE DATASET IS A ZERO POINTER IN " << s_mode << " " << s_track << std::endl;
+      std::cout << "\n THE DATASET IS A ZERO POINTER IN " << s_mode << " " << s_track << " "<< s_charge << " " <<  s_run << std::endl;
       return 0;
     }
 
@@ -400,20 +400,20 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   RooDataSet *extra = new RooDataSet("extra","extra stuff",RooArgSet(mode,run,track,charge,*catNew));
   mode.setLabel(s_mode.c_str());
   track.setLabel(s_track.c_str());
-  charge.setLabel(both.c_str());
-  run.setLabel("all");
+  charge.setLabel(s_charge.c_str());
+  run.setLabel(s_run.c_str());
   RooArgSet datadetails(mode, run, track, charge, *catNew);
   
   std::string catNewLabel;
   for(int i = 0; i < input->numEntries(); i++)
     {
-      catNewLabel = s_mode + "_" + both + "_" + s_track + "_" + "all";
+      catNewLabel = s_mode + "_" + s_charge + "_" + s_track + "_" + s_run;
       catNew->setLabel(catNewLabel.c_str());
       extra->add(datadetails);
     }
   
   input->merge(extra);
-  return input;*/
+  return input;
 }
 
 
@@ -493,10 +493,10 @@ void Fitting::RunFullFit(bool draw=true)
       double mean = ((RooRealVar*)allPars.at(listindex))->getVal();
       double integ_limit_low  = mean - _genConfs->getD("integ_range_low");
       double integ_limit_high = mean + _genConfs->getD("integ_range_high");
-      model->printYieldsAndPurities("Bu",integ_limit_low,integ_limit_high);
+      model->printYieldsAndPurities("Bu",integ_limit_low,integ_limit_high,result);
       integ_limit_low = _genConfs->getD("fit_limit_low");
       integ_limit_high = _genConfs->getD("fit_limit_high");
-      model->printYieldsAndPurities("full",integ_limit_low,integ_limit_high);
+      model->printYieldsAndPurities("full",integ_limit_low,integ_limit_high,result);
       //model->printYieldsAndPurities("binnedfit",5200,5800);
 
 

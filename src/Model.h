@@ -24,7 +24,7 @@ class Model : public Base
   RooSimultaneous* getGenPdf();
   RooSimultaneous* getFitPdf();
 
-  void printYieldsAndPurities(string, double, double);
+  void printYieldsAndPurities(string, double, double, RooFitResult*);
   std::map< std::string,std::map< std::string, std::map< std::string,std::map< std::string, std::map<std::string,double > > > > > plotNums;
   std::vector< RooRealVar* > getMyLowComb(){return yields->ParametersOfFit;};
 

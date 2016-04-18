@@ -22,6 +22,9 @@ class Settings
 
   // check if key contained before query map
   bool contains(std::string);
+
+  // properties in text file
+  bool isChargeSeparated();
  private:
   std::map< std::string, std::string> _pairStringsMap;
   bool _haveReadInMap;
