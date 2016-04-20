@@ -155,16 +155,19 @@ void::Yields::SetYieldRatios()
 {
    	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
 
-	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",0.5,0.0,1.0);
+   		double AfromFit = input->getD(Form("A_%s",(*m).c_str()))*genscale;
+	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",AfromFit,0.0,1.0);
 
 	    if (*m != "d2kpi") {
-	    	R[*m] = new RooRealVar(Form("R_%s",(*m).c_str()),"",0.5,0.0,1.0);
+	    	double RfromFit = input->getD(Form("R_%s",(*m).c_str()))*genscale;
+	    	R[*m] = new RooRealVar(Form("R_%s",(*m).c_str()),"",RfromFit,0.0,1.0);
 	    }
 	    else {
 	        for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
 	          for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
-	       		  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",0,100000);
+	        	  double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
+	       		  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,0,100000);
 
 	          }
 	        }
