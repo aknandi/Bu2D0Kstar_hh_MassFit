@@ -42,8 +42,8 @@ class Yields
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsArg*> > > > n_bu_fit;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb_gen;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_dstkst;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_bu_dstkst_gen;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_dstkst;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_dstkst_gen;
 
   std::map<std::string, RooRealVar*> A;
   std::map<std::string, RooRealVar*> R;

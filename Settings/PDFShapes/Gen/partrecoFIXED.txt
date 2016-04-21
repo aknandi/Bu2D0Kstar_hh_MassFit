@@ -1,6 +1,12 @@
 frac010_bu 0.76
 frac010_bu_LimU 0.76
 frac010_bu_LimL 0.76
+frac010_bd 0.76
+frac010_bd_LimU 0.76
+frac010_bd_LimL 0.76
+frac_bd 0.45
+frac_bd_LimU 0.45
+frac_bd_LimL 0.45
 bs_mix_gamma_frac001 0.796096
 bs_mix_gamma_frac001_LimU 0.796096
 bs_mix_gamma_frac001_LimL 0.796096

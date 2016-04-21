@@ -75,15 +75,15 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
 
   //-----------------------------------------------------------------------------------------------------------------------------------
   // Low Mass Shapes : Bu
-  pdf_DstKst_D0pi0_010["bu"]   = new RooHORNSdini("Bu_DstKst_D0pi0_010"         ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-  pdf_DstKst_D0gamma_010["bu"] = new RooHILLdini("Bu_DstKst_D0gamma_010"        ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_HILLg,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-  pdf_DstKst_D0pi0_101["bu"]   = new RooHILLdini("Bu_DstKst_D0pi0_101"          ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-  pdf_DstKst_D0gamma_101["bu"] = new RooLITTLEHORNSdini("Bu_DstKst_D0gamma_101" ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_LITTLEHORNS,*low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bu_DstKst_D0pi0_010   = new RooHORNSdini("Bu_DstKst_D0pi0_010"         ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bu_DstKst_D0gamma_010 = new RooHILLdini("Bu_DstKst_D0gamma_010"        ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_HILLg,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bu_DstKst_D0pi0_101   = new RooHILLdini("Bu_DstKst_D0pi0_101"          ,"",*x,*a_Bu_DstKst_D0pi0,  *b_Bu_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bu_DstKst_D0gamma_101 = new RooLITTLEHORNSdini("Bu_DstKst_D0gamma_101" ,"",*x,*a_Bu_DstKst_D0gamma,*b_Bu_DstKst_D0gamma,*csi_LITTLEHORNS,*low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
 
   //-----------------------------------------------------------------------------------------------------------------------------------
   // Low Mass Shapes : Bd
-  pdf_DstKst_D0pi0_010["bd"]   = new RooHORNSdini("Bd_DstKst_D0pi0_010"         ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
-  pdf_DstKst_D0pi0_101["bd"]   = new RooHILLdini("Bd_DstKst_D0pi0_101"          ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bd_DstKst_D0pi0_010   = new RooHORNSdini("Bd_DstKst_D0pi0_010"         ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HORNS,      *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
+  pdf_Bd_DstKst_D0pi0_101   = new RooHILLdini("Bd_DstKst_D0pi0_101"          ,"",*x,*a_Bd_DstKst_D0pi0,  *b_Bd_DstKst_D0pi0,  *csi_HILL,       *low_shift,*low_sigma,*ratio_sigma_MC,*f_MC,*low_shiftg);
 
   //-----------------------------------------------------------------------------------------------------------------------------------
 

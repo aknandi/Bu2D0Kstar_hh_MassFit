@@ -26,7 +26,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
         	bu[*mode][*charge][*trackType][*run]  = new myCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
-        	bu_dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_partreco"));
+        	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"));
            }
       }
     }
@@ -76,6 +76,8 @@ void Pdf_Gen::setRelations()
                                                  relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
   RooRealVar *bu_frac010 = new RooRealVar("frac010_bu","",relConfs.getD("frac010_bu"), 0.0, 1.0);
+  RooRealVar *bd_frac010 = new RooRealVar("frac010_bd","",relConfs.getD("frac010_bd"), 0.0, 1.0);
+  RooRealVar *lowmass_fracBd = new RooRealVar("frac_bd","",relConfs.getD("frac_bd"), 0.0, 1.0);
 
   std::cout << std::endl << "PdfGen : floating parameters " << std::endl;
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
@@ -144,7 +146,9 @@ void Pdf_Gen::setRelations()
           }
 
 
-          bu_dstkst[*mode][*charge][*trackType][*run]->setFraction(bu_frac010);
+          dstkst[*mode][*charge][*trackType][*run]->setFractionBu010(bu_frac010);
+          dstkst[*mode][*charge][*trackType][*run]->setFractionBd010(bd_frac010);
+          dstkst[*mode][*charge][*trackType][*run]->setFractionBd(lowmass_fracBd);
         }
       }
     }
@@ -158,7 +162,7 @@ void Pdf_Gen::setRelations()
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
           roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_comb[*mode][*charge][*trackType][*run]      = comb[*mode][*charge][*trackType][*run]->getPdf();
-          roopdf_bu_dstkst[*mode][*charge][*trackType][*run]  = bu_dstkst[*mode][*charge][*trackType][*run]->getPdf();
+          roopdf_dstkst[*mode][*charge][*trackType][*run]  = dstkst[*mode][*charge][*trackType][*run]->getPdf();
         }
       }
     }

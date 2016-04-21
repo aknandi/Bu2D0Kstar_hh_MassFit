@@ -227,12 +227,12 @@ void Yields::SetYieldsGenandFit()
 			// --- Gen yields ---
 			double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,0,10000);
-			double N_bu_dstkst = input->getD(Form("N_bu_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			n_bu_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_gen_%s",identifier),"",N_bu_dstkst,0,10000);
+			double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,0,10000);
 
 			// --- Fit yields ---
 			n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0,10000.);
-			n_bu_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_dstkst_%s",identifier),"",N_bu_dstkst,0.,10000.);
+			n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst,0.,10000.);
 
 
         }

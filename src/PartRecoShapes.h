@@ -15,10 +15,13 @@ public :
   PartRecoShapes(RooRealVar*,bool=false,std::string=""); 
   ~PartRecoShapes(){}
 
-  std::map<std::string,RooAbsPdf*> pdf_DstKst_D0pi0_010;
-  std::map<std::string,RooAbsPdf*> pdf_DstKst_D0pi0_101;
-  std::map<std::string,RooAbsPdf*> pdf_DstKst_D0gamma_010;
-  std::map<std::string,RooAbsPdf*> pdf_DstKst_D0gamma_101;
+  RooAbsPdf* pdf_Bu_DstKst_D0pi0_010;
+  RooAbsPdf* pdf_Bu_DstKst_D0pi0_101;
+  RooAbsPdf* pdf_Bu_DstKst_D0gamma_010;
+  RooAbsPdf* pdf_Bu_DstKst_D0gamma_101;
+
+  RooAbsPdf* pdf_Bd_DstKst_D0pi0_010;
+  RooAbsPdf* pdf_Bd_DstKst_D0pi0_101;
 
   void fix();
 protected :

@@ -73,8 +73,8 @@ RooSimultaneous* Model::getGenPdf()
             pdflist.add(*(genPdf.roopdf_comb[*m][*c][*t][*a]));
             nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
             // DstKst
-            pdflist.add(*(genPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
-            nevents.add(*(yields->n_bu_dstkst_gen[*m][*c][*t][*a]));
+            pdflist.add(*(genPdf.roopdf_dstkst[*m][*c][*t][*a]));
+            nevents.add(*(yields->n_dstkst_gen[*m][*c][*t][*a]));
           }
 
 
@@ -127,8 +127,8 @@ RooSimultaneous* Model::getFitPdf()
               pdflist.add(*(fitPdf.roopdf_comb[*m][*c][*t][*a]));
               nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
               // DstKst
-              pdflist.add(*(fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_bu_dstkst[*m][*c][*t][*a]));
+              pdflist.add(*(fitPdf.roopdf_dstkst[*m][*c][*t][*a]));
+              nevents.add(*(yields->n_dstkst[*m][*c][*t][*a]));
             }
           
           // --- No Gaussian Constraints --- 
@@ -284,7 +284,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           //////////////////////////////////////////////////////////////////////
           double integral_bu  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_comb   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
-          double integral_bu_dstkst   = fitPdf.roopdf_bu_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
+          double integral_dstkst   = fitPdf.roopdf_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           // integration of RooKeysPdf needs to be done by hand 
           //double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
           //////////////////////////////////////////////////////////////////////
@@ -305,12 +305,12 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           }
           //double integyield_bu     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getVal();
           double integyield_comb   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getVal();
-          double integyield_bu_dstkst  = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getVal();
+          double integyield_dstkst  = integral_dstkst * yields->n_dstkst[*m][*c][*t][*a]->getVal();
 
           // Errors
           //double integyield_bu_err     = integral_bu * yields->n_bu_fit[*m][*c][*t][*a]->getError();
           double integyield_comb_err   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getError();
-          double integyield_bu_dstkst_err = integral_bu_dstkst * yields->n_bu_dstkst[*m][*c][*t][*a]->getError();
+          double integyield_dstkst_err = integral_dstkst * yields->n_dstkst[*m][*c][*t][*a]->getError();
 
           // --- If Bs->D*K* yields split by helamp ---
           //double integral_bs_dstkst_010    = bs_dstkst_010_integEvents->sumEntries(integRange.c_str())/bs_dstkst_010_integEvents->sumEntries(fitRange.c_str());
@@ -333,13 +333,13 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           cout<<"In bin : "<<*m<<", "<<*c<<", "<<*t<<", "<<*a<<endl;
           cout << "Bu signal: " << integyield_bu << " +/- " << integyield_bu_err << std::endl;
           cout << "Combs:     " << integyield_comb << " +/- " << integyield_comb_err << std::endl;
-          cout << "Bu D*K*:   " << integyield_bu_dstkst << " +/- " << integyield_bu_dstkst_err << std::endl;
+          cout << "Bu D*K*:   " << integyield_dstkst << " +/- " << integyield_dstkst_err << std::endl;
           cout << "/////////////////////////////////////////////////////////////////" << endl;
-          double total = integyield_bu + integyield_comb + integyield_bu_dstkst;
+          double total = integyield_bu + integyield_comb + integyield_dstkst;
           double nS = integyield_bu;
           double nSerr = integyield_bu_err;
           double nB = total - nS;
-          double nBerr =sqrt( pow(integyield_comb,2) + pow(integyield_bu_dstkst,2) );
+          double nBerr =sqrt( pow(integyield_comb,2) + pow(integyield_dstkst,2) );
           double purity = nS/total;
           double purity_err = sqrt( (nS*nS*nBerr*nBerr + nB*nB*nSerr*nSerr)/pow(nS+nB,4));
           // Not sure if the yield give should be in the B mass region or the total yield of signal peak
@@ -360,7 +360,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           cout << b << " window & & & \\\\" << endl;
           cout << "$B^+ \\to D^{0} K^{\\ast +}$ & $" << integyield_bu << "$ & $\\pm$ & $" << integyield_bu_err << "$ \\\\ " << endl;
           cout << "$\\mathrm{Combinatoric}$ & $" << integyield_comb << "$ & $\\pm$ & $" << integyield_comb_err << "$ \\\\ " << endl;
-          cout << "$B^+ \\to D^{\\ast 0} K^{\\ast +}$ & $" << integyield_bu_dstkst << "$ & $\\pm$ & $" << integyield_bu_dstkst_err << "$ \\\\ " << endl;
+          cout << "$B^+ \\to D^{\\ast 0} K^{\\ast +}$ & $" << integyield_dstkst << "$ & $\\pm$ & $" << integyield_dstkst_err << "$ \\\\ " << endl;
           cout << "\\hline"  << endl;
           cout << "\\end{tabular}"  << endl;
 
@@ -373,9 +373,9 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           GenTotals << "N_comb_" << *m << "_both_" << *t << " " << integyield_comb << std::endl;
           GenTotals << "N_comb_" << *m << "_plus_" << *t << " " << integyield_comb/2.0 << std::endl;
           GenTotals << "N_comb_" << *m << "_minus_" << *t << " " << integyield_comb/2.0 << std::endl;
-          GenTotals << "N_bu_dstkst_" << *m << "_both_" << *t << " " << integyield_bu_dstkst << std::endl;
-          GenTotals << "N_bu_dstkst_" << *m << "_plus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
-          GenTotals << "N_bu_dstkst_" << *m << "_minus_" << *t << " " << integyield_bu_dstkst/2.0 << std::endl;
+          GenTotals << "N_dstkst_" << *m << "_both_" << *t << " " << integyield_dstkst << std::endl;
+          GenTotals << "N_dstkst_" << *m << "_plus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
+          GenTotals << "N_dstkst_" << *m << "_minus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
 
 
         }
