@@ -135,6 +135,7 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
+  // todo set parameters in low mass shape constant
 
  
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)

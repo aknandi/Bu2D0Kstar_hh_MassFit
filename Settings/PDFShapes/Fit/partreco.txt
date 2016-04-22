@@ -22,10 +22,10 @@ frac010_bd_LimL 1.0
 frac_bd 0.45
 frac_bd_LimU 0.2
 frac_bd_LimL 1.0
-gamma_frac010_LL 0.53
-gamma_frac101_LL 0.53
-gamma_frac010_DD 0.50
-gamma_frac101_DD 0.54
+gamma_frac010_LL 0.54
+gamma_frac101_LL 0.56
+gamma_frac010_DD 0.52
+gamma_frac101_DD 0.55
 gamma_frac010_mix 0.50
 gamma_frac101_mix 0.50
 

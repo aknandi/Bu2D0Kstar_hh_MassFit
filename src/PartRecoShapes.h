@@ -24,6 +24,7 @@ public :
   RooAbsPdf* pdf_Bd_DstKst_D0pi0_101;
 
   void fix();
+  void deleteVariables();
 protected :
   void buildShapes(RooRealVar*);
 
@@ -38,23 +39,50 @@ private:
   RooRealVar* a_Bu_DstKst_D0gamma;
   RooRealVar* b_Bu_DstKst_D0pi0;
   RooRealVar* b_Bu_DstKst_D0gamma;
-
   RooRealVar* a_Bd_DstKst_D0pi0;
   RooRealVar* b_Bd_DstKst_D0pi0;
 
-  RooRealVar* csi_HORNS;
-  RooRealVar* csi_LITTLEHORNS;
-  RooRealVar* csi_HILL;
-  RooRealVar* csi_HILLg;
+  RooRealVar* csi_bu_p010;
+  RooRealVar* csi_bu_g010;
+  RooRealVar* csi_bu_p101;
+  RooRealVar* csi_bu_g101;
+  RooRealVar* csi_bd_p010;
+  RooRealVar* csi_bd_p101;
 
-  RooRealVar* f_MC;
-  RooRealVar* ratio_sigma_MC;
-  RooRealVar* alpha;
-  RooRealVar* n;
+  RooRealVar* shift_bu_p010;
+  RooRealVar* shift_bu_g010;
+  RooRealVar* shift_bu_p101;
+  RooRealVar* shift_bu_g101;
+  RooRealVar* shift_bd_p010;
+  RooRealVar* shift_bd_p101;
 
-  RooRealVar* low_shift;
-  RooRealVar* low_shiftg;
-  RooRealVar* low_sigma;
+  RooRealVar* sigma_bu_p010;
+  RooRealVar* sigma_bu_g010;
+  RooRealVar* sigma_bu_p101;
+  RooRealVar* sigma_bu_g101;
+  RooRealVar* sigma_bd_p010;
+  RooRealVar* sigma_bd_p101;
+
+  RooRealVar* ratio_sigma_bu_p010;
+  RooRealVar* ratio_sigma_bu_g010;
+  RooRealVar* ratio_sigma_bu_p101;
+  RooRealVar* ratio_sigma_bu_g101;
+  RooRealVar* ratio_sigma_bd_p010;
+  RooRealVar* ratio_sigma_bd_p101;
+
+  RooRealVar* fraction_sigma_bu_p010;
+  RooRealVar* fraction_sigma_bu_g010;
+  RooRealVar* fraction_sigma_bu_p101;
+  RooRealVar* fraction_sigma_bu_g101;
+  RooRealVar* fraction_sigma_bd_p010;
+  RooRealVar* fraction_sigma_bd_p101;
+
+  RooRealVar* shiftg_bu_p010;
+  RooRealVar* shiftg_bu_g010;
+  RooRealVar* shiftg_bu_p101;
+  RooRealVar* shiftg_bu_g101;
+  RooRealVar* shiftg_bd_p010;
+  RooRealVar* shiftg_bd_p101;
 
 };
 

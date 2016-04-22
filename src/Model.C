@@ -267,8 +267,11 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 				  }
 			  }
 		  }
+
           GenTotals << "A_" << *m << " " << A << std::endl;
-          GenTotals << "R_" << *m << " " << R << std::endl;
+          if (*m != "d2kpi") {
+        	  GenTotals << "R_" << *m << " " << R << std::endl;
+          }
 
 	  }
 
