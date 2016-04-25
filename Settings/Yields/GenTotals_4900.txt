@@ -3,6 +3,10 @@
 DEBUG_runInHighStatsMode 0
 N_bu_d2kpi_all_LL 299.356
 N_bu_d2kpi_all_DD 710.169
+N_bu_d2kpi_run1_LL 299.356
+N_bu_d2kpi_run1_DD 710.169
+N_bu_d2kpi_run2_LL 299.356
+N_bu_d2kpi_run2_DD 710.169
 A_d2kpi 0.1
 A_d2kk 0.255948
 R_d2kk 0.136139

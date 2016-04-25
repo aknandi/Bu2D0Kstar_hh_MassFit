@@ -75,15 +75,13 @@ void Pdf_Gen::setRelations()
   RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
                                                  relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
-  RooRealVar *bu_frac010 = new RooRealVar("frac010_bu","",relConfs.getD("frac010_bu"), 0.0, 1.0);
-  RooRealVar *bd_frac010 = new RooRealVar("frac010_bd","",relConfs.getD("frac010_bd"), 0.0, 1.0);
-  RooRealVar *lowmass_fracBd = new RooRealVar("frac_bd","",relConfs.getD("frac_bd"), 0.0, 1.0);
+  RooRealVar *frac010 = new RooRealVar("frac010","",relConfs.getD("frac010"), 0.0, 1.0);
 
   std::cout << std::endl << "PdfGen : floating parameters " << std::endl;
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
   floatParams->push_back(bu_mean);
   floatParams->push_back(bu_width);
-  floatParams->push_back(bu_frac010);
+  floatParams->push_back(frac010);
 
   for (Int_t n_p = 0; n_p < (Int_t)floatParams->size(); ++n_p)
     {
@@ -146,9 +144,7 @@ void Pdf_Gen::setRelations()
           }
 
 
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBu010(bu_frac010);
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBd010(bd_frac010);
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBd(lowmass_fracBd);
+          dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010);
         }
       }
     }

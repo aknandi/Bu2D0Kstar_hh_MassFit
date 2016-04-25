@@ -21,14 +21,12 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, st
   //_frac010 = mySettings.getD("frac010_"+p+"_"+fitlow);
 
   // Create any RooRealVars you'll need
-  _intVars["frac010_bu"] = 0;
-  _intVars["frac010_bd"] = 0;
-  _intVars["frac_bd"] = 0;
+  _intVars["frac010"] = 0;
 
   // Read in PARAMETRIC low mass pdf
   PartRecoShapes* prs = new PartRecoShapes(_mB, true, t);
-  pdf_bu_g_101  = prs->pdf_Bu_DstKst_D0gamma_101;
-  pdf_bu_g_010  = prs->pdf_Bu_DstKst_D0gamma_010;
+  pdf_bu_gamma_101  = prs->pdf_Bu_DstKst_D0gamma_101;
+  pdf_bu_gamma_010  = prs->pdf_Bu_DstKst_D0gamma_010;
   pdf_bu_pi_101 = prs->pdf_Bu_DstKst_D0pi0_101;
   pdf_bu_pi_010 = prs->pdf_Bu_DstKst_D0pi0_010;
 
@@ -36,41 +34,67 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, st
   pdf_bd_pi_010 = prs->pdf_Bd_DstKst_D0pi0_010;
   // ------------------------------------
 
-  if(!pdf_bu_g_101 || !pdf_bu_g_010 || !pdf_bu_pi_101 || !pdf_bu_pi_010 || !pdf_bd_pi_101 || !pdf_bd_pi_010) {
+  if(!pdf_bu_gamma_101 || !pdf_bu_gamma_010 || !pdf_bu_pi_101 || !pdf_bu_pi_010 || !pdf_bd_pi_101 || !pdf_bd_pi_010) {
     std::cout << "Problem obtaining Low Mass Pdfs!" << std::endl;
     exit(1);
   }
 
   // Bu shapes
-  double G_101 = mySettings.getD("gamma_frac101_"+t);
-  double G_010 = mySettings.getD("gamma_frac010_"+t);
+  double gamma_101 = mySettings.getD("gamma_frac101_"+t);
+  double gamma_010 = mySettings.getD("gamma_frac010_"+t);
+  double bd_101 = mySettings.getD("bd_frac101_"+t);
+  double bd_010 = mySettings.getD("bd_frac010_"+t);
+
+  // Calculate the fraction on each 010 and 101 pdf such that they normalise to 1
+  // We know the ratio of gamma/pi and Bdpi/Bupi
+  double totalFraction101 = 1.0 + gamma_101 + bd_101;
+  double pi_101 = 1/totalFraction101;
+  gamma_101 /= totalFraction101;
+  bd_101 /= totalFraction101;
+  double totalFraction010 = 1.0 + gamma_010 + bd_010;
+  double pi_010 = 1/totalFraction010;
+  gamma_010 /= totalFraction010;
+  bd_010 /= totalFraction010;
 
   std::cout << "PartRecoDstKst " << t << std::endl;
-  std::cout << " G_101 " << G_101 << "\n" << " G_010 " << G_010 << std::endl;
-  var_G_101 = new RooRealVar(("bu_"+t+"_gamma_frac101").c_str(),"",G_101);
-  var_G_010 = new RooRealVar(("bu_"+t+"_gamma_frac010").c_str(),"",G_010);
-  //var_G_001->setConstant(kTRUE);
-  //var_G_010->setConstant(kTRUE);
+  std::cout << " pi_101 " << pi_101 << "\n" << " pi_010 " << pi_010 << std::endl;
+  std::cout << " gamma_101 " << gamma_101 << "\n" << " gamma_010 " << gamma_010 << std::endl;
+  std::cout << " bd_101 " << bd_101 << "\n" << " bd_010 " << bd_010 << std::endl;
 
-  pdf_bu_101 = new RooAddPdf((_name+"bu_101").c_str(),"",*pdf_bu_g_101,*pdf_bu_pi_101,*var_G_101);
-  pdf_bu_010 = new RooAddPdf((_name+"bu_010").c_str(),"",*pdf_bu_g_010,*pdf_bu_pi_010,*var_G_010);
+  frac_pi_101 = new RooRealVar(("bu_"+t+"_pi_frac101").c_str(),"",pi_101);
+  frac_pi_010 = new RooRealVar(("bu_"+t+"_pi_frac010").c_str(),"",pi_010);
+  frac_gamma_101 = new RooRealVar(("bu_"+t+"_gamma_frac101").c_str(),"",gamma_101);
+  frac_gamma_010 = new RooRealVar(("bu_"+t+"_gamma_frac010").c_str(),"",gamma_010);
+  frac_bd_101 = new RooRealVar((t+"_bd_frac101").c_str(),"",bd_101);
+  frac_bd_010 = new RooRealVar((t+"_bd_frac010").c_str(),"",bd_010);
 
+  RooArgSet pdfList101;
+  RooArgSet pdfList010;
+  RooArgSet yieldFractions101;
+  RooArgSet yieldFractions010;
+
+  pdfList010.add(*pdf_bu_pi_010);
+  pdfList010.add(*pdf_bu_gamma_010);
+  pdfList010.add(*pdf_bd_pi_010);
+  yieldFractions010.add(*frac_pi_010);
+  yieldFractions010.add(*frac_gamma_010);
+  yieldFractions010.add(*frac_bd_010);
+
+  pdfList101.add(*pdf_bu_pi_101);
+  pdfList101.add(*pdf_bu_gamma_101);
+  pdfList101.add(*pdf_bd_pi_101);
+  yieldFractions101.add(*frac_pi_101);
+  yieldFractions101.add(*frac_gamma_101);
+  yieldFractions101.add(*frac_bd_101);
+
+  pdf_010 = new RooAddPdf((_name+"010").c_str(),"",pdfList010,yieldFractions010);
+  pdf_101 = new RooAddPdf((_name+"101").c_str(),"",pdfList101,yieldFractions101);
 
 }
 
-void PartRecoDstKst::setFractionBu010(RooAbsReal* newFractionBu010)
+void PartRecoDstKst::setFraction010(RooAbsReal* newFraction010)
 {
-	setRelation("frac010_bu",newFractionBu010);
-}
-
-void PartRecoDstKst::setFractionBd010(RooAbsReal* newFractionBd010)
-{
-	setRelation("frac010_bd",newFractionBd010);
-}
-
-void PartRecoDstKst::setFractionBd(RooAbsReal* newFractionBd)
-{
-	setRelation("frac_bd",newFractionBd);
+	setRelation("frac010",newFraction010);
 }
 
 RooAbsPdf* PartRecoDstKst::getPdf()
@@ -78,23 +102,15 @@ RooAbsPdf* PartRecoDstKst::getPdf()
   bool dbThis(false);
   // If any RooFit variables still have 0 pointers (ie have not been set from outside (e.g. sharing parameters (like mean) across multiple shapes) then
   // assume that the values should be those passed in the constructor
-  if(_intVars["frac010_bu"]==0)	_intVars["frac010_bu"]		 	= new RooRealVar(Form("%s_Var_frac010_bu",_name.c_str()),"",_frac010_bu);
-  if(_intVars["frac010_bd"]==0)	_intVars["frac010_bd"]		 	= new RooRealVar(Form("%s_Var_frac010_bd",_name.c_str()),"",_frac010_bd);
-  if(_intVars["frac_bd"]==0)		_intVars["frac_bd"]		 	= new RooRealVar(Form("%s_Var_frac_bd",_name.c_str()),"",_frac_bd);
+  if(_intVars["frac010"]==0)	_intVars["frac010"]		 	= new RooRealVar(Form("%s_Var_frac010",_name.c_str()),"",_frac010);
 
   if(dbThis) {
     std::cout << "For name: " << _name << endl;
-    std::cout << " PartRecoDstKst (frac010_bu): " << _intVars["frac010_bu"]->getVal()
-			  << " PartRecoDstKst (frac010_bd): " << _intVars["frac010_bd"]->getVal()
-			  << " PartRecoDstKst (frac_bd): " << _intVars["frac_bd"]->getVal()
+    std::cout << " PartRecoDstKst (frac010): " << _intVars["frac010"]->getVal()
               << std::endl;
   }
 
-  // Float the ratio between helamp 010 and 101 in Bu
-  pdf_bu = new RooAddPdf((_name+"bu").c_str(),"",*pdf_bu_010,*pdf_bu_101,*_intVars["frac010_bu"]);
-  pdf_bd = new RooAddPdf((_name+"bd").c_str(),"",*pdf_bd_pi_010,*pdf_bd_pi_101,*_intVars["frac010_bd"]);
-
   // Combine Bd and Bu and float ratio
-  RooAddPdf *pdf_partreco = new RooAddPdf(_name.c_str(),"",*pdf_bd,*pdf_bu,*_intVars["frac_bd"]);
+  RooAddPdf *pdf_partreco = new RooAddPdf(_name.c_str(),"",*pdf_010,*pdf_101,*_intVars["frac010"]);
   return pdf_partreco;
 }

@@ -87,9 +87,7 @@ void Pdf_Fit::setRelations()
   RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
                                                  relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
-  RooRealVar *bu_frac010 = new RooRealVar("frac010_bu","",relConfs.getD("frac010_bu"), 0.0, 1.0);
-  RooRealVar *bd_frac010 = new RooRealVar("frac010_bd","",relConfs.getD("frac010_bd"), 0.0, 1.0);
-  RooRealVar *lowmass_fracBd = new RooRealVar("frac_bd","",relConfs.getD("frac_bd"), 0.0, 1.0);
+  RooRealVar *frac010 = new RooRealVar("frac010","",relConfs.getD("frac010"), 0.0, 1.0);
 
   //PartReco
   string limitlow = relConfs.get("fit_limit_low");
@@ -175,9 +173,7 @@ void Pdf_Fit::setRelations()
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
           }
 
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBu010(bu_frac010);
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBd010(bd_frac010);
-          dstkst[*mode][*charge][*trackType][*run]->setFractionBd(lowmass_fracBd);
+          dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010);
         }
       }
     }
