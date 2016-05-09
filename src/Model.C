@@ -380,6 +380,26 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           GenTotals << "N_dstkst_" << *m << "_plus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
           GenTotals << "N_dstkst_" << *m << "_minus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
 
+          /*
+          if(!_genConfs->isChargeSeparated() && *m=="d2kpi") {
+        	  for(int i=0; i<6; i++) {
+        		  double new_integ_limit_low = 5200 + 10*i;
+        		  mB->setRange(Form("narrowRange%i",i),new_integ_limit_low,integ_limit_high);
+        		  double integral_bu_newRange  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
+        		  double integral_comb_newRange   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
+        		  double integral_dstkst_newRange   = fitPdf.roopdf_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
+        		  RooRealVar* n_bu_fit_asRooRealVar = static_cast<RooRealVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+        		  double integyield_bu_newRange = integral_bu_newRange * n_bu_fit_asRooRealVar->getVal();
+        		  double integyield_bu_err_newRange = integral_bu_newRange * n_bu_fit_asRooRealVar->getError();
+        		  double integyield_comb_newRange   = integral_comb_newRange * yields->n_comb[*m][*c][*t][*a]->getVal();
+        		  double integyield_dstkst_newRange  = integral_dstkst_newRange * yields->n_dstkst[*m][*c][*t][*a]->getVal();
+        		  double integyield_comb_err_newRange   = integral_comb_newRange * yields->n_comb[*m][*c][*t][*a]->getError();
+        		  double integyield_dstkst_err_newRange = integral_dstkst_newRange * yields->n_dstkst[*m][*c][*t][*a]->getError();
+
+        		  cout << new_integ_limit_low << "\t" << integyield_bu_newRange << "\t" << integyield_bu_err_newRange << "\t" << integyield_comb_newRange << "\t" << integyield_comb_err_newRange << "\t" << integyield_dstkst_newRange << "\t" << integyield_dstkst_err_newRange << endl;
+        	  }
+          }
+          */
 
         }
       }

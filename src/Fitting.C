@@ -386,7 +386,10 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   TString exclusionString;
 
   std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
-  exclusionString = masscut;
+  std::string charmlesscut = "D0_FDsignificance > " + _genConfs->get("D0fdcut");
+  std::string kstmasscut = "abs(Kst_M - 891.66) < " + _genConfs->get("Kstmasscut");
+  std::string kshelcut = "abs(Ks_cosHelicityAngleA) > " + _genConfs->get("Kshelcut");
+  exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
 
@@ -729,7 +732,7 @@ void Fitting::RunFullFit(bool draw=true)
             plot[*c][*t][*a]->GetYaxis()->SetTitleOffset(1.3);
 
             //draw legend
-            Double_t legtop = 0.60;
+            Double_t legtop = 0.75;
             TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
             leg->SetFillStyle(0);
             leg->SetBorderSize(0);
@@ -737,7 +740,7 @@ void Fitting::RunFullFit(bool draw=true)
             leg->AddEntry((TObject*)0,"","");
             leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
             leg->AddEntry((TObject*)0,"","");
-            leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B_{u} #rightarrow D^{*}K^{*}","l");
+            leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
             leg->AddEntry((TObject*)0,"","");
             leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
 
@@ -753,7 +756,7 @@ void Fitting::RunFullFit(bool draw=true)
                 pav->SetTextFont(132); pav->SetTextSize(0.8);
                 pav->Draw();
              */
-            if(genToys=="false") lhcbpreliminary->Draw();
+            //if(genToys=="false") lhcbpreliminary->Draw();
             if(plot[*c][*t][*a]->GetMaximum()>maxH)
             {
             	maxH=plot[*c][*t][*a]->GetMaximum();
@@ -832,6 +835,7 @@ void Fitting::RunFullFit(bool draw=true)
           else
             {
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.pdf",v_canvas[*t][*a]->GetName()));
+              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
               v_canvas[*t][*a]->Print(Form("figs/fits/%s.C",v_canvas[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.pdf",v_canRes[*t][*a]->GetName()));
               if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.C",v_canRes[*t][*a]->GetName()));

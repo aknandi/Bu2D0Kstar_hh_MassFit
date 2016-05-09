@@ -156,7 +156,7 @@ void::Yields::SetYieldRatios()
    	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
 
    		double AfromFit = input->getD(Form("A_%s",(*m).c_str()));
-	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",AfromFit,0.0,1.0);
+	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",AfromFit,-1.0,1.0);
 
 	    if (*m != "d2kpi") {
 	    	double RfromFit = input->getD(Form("R_%s",(*m).c_str()));
