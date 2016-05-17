@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
   // Get true values
   ifstream infile;
-  infile.open("truevals_4900_modAlexis.txt",ifstream::in);
+  infile.open("truevals.txt",ifstream::in);
   string var;
   float val;
   vector<TString> varList;

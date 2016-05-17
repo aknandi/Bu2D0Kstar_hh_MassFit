@@ -2,52 +2,47 @@ doFit true
 drawProjections true
 *
 * INTEGRATION RANGES
-integ_range_low 25
-integ_range_high 25
-bdbs_diff 87.19
-fit_limit_low 5200
-fit_limit_high 5800
+integ_range_low 30
+integ_range_high 30
+fit_limit_low 4900
+fit_limit_high 5600
+*
+* CUTS BEFORE FITTING
+D0fdcut 0
+Kstmasscut 100
+Kshelcut 0
 *
 * PDFS
-bd_drho true
-bs_dstkst true
-bd_dstkst false
-bu_dkpipi false 
-bu_dpipipi false
-lb_dppi false
+* bu_dksk false
 *
-binned 0
 batchMode true 
 setLogScale false
 doMinosErrors_xy false
 *
-* set numBinsToUse to 0 for putting whole Dalitz space into one bin
-numBinsToUse 0  
-*
 * TOYS
-startSeed 99
-nToys 25
-genToys false 
+startSeed 100
+nToys 100
+genToys true
 readToys false
-readData true
-fixedGC true
+readData false
 * refreshQuickDataSet true
 numCPUsToUse 1
-toyLocation TOYS/test2/.
-OutputFileNameAndLOC TOYS/test2/PlotFile.root
+toyLocation TOYS/test/
+OutputFileNameAndLOC TOYS/test/PlotFile.root
 *
 * DATA
 dataSetLists Settings/DataSets.txt
-* Dalitz Binnings
-binningHistName binningHistograms/dkpp_blur.root
-binningHistName_KsKK binningHistograms/KsKK_2bins.root
 *
 * SYSTEMATICS - set to zero if you don't want to run
 inputTwoStageFitErrors 0
-makeCorrelationMatrix true
-cisishiftsyst 0
+makeCorrelationMatrix false
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should
 * be 'false' for data)
 MCsimfit false
 *
 UNBLIND true
+* 
+* CATEGORIES
+chargeSeparated true
+trackSeparated true
+runSeparated false

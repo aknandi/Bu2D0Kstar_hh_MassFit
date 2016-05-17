@@ -2,11 +2,11 @@
 
 INPUTFILES=()
 
-INPUTDIR="/data/lhcb/users/cheungs/B02DKstar_Kshh_toys/"
-SUBDIR="2015-06-01_MassFit_modAlexis_relaxFrac010/"
+INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
+SUBDIR="2016-05-17_test/"
 MIN=1
-MAX=10000
-GAP=25
+MAX=100
+GAP=1
 
 for (( i=$MIN; i <= $MAX; i+=$GAP ))
 do
@@ -27,20 +27,13 @@ done
 #INPUTFILES=("../TOYS/test2/toy_31.txt"
 #            )
 
-VARS=("bs_signal_mean" 
-      "d2kspipi_exp_mix_combs_slope" 
-      "frac010_bs_4900" 
-      "n_bd_fit_d2kspipi_both_mix_merge" 
-      "n_bs_fit_d2kspipi_both_mix_merge" 
-      "n_comb_d2kspipi_both_mix_merge" 
-      "ratio_bs_drho_both_mix_merge" 
-      "ratio_bs_dstkst_both_mix_merge" 
-      "ratio_bd_dstkst_both_mix_merge" 
-      "ratio_bs_dstkst_010_both_mix_merge"
-      "ratio_bs_dstkst_001_both_mix_merge"
-      "signal_width" 
-      "n_drho_both_mix_merge" 
-      "n_bs_dstkst_both_mix_merge"
+VARS=("A_d2kpi" 
+      "A_d2kk" 
+      "A_d2pipi" 
+      "A_d2pik" 
+      "R_d2kk" 
+      "R_d2pipi" 
+      "R_d2pik" 
       )
 
 rm results/*.txt

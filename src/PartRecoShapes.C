@@ -59,31 +59,37 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   double a_p101_bd, b_p101_bd, csi_p101_bd, shift_p101_bd, sigma_p101_bd, ratio_sigma_p101_bd, fraction_sigma_p101_bd, shiftg_p101_bd;
 
   if(t=="LL") {
-    a_p010 = 5025; b_p010 = 5121; csi_p010 = 0.80; shift_p010 = -1.1; sigma_p010 = 11.3; ratio_sigma_p010 = 7.1; fraction_sigma_p010 = 0.96; shiftg_p010 = -55;
-    a_p101 = 5012; b_p101 = 5110; csi_p101 = 0.43; shift_p101 = 8.4;  sigma_p101 = 11.7; ratio_sigma_p101 = 5.0; fraction_sigma_p101 = 0.91; shiftg_p101 = -90.0;
-    a_g010 = 4908; b_g010 = 5217; csi_g010 = 0.85; shift_g010 = 18.4; sigma_g010 = 5.0;  ratio_sigma_g010 = 7.1; fraction_sigma_g010 = 0.19; shiftg_g010 = -95.8;
-    a_g101 = 4930; b_g101 = 5236; csi_g101 = 0.63; shift_g101 = -8.0; sigma_g101 = 12.8; ratio_sigma_g101 = 5.6; fraction_sigma_g101 = 0.88; shiftg_g101 = -53;
+	  // Low mass parameters for Bu shapes
+	  a_p010 = 5021; b_p010 = 5117; csi_p010 = 0.85; shift_p010 = -9;  sigma_p010 = 11.2; ratio_sigma_p010 = 8.1; fraction_sigma_p010 = 0.96; shiftg_p010 = -40;
+	  a_p101 = 5016; b_p101 = 5109; csi_p101 = 0.71; shift_p101 = 4;   sigma_p101 = 13.3; ratio_sigma_p101 = 6.8; fraction_sigma_p101 = 0.95; shiftg_p101 = -120;
+	  a_g010 = 4926; b_g010 = 5231; csi_g010 = 0.8;  shift_g010 = 0.1; sigma_g010 =  5.8; ratio_sigma_g010 = 0.01; fraction_sigma_g010 = 0.93; shiftg_g010 = -60;
+	  a_g101 = 4910; b_g101 = 5219; csi_g101 = 0.65; shift_g101 = 6.0; sigma_g101 = 11.6; ratio_sigma_g101 = 5.7; fraction_sigma_g101 = 0.87; shiftg_g101 = -40;
 
-    a_p010_bd = 5022; b_p010_bd = 5110; csi_p010_bd = 1.00; shift_p010_bd = 0.05; sigma_p010_bd = 12.4; ratio_sigma_p010_bd = 6.1; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -89;
-    a_p101_bd = 5017; b_p101_bd = 5104; csi_p101_bd = 0.86; shift_p101_bd = 5.1;  sigma_p101_bd = 14.7; ratio_sigma_p101_bd = 4.8; fraction_sigma_p101_bd = 0.97; shiftg_p101_bd = -97;
+	  // Low mass parameters for Bd shapes
+	  a_p010_bd = 5019; b_p010_bd = 5109; csi_p010_bd = 1.2;  shift_p010_bd = 0.0; sigma_p010_bd = 12.4; ratio_sigma_p010_bd = 4.7; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -70;
+	  a_p101_bd = 5026; b_p101_bd = 5107; csi_p101_bd = 0.75; shift_p101_bd = -5.4;  sigma_p101_bd = 16.5; ratio_sigma_p101_bd = 3.7; fraction_sigma_p101_bd = 0.97; shiftg_p101_bd = -160;
   }
   else if(t=="DD") {
-    a_p010 = 5025; b_p010 = 5120; csi_p010 = 0.81;   shift_p010 = -1.2; sigma_p010 = 11.8; ratio_sigma_p010 = 7.3; fraction_sigma_p010 = 0.97; shiftg_p010 = -60;
-    a_p101 = 5005; b_p101 = 5113; csi_p101 = 0.0015; shift_p101 = -2.7; sigma_p101 = 14.9; ratio_sigma_p101 = 5.1; fraction_sigma_p101 = 0.99; shiftg_p101 = -69;
-    a_g010 = 4905; b_g010 = 5206; csi_g010 = 0.52;   shift_g010 = 19.8; sigma_g010 = 12.4; ratio_sigma_g010 = 3.5; fraction_sigma_g010 = 0.97; shiftg_g010 = -100;
-    a_g101 = 4929; b_g101 = 5234; csi_g101 = 0.52;   shift_g101 = -7.8; sigma_g101 = 14.4; ratio_sigma_g101 = 5.0; fraction_sigma_g101 = 0.88; shiftg_g101 = -64;
+	  // Low mass parameters for Bu shapes
+	  a_p010 = 5021; b_p010 = 5114; csi_p010 = 0.87;   shift_p010 = 0.2; sigma_p010 = 12.0; ratio_sigma_p010 = 7.2; fraction_sigma_p010 = 0.97; shiftg_p010 = -60;
+	  a_p101 = 5013; b_p101 = 5105; csi_p101 = 0.60;   shift_p101 = 5.7; sigma_p101 = 13.6; ratio_sigma_p101 = 6.1; fraction_sigma_p101 = 0.93; shiftg_p101 = -114;
+	  a_g010 = 4917; b_g010 = 5218; csi_g010 = 0.46;   shift_g010 = 0.0; sigma_g010 = 15.0; ratio_sigma_g010 = 6.4; fraction_sigma_g010 = 0.96; shiftg_g010 = -100;
+	  a_g101 = 4928; b_g101 = 5234; csi_g101 = 0.65;   shift_g101 = -9.0; sigma_g101 = 12.5; ratio_sigma_g101 = 5.9; fraction_sigma_g101 = 0.91; shiftg_g101 = -50;
 
-    a_p010_bd = 5022; b_p010_bd = 5111; csi_p010_bd = 1.00; shift_p010_bd = 0.12; sigma_p010_bd = 11.8; ratio_sigma_p010_bd = 7.6; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -51;
-    a_p101_bd = 5014; b_p101_bd = 5103; csi_p101_bd = 0.45; shift_p101_bd = 5.0;  sigma_p101_bd = 11.6; ratio_sigma_p101_bd = 5.8; fraction_sigma_p101_bd = 0.92; shiftg_p101_bd = -87;
+	  // Low mass parameters for Bd shapes
+	  a_p010_bd = 5021; b_p010_bd = 5109; csi_p010_bd = 0.90; shift_p010_bd = -0.9; sigma_p010_bd = 12.7; ratio_sigma_p010_bd = 7.2; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -50;
+	  a_p101_bd = 5032; b_p101_bd = 5116; csi_p101_bd = 0.93; shift_p101_bd = -10;  sigma_p101_bd = 14.0; ratio_sigma_p101_bd = 6.3; fraction_sigma_p101_bd = 0.97; shiftg_p101_bd = -103;
   }
   else if(t=="mix") {
-    a_p010 = 5026; b_p010 = 5120; csi_p010 = 0.81;   shift_p010 = -1.6; sigma_p010 = 11.7; ratio_sigma_p010 = 7.3; fraction_sigma_p010 = 0.97; shiftg_p010 = -58;
-    a_p101 = 5019; b_p101 = 5113; csi_p101 = 0.47;   shift_p101 = 1.7;  sigma_p101 = 12.5; ratio_sigma_p101 = 5.1; fraction_sigma_p101 = 0.92; shiftg_p101 = -88;
-    a_g010 = 4905; b_g010 = 5211; csi_g010 = 0.63;   shift_g010 = 19.8; sigma_g010 = 8.41; ratio_sigma_g010 = 4.1; fraction_sigma_g010 = 0.97; shiftg_g010 = -100;
-    a_g101 = 4930; b_g101 = 5236; csi_g101 = 0.58;   shift_g101 = -8.4; sigma_g101 = 13.6; ratio_sigma_g101 = 5.3; fraction_sigma_g101 = 0.88; shiftg_g101 = -58;
+	  // Low mass parameters for Bu shapes
+	  a_p010 = 5021; b_p010 = 5114; csi_p010 = 0.87;   shift_p010 = 0.2; sigma_p010 = 12.0; ratio_sigma_p010 = 7.2; fraction_sigma_p010 = 0.97; shiftg_p010 = -60;
+	  a_p101 = 5013; b_p101 = 5105; csi_p101 = 0.60;   shift_p101 = 5.7; sigma_p101 = 13.6; ratio_sigma_p101 = 6.1; fraction_sigma_p101 = 0.93; shiftg_p101 = -114;
+	  a_g010 = 4917; b_g010 = 5218; csi_g010 = 0.46;   shift_g010 = 0.0; sigma_g010 = 15.0; ratio_sigma_g010 = 6.4; fraction_sigma_g010 = 0.96; shiftg_g010 = -100;
+	  a_g101 = 4928; b_g101 = 5234; csi_g101 = 0.65;   shift_g101 = -9.0; sigma_g101 = 12.5; ratio_sigma_g101 = 5.9; fraction_sigma_g101 = 0.91; shiftg_g101 = -50;
 
-    a_p010_bd = 5022; b_p010_bd = 5111; csi_p010_bd = 1.00; shift_p010_bd = 0.12; sigma_p010_bd = 11.8; ratio_sigma_p010_bd = 7.6; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -51;
-    a_p101_bd = 5014; b_p101_bd = 5103; csi_p101_bd = 0.45; shift_p101_bd = 5.0;  sigma_p101_bd = 11.6; ratio_sigma_p101_bd = 5.8; fraction_sigma_p101_bd = 0.92; shiftg_p101_bd = -87;
+	  // Low mass parameters for Bd shapes
+	  a_p010_bd = 5021; b_p010_bd = 5109; csi_p010_bd = 0.90; shift_p010_bd = -0.9; sigma_p010_bd = 12.7; ratio_sigma_p010_bd = 7.2; fraction_sigma_p010_bd = 0.96; shiftg_p010_bd = -50;
+	  a_p101_bd = 5032; b_p101_bd = 5116; csi_p101_bd = 0.93; shift_p101_bd = -10;  sigma_p101_bd = 14.0; ratio_sigma_p101_bd = 6.3; fraction_sigma_p101_bd = 0.97; shiftg_p101_bd = -103;
   }
 
   csi_bu_p010 = new RooRealVar("csi_bu_pi010" ,"", 		csi_p010);

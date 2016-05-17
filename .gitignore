@@ -11,4 +11,14 @@ EventDict_rdict.pcm
 .project
 .svn/
 .settings/*
+ToyReading/correlations/*
+ToyReading/results/*
+ToyReading/report.aux
+ToyReading/report.dvi
+ToyReading/report.idx
+ToyReading/report.log
+ToyReading/report.pdf
+ToyReading/report.ps
+ToyReading/*.o
+ToyReading/*.exe
 *~

@@ -168,7 +168,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2kpi);
   modeList.push_back(d2kk);
   modeList.push_back(d2pipi);
-  //modeList.push_back(d2pik);
+  modeList.push_back(d2pik);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());
@@ -959,6 +959,9 @@ void Fitting::OrderToys(int n)
 
 void Fitting::NewOrderToys(int n)
 {
+  // Only use RooMCStudy when only running a few toys locally
+  // For many toys submitted in parallel RooMCStudy won't work
+  bool roomcstudy = false;
 
   gSystem->Exec((std::string("mkdir -p ")+_genConfs->get("toyLocation")).c_str());
   std::string textfile = _genConfs->get("toyLocation")+"/toy_";
@@ -986,6 +989,8 @@ void Fitting::NewOrderToys(int n)
   
   std::cout<<"Generating "<<n<<" toys of "<<nEvtsPerSample<<" events."<<std::endl;
 
+  // Cannot use RooMCStudy if submitting many jobs to speed up toys
+  if(roomcstudy) {
   // ========= Using RooMCStudy ============= 
   mcstudy->generateAndFit(n,nEvtsPerSample,true);
   fittedPars->Print("v");
@@ -1041,9 +1046,10 @@ void Fitting::NewOrderToys(int n)
     }
   }
   // =========== End using RooMCStudy =============
+  }
 
-
- /* mcstudy->generate(n,nEvtsPerSample,true);
+  if(!roomcstudy) {
+  mcstudy->generate(n,nEvtsPerSample,true);
   if(1==n&&!DB){
     data=(RooDataSet*)mcstudy->genData(n-1);
   }
@@ -1118,18 +1124,18 @@ void Fitting::NewOrderToys(int n)
         }
         resfile << par->GetName() << ' '
                 << par->getVal() << ' '
-                //<< par->getError() << ' ' // HESSE
-                << par->getAsymErrorLo() << ' '
-                << par->getAsymErrorHi() << ' '
+                << par->getError() << ' ' // HESSE
+                //<< par->getAsymErrorLo() << ' '
+                //<< par->getAsymErrorHi() << ' '
                 << result->covQual()<< ' '
                 << _genConfs->getI("startSeed") << ' '
                 << i << ' '
-                << result->status() <<' '
-                << result->edm() << std::endl;
+                << result->status() << std::endl;
+                //<< result->edm() << std::endl;
         delete initpar;
       }
       delete par;
-
+/*
       if(i==0) {
         std::cout << "Now making a plot" << std::endl;
         catNew->setLabel(Form("%s_%s_%s_%s","d2kpi","both","mix","all"));
@@ -1164,7 +1170,7 @@ void Fitting::NewOrderToys(int n)
         delete ctoy;
         delete frame;
       }
-
+*/
       std::cout<<" now going to delete some stuff" << std::endl;
 
       //now to delete all the things created.
@@ -1177,7 +1183,8 @@ void Fitting::NewOrderToys(int n)
     }
     resfile.close();	
     //gDirectory->ls();
-  } */
+  }
+  }
   delete mcstudy;
 }
 
