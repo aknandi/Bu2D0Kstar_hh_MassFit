@@ -1,4 +1,6 @@
 * Yield fractions for other D modes
+kpitod2kpi_LL 1.0
+kpitod2kpi_DD 1.0
 kpitod2kk_LL 0.1112
 kpitod2kk_DD 0.1104
 kpitod2pipi_LL 0.0347
@@ -56,5 +58,34 @@ eff010_LL_0.4 0.933513
 eff010_DD_0.4 0.928082
 eff101_LL_0.4 0.433124
 eff101_DD_0.4 0.414262
-
+effComb_LL_100_0 1.0
+effComb_DD_100_0 1.0
+effComb_LL_100_0.1 0.923077
+effComb_DD_100_0.1 0.932584
+effComb_LL_100_0.2 0.846154
+effComb_DD_100_0.2 0.865169
+effComb_LL_100_0.3 0.794872
+effComb_DD_100_0.3 0.786517
+effComb_LL_100_0.4 0.74359
+effComb_DD_100_0.4 0.674157
+effComb_LL_75_0 0.820513
+effComb_DD_75_0 0.775281
+effComb_LL_75_0.1 0.74359
+effComb_DD_75_0.1 0.707865
+effComb_LL_75_0.2 0.666667
+effComb_DD_75_0.2 0.651685
+effComb_LL_75_0.3 0.615385
+effComb_DD_75_0.3 0.58427
+effComb_LL_75_0.4 0.564103
+effComb_DD_75_0.4 0.483146
+effComb_LL_50_0 0.461538
+effComb_DD_50_0 0.595506
+effComb_LL_50_0.1 0.410256
+effComb_DD_50_0.1 0.539326
+effComb_LL_50_0.2 0.384615
+effComb_DD_50_0.2 0.505618
+effComb_LL_50_0.3 0.384615
+effComb_DD_50_0.3 0.460674
+effComb_LL_50_0.4 0.358974
+effComb_DD_50_0.4 0.370787
 

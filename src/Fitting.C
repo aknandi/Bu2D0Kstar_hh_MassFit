@@ -321,7 +321,11 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
 
   TString exclusionString;
   std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
-  exclusionString = masscut;
+/*  std::string charmlesscut = "D0_FDsignificance > " + _genConfs->get("D0fdcut");
+  std::string kstmasscut = "abs(Kst_M - 891.66) < " + _genConfs->get("Kstmasscut");
+  std::string kshelcut = "abs(Ks_cosHelicityAngleA) > " + _genConfs->get("Kshelcut");
+  std::string bdtcut = "BDTG > " + _genConfs->get("Bdtcut");*/
+  exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut + " && " + bdtcut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
   
@@ -389,7 +393,8 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   std::string charmlesscut = "D0_FDsignificance > " + _genConfs->get("D0fdcut");
   std::string kstmasscut = "abs(Kst_M - 891.66) < " + _genConfs->get("Kstmasscut");
   std::string kshelcut = "abs(Ks_cosHelicityAngleA) > " + _genConfs->get("Kshelcut");
-  exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut;
+  std::string bdtcut = "BDTG > " + _genConfs->get("Bdtcut");
+  exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut + " && " + bdtcut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
 
@@ -477,7 +482,7 @@ void Fitting::RunFullFit(bool draw=true)
     {
       std::cout << "Start fitTo" << std::endl;
 
-      std::vector< RooRealVar* > listlowcomb = model->getMyLowComb();
+      //std::vector< RooRealVar* > listlowcomb = model->getMyLowComb();
 
       std::cout << "About to actually run 'fitTo' " << std::endl;
       //result = sim->fitTo(*data, RooFit::Save(), RooFit::Extended());
@@ -650,6 +655,7 @@ void Fitting::RunFullFit(bool draw=true)
                            RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
                            RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
 
+              if(_genConfs->get("MCsimfit")!="true") {
               // Combinatoric
               std::cout <<" plotting combinatoric "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
@@ -664,7 +670,7 @@ void Fitting::RunFullFit(bool draw=true)
                            //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
                            //),
                            RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
-
+              }
             }
 
             //plot total PDF again
@@ -739,11 +745,12 @@ void Fitting::RunFullFit(bool draw=true)
             leg->SetTextFont(132);
             leg->AddEntry((TObject*)0,"","");
             leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
+            if(_genConfs->get("MCsimfit")!="true") {
             leg->AddEntry((TObject*)0,"","");
             leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
             leg->AddEntry((TObject*)0,"","");
             leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
-
+            }
 
             //do not draw legend if a log plot or pulls are drawn
             //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
@@ -903,7 +910,7 @@ void Fitting::OrderToys(int n)
   
   RooMCStudy* mcstudy = new RooMCStudy(*genPdf,reducedlist,RooFit::FitModel(*fitPdf),RooFit::FitOptions(RooFit::Save(true),RooFit::Extended(true),RooFit::NumCPU(_genConfs->getI("numCPUsToUse")),RooFit::PrintLevel(DB?1:-1)));
 
-  int nEvtsPerSample=(int)genPdf->expectedEvents(*cat);
+  int nEvtsPerSample=(int)genPdf->expectedEvents(*catNew);
   if(1==n&&!DB){
     mcstudy->generate(n,nEvtsPerSample,true);
     data=(RooDataSet*)mcstudy->genData(n-1);

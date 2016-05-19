@@ -1,12 +1,8 @@
 * 2013 (2011 + 2012)
 *
 DEBUG_runInHighStatsMode 0
-N_bu_d2kpi_all_LL 296.594
-N_bu_d2kpi_all_DD 701.045
-N_bu_d2kpi_run1_LL 299.356
-N_bu_d2kpi_run1_DD 710.169
-N_bu_d2kpi_run2_LL 299.356
-N_bu_d2kpi_run2_DD 710.169
+*
+* Calculated from rb, deltab and gamma
 A_d2kpi -0.104716
 A_d2kk 0.259092
 R_d2kk 0.135066
@@ -14,22 +10,44 @@ A_d2pipi 0.318581
 R_d2pipi 0.0682783
 A_d2pik 0.28
 R_d2pik 0.04
+* 
+* Taken from single fit
+* N_bu_d2kpi_all_LL 351.0
+* N_bu_d2kpi_all_DD 880.0
+* N_comb_d2kpi_both_LL 208.0
+* N_dstkst_d2kpi_both_LL 645.0
+* N_comb_d2kpi_both_DD 1667.0
+* N_dstkst_d2kpi_both_DD 1460.0
+* N_dstkst010_d2kpi_LL 296.4
+* N_dstkst101_d2kpi_LL 349.6
+* N_dstkst010_d2kpi_DD 679.3
+* N_dstkst101_d2kpi_DD 780.7
+N_bu_d2kpi_all_LL 320.361
+N_comb_d2kpi_both_LL 556.625
+N_dstkst010_d2kpi_LL 270.973
+N_dstkst101_d2kpi_LL 318.918
+N_bu_d2kpi_all_DD 758.736
+N_comb_d2kpi_both_DD 3633.39
+N_dstkst010_d2kpi_DD 584.571
+N_dstkst101_d2kpi_DD 672.7
+* 
+* Other values from data fit
+N_bu_d2kpi_run1_LL 299.356
+N_bu_d2kpi_run1_DD 710.169
+N_bu_d2kpi_run2_LL 299.356
+N_bu_d2kpi_run2_DD 710.169
 N_bu_d2kpi_both_LL 295.913
 N_bu_d2kpi_plus_LL 147.957
 N_bu_d2kpi_minus_LL 147.957
-N_comb_d2kpi_both_LL 333.398
 N_comb_d2kpi_plus_LL 166.699
 N_comb_d2kpi_minus_LL 166.699
-N_dstkst_d2kpi_both_LL 597.689
 N_dstkst_d2kpi_plus_LL 298.845
 N_dstkst_d2kpi_minus_LL 298.845
 N_bu_d2kpi_both_DD 702.714
 N_bu_d2kpi_plus_DD 351.357
 N_bu_d2kpi_minus_DD 351.357
-N_comb_d2kpi_both_DD 1268.35
 N_comb_d2kpi_plus_DD 634.176
 N_comb_d2kpi_minus_DD 634.176
-N_dstkst_d2kpi_both_DD 1384.94
 N_dstkst_d2kpi_plus_DD 692.472
 N_dstkst_d2kpi_minus_DD 692.472
 N_bu_d2kk_both_LL 39.4174

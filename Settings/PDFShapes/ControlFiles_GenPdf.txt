@@ -10,3 +10,8 @@ gen_partreco Settings/PDFShapes/Gen/partrecoFIXED.txt
 *
 ** Drho
 gensettings Settings/GeneralSettings.txt
+* 
+** partreco needs yields to calculate frac010
+PathnameToTotals Settings/Yields/GenTotals_4900.txt
+PathnameToYieldCorrections Settings/Yields/YieldCorrections.txt
+

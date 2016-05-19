@@ -28,10 +28,10 @@ class Yields
   Settings* _fileList;
   Settings* input;
 
-  void SetYieldsGenandFit();
   void SetOtherBkgs();
   void SetDstKstGenandFit();
-  void SetYieldRatios();
+  void SetYieldRatios(std::string, std::string);
+  void SetYieldsGenandFit(std::string, std::string);
   
   double genscale;
   std::string limitlow;

@@ -6,3 +6,8 @@ fit_partreco Settings/PDFShapes/Fit/partreco.txt
 gensettings Settings/GeneralSettings.txt
 * shapes correlation matrix and fit errors
 fit_d2kspipi_shapesFitResults Settings/PDFShapes/Fit/persistFitOutput.root
+* 
+** partreco needs yields to calculate frac010
+PathnameToTotals Settings/Yields/GenTotals_4900.txt
+PathnameToYieldCorrections Settings/Yields/YieldCorrections.txt
+

@@ -71,7 +71,7 @@ RooSimultaneous* Model::getGenPdf()
           if(_genConfs->get("MCsimfit")!="true") {
             // Combinatorics
             pdflist.add(*(genPdf.roopdf_comb[*m][*c][*t][*a]));
-            nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
+            nevents.add(*(yields->n_comb_gen[*m][*c][*t][*a]));
             // DstKst
             pdflist.add(*(genPdf.roopdf_dstkst[*m][*c][*t][*a]));
             nevents.add(*(yields->n_dstkst_gen[*m][*c][*t][*a]));
@@ -203,7 +203,7 @@ RooSimultaneous* Model::getFitPdf()
             if(_genConfs->get("bu_dpipipi")=="true") constpdfset.add(*(yields->gausratio_bs_dpipipi[*c][*t][*a]));*/
           }
 
-          constpdfset.Print("v");
+          //constpdfset.Print("v");
           //RooAbsPdf* pdf = new RooProdPdf(Form("CONSTFITpdf_%s",tag.c_str()),"",constpdfset);
 
           // --- Add to simultaneous pdf ---

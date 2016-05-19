@@ -16,6 +16,7 @@ class InternalStorage;
 
 Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allrunList, std::string unblind)
 {
+
   _genConfs = genConfs;
   _fileList = fileList;
   //stuff so that the bin lists and categories are defined and also the paramter object p.
@@ -25,6 +26,8 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   trackList=alltrackList;
   runList=allrunList;
 
+  std::cout << "Testing" << std::endl;
+
   input = new Settings("SetRatios");
   input->readPairStringsToMap(_fileList->get("PathnameToRatios"));
   input->readPairStringsToMap(_fileList->get("PathnameToYieldCorrections"));
@@ -32,17 +35,19 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   input->readPairStringsToMap(_fileList->get("PathnameToFitRatios"));
 
   //myMaps.Initialize(fileList, modeList,chargeList,trackList,binList);
-
   genscale = 1.; // scale yields for generation
   limitlow = _genConfs->get("fit_limit_low");
   unblind=_genConfs->get("UNBLIND");
+  std::string kstmasscut = _genConfs->get("Kstmasscut");
+  std::string kshelcut = _genConfs->get("Kshelcut");
+
 
   std::cout << "*****************************************************" << std::endl;
   std::cout << "Initialising yields ... " << std::endl;
   SetOtherBkgs(); // this has to come before setyieldsGenandfit()
   SetDstKstGenandFit();
-  SetYieldRatios();
-  SetYieldsGenandFit(); // must be last
+  SetYieldRatios(kstmasscut,kshelcut);
+  SetYieldsGenandFit(kstmasscut,kshelcut); // must be last
 
   std::cout<<" Yields done "<<std::endl;
 
@@ -151,7 +156,7 @@ void Yields::SetDstKstGenandFit()
 
 }
 
-void::Yields::SetYieldRatios()
+void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut)
 {
    	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
 
@@ -162,12 +167,13 @@ void::Yields::SetYieldRatios()
 	    	double RfromFit = input->getD(Form("R_%s",(*m).c_str()));
 	    	R[*m] = new RooRealVar(Form("R_%s",(*m).c_str()),"",RfromFit,0.0,1.0);
 	    }
-	    else {
+	    else { // Only d2kpi
 	        for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
 	          for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
-	        	  double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
-	       		  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,0,100000);
+	        	  //double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
+	        	  double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*input->getD(Form("effSig_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str()))*genscale;
+	        	  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,0,100000);
 
 	          }
 	        }
@@ -176,7 +182,7 @@ void::Yields::SetYieldRatios()
 
 }
 
-void Yields::SetYieldsGenandFit()
+void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut)
 {
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
     for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
@@ -225,9 +231,14 @@ void Yields::SetYieldsGenandFit()
 
 			// The rest of the pdf shapes are always fitted for yields
 			// --- Gen yields ---
-			double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			//double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			// ncomb = 0.5 * kpi comb yield * efficiency of kst selection (account for split by charge)
+			double N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s",(*t).c_str()))*input->getD(Form("effComb_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,0.,100000.);
-			double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+
+			//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
+			double N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0",(*t).c_str(),kstmasscut.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,0.,100000.);
 
 			// --- Fit yields ---

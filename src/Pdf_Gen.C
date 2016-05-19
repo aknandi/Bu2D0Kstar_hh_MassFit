@@ -19,6 +19,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
   _trackTypeList=trackTypeList;
   _runList=runList;
 
+
   // Initialise the PDFs
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
     for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
@@ -40,9 +41,12 @@ void Pdf_Gen::setRelations()
 {
   // Set up the configuration files
   Settings relConfs("Pdf_Gen::SetRelations");
+  relConfs.readPairStringsToMap(_fileList->get("gensettings"));
   relConfs.readPairStringsToMap(_fileList->get("gen_signal"));
   relConfs.readPairStringsToMap(_fileList->get("gen_combs"));
   relConfs.readPairStringsToMap(_fileList->get("gen_partreco"));
+  relConfs.readPairStringsToMap(_fileList->get("PathnameToTotals"));
+  relConfs.readPairStringsToMap(_fileList->get("PathnameToYieldCorrections"));
 
 
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
@@ -75,13 +79,20 @@ void Pdf_Gen::setRelations()
   RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
                                                  relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
-  RooRealVar *frac010 = new RooRealVar("frac010","",relConfs.getD("frac010"), 0.0, 1.0);
+  //Get Ks helicity angle selection from general settings
+  std::string kshelcut = relConfs.get("Kshelcut");
+  // frac010 = (n010*eff010)/(n101*eff101), different for DD and LL
+  double frac010LL = (relConfs.getD("N_dstkst010_d2kpi_LL")*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_LL")*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
+  double frac010DD = (relConfs.getD("N_dstkst010_d2kpi_DD")*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_DD")*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
+
+  RooRealVar *frac010_LL = new RooRealVar("frac010_LL","",frac010LL);//, 0.0, 10.0);
+  RooRealVar *frac010_DD = new RooRealVar("frac010_DD","",frac010DD);//, 0.0, 10.0);
 
   std::cout << std::endl << "PdfGen : floating parameters " << std::endl;
   std::vector<RooRealVar*> *floatParams = new std::vector <RooRealVar*>;
   floatParams->push_back(bu_mean);
   floatParams->push_back(bu_width);
-  floatParams->push_back(frac010);
+
 
   for (Int_t n_p = 0; n_p < (Int_t)floatParams->size(); ++n_p)
     {
@@ -102,6 +113,8 @@ void Pdf_Gen::setRelations()
   //fixedParams->push_back(bu_n_mix);
   fixedParams->push_back(combs_slope_LL);
   fixedParams->push_back(combs_slope_DD);
+  fixedParams->push_back(frac010_LL);
+  fixedParams->push_back(frac010_DD);
 
 
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
@@ -130,21 +143,24 @@ void Pdf_Gen::setRelations()
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_LL);
 
           }
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_DD);
           }
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_DD);
           }
 
 
-          dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010);
+
         }
       }
     }

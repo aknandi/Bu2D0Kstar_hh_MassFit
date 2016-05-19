@@ -52,6 +52,8 @@ void Pdf_Fit::setRelations()
   relConfs.readPairStringsToMap(_fileList->get("fit_partreco"));
 //  relConfs.readPairStringsToMap(_fileList->get("fit_drho"));
   relConfs.readPairStringsToMap(_fileList->get("gensettings"));
+  relConfs.readPairStringsToMap(_fileList->get("PathnameToTotals"));
+  relConfs.readPairStringsToMap(_fileList->get("PathnameToYieldCorrections"));
   Settings pdfGenConfs("pdfGenConfs");
   pdfGenConfs.readPairStringsToMap(_fileList->get("gen_partreco"));
 
@@ -87,7 +89,14 @@ void Pdf_Fit::setRelations()
   RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
                                                  relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
 
-  RooRealVar *frac010 = new RooRealVar("frac010","",relConfs.getD("frac010"), 0.0, 1.0);
+  //Get Ks helicity angle selection from general settings
+  std::string kshelcut = relConfs.get("Kshelcut");
+  // frac010 = (n010*eff010)/(n101*eff101), different for DD and LL
+  double frac010LL = (relConfs.getD("N_dstkst010_d2kpi_LL")*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_LL")*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
+  double frac010DD = (relConfs.getD("N_dstkst010_d2kpi_DD")*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_DD")*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
+
+  RooRealVar *frac010_LL = new RooRealVar("frac010_LL","",frac010LL);//, 0.0, 10.0);
+  RooRealVar *frac010_DD = new RooRealVar("frac010_DD","",frac010DD);//, 0.0, 10.0);
 
   //PartReco
   string limitlow = relConfs.get("fit_limit_low");
@@ -133,6 +142,9 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
+  fixedParams->push_back(frac010_LL);
+  fixedParams->push_back(frac010_DD);
+
   // todo set parameters in low mass shape constant
 
  
@@ -161,19 +173,21 @@ void Pdf_Fit::setRelations()
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_LL);
           }
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_DD);
           }
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
+        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_LL);
           }
 
-          dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010);
         }
       }
     }

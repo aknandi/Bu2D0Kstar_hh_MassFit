@@ -8,9 +8,10 @@ fit_limit_low 4900
 fit_limit_high 5600
 *
 * CUTS BEFORE FITTING
-D0fdcut 0
+D0fdcut 2
 Kstmasscut 100
 Kshelcut 0
+Bdtcut -0.8
 *
 * PDFS
 * bu_dksk false
@@ -21,7 +22,7 @@ doMinosErrors_xy false
 *
 * TOYS
 startSeed 100
-nToys 100
+nToys 1
 genToys true
 readToys false
 readData false
@@ -46,3 +47,4 @@ UNBLIND true
 chargeSeparated true
 trackSeparated true
 runSeparated false
+
