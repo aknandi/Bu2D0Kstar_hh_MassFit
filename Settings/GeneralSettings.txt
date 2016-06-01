@@ -4,13 +4,13 @@ drawProjections true
 * INTEGRATION RANGES
 integ_range_low 30
 integ_range_high 30
-fit_limit_low 4900
+fit_limit_low 5230
 fit_limit_high 5600
 *
 * CUTS BEFORE FITTING
 D0fdcut 2
 Kstmasscut 100
-Kshelcut 0
+Kshelcut 0.2
 Bdtcut -0.8
 *
 * PDFS

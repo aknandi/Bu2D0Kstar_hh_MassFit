@@ -91,9 +91,10 @@ void Pdf_Fit::setRelations()
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");
+  std::string lowRange = relConfs.get("fit_limit_low");
   // frac010 = (n010*eff010)/(n101*eff101), different for DD and LL
-  double frac010LL = (relConfs.getD("N_dstkst010_d2kpi_LL")*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_LL")*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
-  double frac010DD = (relConfs.getD("N_dstkst010_d2kpi_DD")*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD("N_dstkst101_d2kpi_DD")*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
+  double frac010LL = (relConfs.getD(Form("N_dstkst010_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
+  double frac010DD = (relConfs.getD(Form("N_dstkst010_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
 
   RooRealVar *frac010_LL = new RooRealVar("frac010_LL","",frac010LL);//, 0.0, 10.0);
   RooRealVar *frac010_DD = new RooRealVar("frac010_DD","",frac010DD);//, 0.0, 10.0);
