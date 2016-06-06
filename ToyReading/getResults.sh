@@ -3,10 +3,10 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-05-31_KstMass50_KsHel0.4/"
+SUBDIR="2016-06-06_KstMass50_KsHel0.2/"
 MIN=1
-MAX=1000
-GAP=20
+MAX=2000
+GAP=40
 
 for (( i=$MIN; i <= $MAX; i+=$GAP ))
 do
@@ -30,10 +30,10 @@ done
 VARS=("A_d2kpi" 
       "A_d2kk" 
       "A_d2pipi" 
-      "A_d2pik" 
+      #"A_d2pik" 
       "R_d2kk" 
       "R_d2pipi" 
-      "R_d2pik" 
+      #"R_d2pik" 
       )
 
 rm results/*.txt

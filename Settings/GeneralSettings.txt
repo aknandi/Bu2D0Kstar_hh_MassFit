@@ -9,8 +9,8 @@ fit_limit_high 5600
 *
 * CUTS BEFORE FITTING
 D0fdcut 2
-Kstmasscut 100
-Kshelcut 0.2
+Kstmasscut 50
+Kshelcut 0.4
 Bdtcut -0.8
 *
 * PDFS

@@ -345,6 +345,8 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double nBerr =sqrt( pow(integyield_comb,2) + pow(integyield_dstkst,2) );
           double purity = nS/total;
           double purity_err = sqrt( (nS*nS*nBerr*nBerr + nB*nB*nSerr*nSerr)/pow(nS+nB,4));
+          double significance = nS/sqrt(total);
+          double significance_err = sqrt(nS*nS*(pow(nS+nB+nB,2)*nSerr*nSerr + nS*nS*nBerr*nBerr)/(4*pow(nS+nB,4)));
           // Not sure if the yield give should be in the B mass region or the total yield of signal peak
           // nS and nSerr- inside or outside the if statement?
           if(b!="full") {
@@ -353,6 +355,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           plotNums[*m][*c][*t][*a]["purity_val"]=purity;
           plotNums[*m][*c][*t][*a]["purity_err"]=purity_err;
           cout << "PURITY: " << purity << " +- " << purity_err << endl;
+          cout << "SIGNIFICANCE: " << significance << " +- " << significance_err <<endl;
           }
 
           //////////////////////////////////////////////////////////////////////
