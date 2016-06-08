@@ -96,8 +96,18 @@ void Pdf_Fit::setRelations()
   double frac010LL = (relConfs.getD(Form("N_dstkst010_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
   double frac010DD = (relConfs.getD(Form("N_dstkst010_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
 
-  RooRealVar *frac010_LL = new RooRealVar("frac010_LL","",frac010LL);//, 0.0, 10.0);
-  RooRealVar *frac010_DD = new RooRealVar("frac010_DD","",frac010DD);//, 0.0, 10.0);
+  double coef010LL = frac010LL/(1+frac010LL);
+  double coef101LL = 1/(1+frac010LL);
+  double coef010DD = frac010DD/(1+frac010DD);
+  double coef101DD= 1/(1+frac010DD);
+
+  RooRealVar *coef010_LL = new RooRealVar("coef010_LL","",coef010LL);//, 0.0, 10.0);
+  RooRealVar *coef010_DD = new RooRealVar("coef010_DD","",coef010DD);//, 0.0, 10.0);
+  RooRealVar *coef101_LL = new RooRealVar("coef101_LL","",coef101LL);//, 0.0, 10.0);
+  RooRealVar *coef101_DD = new RooRealVar("coef101_DD","",coef101DD);//, 0.0, 10.0);
+
+  //RooRealVar *frac010_LL = new RooRealVar("frac010_LL","",frac010LL);//, 0.0, 10.0);
+  //RooRealVar *frac010_DD = new RooRealVar("frac010_DD","",frac010DD);//, 0.0, 10.0);
 
   //PartReco
   string limitlow = relConfs.get("fit_limit_low");
@@ -143,8 +153,12 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
-  fixedParams->push_back(frac010_LL);
-  fixedParams->push_back(frac010_DD);
+  //fixedParams->push_back(frac010_LL);
+  //fixedParams->push_back(frac010_DD);
+  fixedParams->push_back(coef010_LL);
+  fixedParams->push_back(coef010_DD);
+  fixedParams->push_back(coef101_LL);
+  fixedParams->push_back(coef101_DD);
 
   // todo set parameters in low mass shape constant
 
@@ -174,19 +188,22 @@ void Pdf_Fit::setRelations()
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
-        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_LL);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_LL);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_LL);
           }
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
-        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_DD);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
           }
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
-        	  dstkst[*mode][*charge][*trackType][*run]->setFraction010(frac010_LL);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
+        	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
           }
 
         }

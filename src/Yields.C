@@ -39,15 +39,15 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   unblind=_genConfs->get("UNBLIND");
   std::string kstmasscut = _genConfs->get("Kstmasscut");
   std::string kshelcut = _genConfs->get("Kshelcut");
-  std::string bdtcut = _genConfs->get("Bdtcut");
-
+  std::string bdtcutLL = _genConfs->get("BdtcutLL");
+  std::string bdtcutDD = _genConfs->get("BdtcutDD");
 
   std::cout << "*****************************************************" << std::endl;
   std::cout << "Initialising yields ... " << std::endl;
   SetOtherBkgs(); // this has to come before setyieldsGenandfit()
   SetDstKstGenandFit();
-  SetYieldRatios(kstmasscut,kshelcut,bdtcut);
-  SetYieldsGenandFit(kstmasscut,kshelcut,bdtcut); // must be last
+  SetYieldRatios(kstmasscut,kshelcut,bdtcutLL,bdtcutDD);
+  SetYieldsGenandFit(kstmasscut,kshelcut,bdtcutLL,bdtcutDD); // must be last
 
   std::cout<<" Yields done "<<std::endl;
 
@@ -156,7 +156,7 @@ void Yields::SetDstKstGenandFit()
 
 }
 
-void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::string bdtcut)
+void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::string bdtcutLL,std::string bdtcutDD)
 {
    	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
 
@@ -172,8 +172,9 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 	          for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
 	        	  //double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
-	        	  double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcut.c_str()))*genscale;
-	        	  //double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str()))*genscale;
+	        	  double N_kpifromFit;
+	        	  if(*t == "LL") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*genscale;
+	        	  if(*t == "DD") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*genscale;
 	        	  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,0,100000);
 
 	          }
@@ -183,7 +184,7 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 
 }
 
-void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std::string bdtcut)
+void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std::string bdtcutLL,std::string bdtcutDD)
 {
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
     for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
@@ -248,14 +249,16 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 			// --- Gen yields ---
 			//double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			// ncomb = 0.5 * kpi comb yield * efficiency of kst selection (account for split by charge)
-			double N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcut.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			//double N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			double N_comb;
+			if(*t == "LL") N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			if(*t == "DD") N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,0.,100000.);
 
 			//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
-			double N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcut.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			//double N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0",(*t).c_str(),kstmasscut.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			double N_dstkst;
+			if(*t == "LL") N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcutLL.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+			if(*t == "DD") N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcutDD.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,0.,100000.);
 
 			// --- Fit yields ---

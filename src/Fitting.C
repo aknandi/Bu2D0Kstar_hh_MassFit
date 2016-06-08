@@ -666,7 +666,7 @@ void Fitting::RunFullFit(bool draw=true)
               std::cout<<" plotting Bu -> D*K*  "<<std::endl;
               sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
                            RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           //RooFit::Components(Form("PartRecoDstKst_%s_bu_001_%s_%s_%s, PartRecoDstKst_%s_bu_010_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+                           //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
                            //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
                            //),
                            RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));

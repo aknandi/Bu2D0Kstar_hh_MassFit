@@ -1,9 +1,8 @@
 #!/bin/bash
-
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-06-06_KstMass50_KsHel0.2/"
+SUBDIR="2016-06-08_KsHel0.4_BdtLL0.6_BdtDD0.7/"
 MIN=1
 MAX=2000
 GAP=40

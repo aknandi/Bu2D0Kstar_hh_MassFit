@@ -21,7 +21,8 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, st
   //_frac010 = mySettings.getD("frac010_"+p+"_"+fitlow);
 
   // Create any RooRealVars you'll need
-  _intVars["frac010"] = 0;
+  _intVars["coef010"] = 0;
+  _intVars["coef101"] = 0;
 
   // Read in PARAMETRIC low mass pdf
   PartRecoShapes* prs = new PartRecoShapes(_mB, true, t);
@@ -92,17 +93,24 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, st
 
 }
 
-void PartRecoDstKst::setFraction010(RooAbsReal* newFraction010)
+void PartRecoDstKst::setCoef010(RooAbsReal* newCoef010)
 {
-	setRelation("frac010",newFraction010);
+	setRelation("coef010",newCoef010);
 }
+
+void PartRecoDstKst::setCoef101(RooAbsReal* newCoef101)
+{
+	setRelation("coef101",newCoef101);
+}
+
 
 RooAbsPdf* PartRecoDstKst::getPdf()
 {
   bool dbThis(false);
   // If any RooFit variables still have 0 pointers (ie have not been set from outside (e.g. sharing parameters (like mean) across multiple shapes) then
   // assume that the values should be those passed in the constructor
-  if(_intVars["frac010"]==0)	_intVars["frac010"]		 	= new RooRealVar(Form("%s_Var_frac010",_name.c_str()),"",_frac010);
+  if(_intVars["coef010"]==0)	_intVars["coef010"]		 	= new RooRealVar(Form("%s_Var_coef010",_name.c_str()),"",_coef010);
+  if(_intVars["coef101"]==0)	_intVars["coef101"]		 	= new RooRealVar(Form("%s_Var_coef101",_name.c_str()),"",_coef101);
 
   if(dbThis) {
     std::cout << "For name: " << _name << endl;
@@ -110,7 +118,15 @@ RooAbsPdf* PartRecoDstKst::getPdf()
               << std::endl;
   }
 
+  RooArgSet pdflist;
+  RooArgSet coefficients;
+
+  pdflist.add(*pdf_010);
+  pdflist.add(*pdf_101);
+  coefficients.add(*_intVars["coef010"]);
+  coefficients.add(*_intVars["coef101"]);
+
   // Combine Bd and Bu and float ratio
-  RooAddPdf *pdf_partreco = new RooAddPdf(_name.c_str(),"",*pdf_010,*pdf_101,*_intVars["frac010"]);
+  RooAddPdf *pdf_partreco = new RooAddPdf(_name.c_str(),"",pdflist,coefficients);
   return pdf_partreco;
 }
