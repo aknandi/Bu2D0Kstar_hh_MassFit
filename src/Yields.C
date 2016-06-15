@@ -160,12 +160,20 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 {
    	for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end();m++){
 
-   		double AfromFit = input->getD(Form("A_%s",(*m).c_str()));
-	    A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",AfromFit,-5.0,5.0);
+   		if(*m != "d2pik") {
+   			double AfromFit = input->getD(Form("A_%s",(*m).c_str()));
+   			A[*m] = new RooRealVar(Form("A_%s",(*m).c_str()),"",AfromFit,-5.0,5.0);
+   		}
 
-	    if (*m != "d2kpi") {
+	    if (*m == "d2kk" || *m == "d2pipi") {
 	    	double RfromFit = input->getD(Form("R_%s",(*m).c_str()));
 	    	R[*m] = new RooRealVar(Form("R_%s",(*m).c_str()),"",RfromFit,0.0,10.0);
+	    }
+	    else if (*m == "d2pik") {
+	    	double Rplus_pik = input->getD(Form("Rplus_%s",(*m).c_str()));
+	    	double Rminus_pik = input->getD(Form("Rminus_%s",(*m).c_str()));
+	    	A[*m] = new RooRealVar(Form("Rplus_%s",(*m).c_str()),"",Rplus_pik,0.0,10.0);
+	    	R[*m] = new RooRealVar(Form("Rminus_%s",(*m).c_str()),"",Rminus_pik,0.0,10.0);
 	    }
 	    else { // Only d2kpi
 	        for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
@@ -223,13 +231,16 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					}
 				}
 				else {
+					double efficiencyVeto = input->getD(Form("effVeto_%s",(*t).c_str()));
+					RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s",(*t).c_str()),"",efficiencyVeto);
+
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2",RooArgList(*N_kpi[*t][*a],*effVeto,*A[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2",RooArgList(*N_kpi[*t][*a],*effVeto,*A[*m]));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m]));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2",RooArgList(*N_kpi[*t][*a],*effVeto,*R[*m]));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2",RooArgList(*N_kpi[*t][*a],*effVeto,*R[*m]));
 					}
 				}
 

@@ -12,6 +12,10 @@ kpitod2pipi_LL 0.0347
 kpitod2pipi_DD 0.0338
 kpitod2pik_LL 0.0036
 kpitod2pik_DD 0.0036
+*
+Efficiency of double misID veto for ADS
+effVeto_LL 0.9283
+effVeto_DD 0.9289
 * 
 * Yield fractions for combinatoric for other D modes (from data fit)
 effComb_kpitod2kpi_LL 1.0

@@ -390,10 +390,10 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   TString exclusionString;
 
   std::string masscut = "Bu_D0constKS0constPVconst_M > " + _genConfs->get("fit_limit_low") + " && Bu_D0constKS0constPVconst_M < " + _genConfs->get("fit_limit_high");
-  std::string charmlesscut = "D0_FDsignificance > " + _genConfs->get("D0fdcut");
+/*  std::string charmlesscut = "D0_FDsignificance > " + _genConfs->get("D0fdcut");
   std::string kstmasscut = "abs(Kst_M - 891.66) < " + _genConfs->get("Kstmasscut");
   std::string kshelcut = "abs(Ks_cosHelicityAngleA) > " + _genConfs->get("Kshelcut");
-  std::string bdtcut = "BDTG > " + _genConfs->get("Bdtcut");
+  std::string bdtcut = "BDTG > " + _genConfs->get("Bdtcut");*/
   exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut + " && " + bdtcut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;

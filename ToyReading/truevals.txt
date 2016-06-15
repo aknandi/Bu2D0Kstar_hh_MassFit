@@ -3,5 +3,5 @@ A_d2kk 0.09884
 R_d2kk 0.95076
 A_d2pipi 0.09884
 R_d2pipi 0.95076
-A_d2pik -0.25354
-R_d2pik 0.01738
+Rplus_d2pik 0.02157
+Rminus_d2pik 0.01302
