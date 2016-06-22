@@ -168,7 +168,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2kpi);
   modeList.push_back(d2kk);
   modeList.push_back(d2pipi);
-  //modeList.push_back(d2pik);
+  modeList.push_back(d2pik);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
       mode.defineType((*m).c_str());

@@ -1,7 +1,7 @@
 A_d2kpi 0.0
-A_d2kk 0.09884
-R_d2kk 0.95076
-A_d2pipi 0.09884
-R_d2pipi 0.95076
-Rplus_d2pik 0.02157
-Rminus_d2pik 0.01302
+A_d2kk -0.03462
+R_d2kk 0.94264
+A_d2pipi -0.03462
+R_d2pipi 0.94264
+Rplus_d2pik 0.01418
+Rminus_d2pik 0.02072

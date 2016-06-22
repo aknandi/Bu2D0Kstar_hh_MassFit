@@ -34,6 +34,6 @@ Base::Base()
   allmodeList.push_back(d2kpi);
   allmodeList.push_back(d2kk);
   allmodeList.push_back(d2pipi);
-  //allmodeList.push_back(d2pik);
+  allmodeList.push_back(d2pik);
         
 }

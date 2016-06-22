@@ -2,7 +2,7 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-06-14_withADS_RplusRminus/"
+SUBDIR="2016-06-19_BdtLL0.8_BdtDD0.9_deltab190/"
 MIN=1
 MAX=2000
 GAP=40
@@ -35,6 +35,7 @@ VARS=("A_d2kpi"
       #"R_d2pik"
       "Rminus_d2pik"
       "Rplus_d2pik"
+      #"n_comb_d2pik_plus_DD_all"
       )
 
 rm results/*.txt

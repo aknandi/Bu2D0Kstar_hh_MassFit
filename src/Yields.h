@@ -31,7 +31,7 @@ class Yields
   void SetOtherBkgs();
   void SetDstKstGenandFit();
   void SetYieldRatios(std::string, std::string, std::string, std::string);
-  void SetYieldsGenandFit(std::string, std::string, std::string, std::string);
+  void SetYieldsGenandFit(std::string, std::string, std::string, std::string, std::string, std::string);
   
   double genscale;
   std::string limitlow;

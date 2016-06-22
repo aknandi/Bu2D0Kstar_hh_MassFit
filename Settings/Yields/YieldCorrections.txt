@@ -162,14 +162,45 @@ effSig_LL_75_0.3_0.2 0.894861
 effSig_DD_75_0.3_0.2 0.878276
 effSig_LL_75_0.3_0.4 0.885445
 effSig_DD_75_0.3_0.4 0.865463
-effSig_LL_75_0.3_0.6 0.874853
-effSig_DD_75_0.3_0.6 0.842603
-effSig_LL_75_0.3_0.7 0.863868
-effSig_DD_75_0.3_0.7 0.82484
-effSig_LL_75_0.3_0.8 0.849745
-effSig_DD_75_0.3_0.8 0.794118
-effSig_LL_75_0.3_0.9 0.817183
-effSig_DD_75_0.3_0.9 0.734712
+* effSig_LL_75_0.3_0.6 0.874853
+* effSig_DD_75_0.3_0.6 0.842603
+* effSig_LL_75_0.3_0.7 0.863868
+* effSig_DD_75_0.3_0.7 0.82484
+* effSig_LL_75_0.3_0.8 0.849745
+* effSig_DD_75_0.3_0.8 0.794118
+* effSig_LL_75_0.3_0.9 0.817183
+* effSig_DD_75_0.3_0.9 0.734712
+* 
+* efficiencies from new trained MC
+effSig_LL_75_0.3_0.6 0.877358
+effSig_DD_75_0.3_0.6 0.8274
+effSig_LL_75_0.3_0.65 0.873428
+effSig_DD_75_0.3_0.65 0.819813
+effSig_LL_75_0.3_0.7 0.866745
+effSig_DD_75_0.3_0.7 0.805953
+effSig_LL_75_0.3_0.75 0.858884
+effSig_DD_75_0.3_0.75 0.789758
+effSig_LL_75_0.3_0.8 0.853774
+effSig_DD_75_0.3_0.8 0.773855
+effSig_LL_75_0.3_0.85 0.841195
+effSig_DD_75_0.3_0.85 0.746134
+effSig_LL_75_0.3_0.9 0.825079
+effSig_DD_75_0.3_0.9 0.705282
+effSig_LL_75_0.3_0.95 0.777123
+effSig_DD_75_0.3_0.95 0.631164
+* 
+* efficiencies for tighter D mass
+effSig_LL_75_0.3_0.6_25 0.867925
+effSig_DD_75_0.3_0.6_25 0.819084
+effSig_LL_75_0.3_0.7_25 0.857704
+effSig_DD_75_0.3_0.7_25 0.798366
+effSig_LL_75_0.3_0.8_25 0.844733
+effSig_DD_75_0.3_0.8_25 0.766706
+effSig_LL_75_0.3_0.9_25 0.816824
+effSig_DD_75_0.3_0.9_25 0.6993
+effSig_LL_75_0.3_0.95_25 0.769654
+effSig_DD_75_0.3_0.95_25 0.626204
+* 
 effSig_LL_75_0.4_-0.6 0.874068
 effSig_DD_75_0.4_-0.6 0.869249
 effSig_LL_75_0.4_-0.4 0.870145
@@ -406,6 +437,21 @@ effComb_LL_d2kpi_75_0.3_0.8 0.0833333
 effComb_DD_d2kpi_75_0.3_0.8 0.104348
 effComb_LL_d2kpi_75_0.3_0.9 0.0833333
 effComb_DD_d2kpi_75_0.3_0.9 0.0347826
+effComb_LL_d2kpi_75_0.3_0.95 0.0833333
+effComb_DD_d2kpi_75_0.3_0.95 0.0173913
+*
+* efficiencies for tighter D mass
+effComb_LL_d2kpi_75_0.3_0.6_25 0.0833333
+effComb_DD_d2kpi_75_0.3_0.6_25 0.165217
+effComb_LL_d2kpi_75_0.3_0.7_25 0.0833333
+effComb_DD_d2kpi_75_0.3_0.7_25 0.130435
+effComb_LL_d2kpi_75_0.3_0.8_25 0.0833333
+effComb_DD_d2kpi_75_0.3_0.8_25 0.104348
+effComb_LL_d2kpi_75_0.3_0.9_25 0.0833333
+effComb_DD_d2kpi_75_0.3_0.9_25 0.0347826
+effComb_LL_d2kpi_75_0.3_0.95_25 0.0833333
+effComb_DD_d2kpi_75_0.3_0.95_25 0.0173913
+*
 effComb_LL_d2kpi_75_0.4_-0.6 0.25
 effComb_DD_d2kpi_75_0.4_-0.6 0.33913
 effComb_LL_d2kpi_75_0.4_-0.4 0.25
