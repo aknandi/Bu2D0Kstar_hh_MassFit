@@ -2,7 +2,7 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-06-19_BdtLL0.8_BdtDD0.9_deltab190/"
+SUBDIR="2016-08-01_currentStatus_genscale10/"
 MIN=1
 MAX=2000
 GAP=40
@@ -36,6 +36,26 @@ VARS=("A_d2kpi"
       "Rminus_d2pik"
       "Rplus_d2pik"
       #"n_comb_d2pik_plus_DD_all"
+      "bu_mean"
+      "bu_width"
+      "d2kpi_exp_DD_combs_slope"
+      "d2kpi_exp_LL_combs_slope"
+      "n_comb_d2kk_minus_DD_all"
+      "n_comb_d2kk_minus_LL_all"
+      "n_comb_d2kk_plus_DD_all"
+      "n_comb_d2kk_plus_LL_all"
+      "n_comb_d2kpi_minus_DD_all"
+      "n_comb_d2kpi_minus_LL_all"
+      "n_comb_d2kpi_plus_DD_all"
+      "n_comb_d2kpi_plus_LL_all"
+      "n_comb_d2pik_minus_DD_all"
+      "n_comb_d2pik_minus_LL_all"
+      "n_comb_d2pik_plus_DD_all"
+      "n_comb_d2pik_plus_LL_all"
+      "n_comb_d2pipi_minus_DD_all"
+      "n_comb_d2pipi_minus_LL_all"
+      "n_comb_d2pipi_plus_DD_all"
+      "n_comb_d2pipi_plus_LL_all"
       )
 
 rm results/*.txt

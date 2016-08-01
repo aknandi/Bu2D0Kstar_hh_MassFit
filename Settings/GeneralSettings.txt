@@ -13,7 +13,7 @@ Kstmasscut 75
 Kshelcut 0.3
 BdtcutLL 0.6
 BdtcutDD 0.7
-BdtadsLL 0.8
+BdtadsLL 0.6
 BdtadsDD 0.9
 Dmasscut 25
 *

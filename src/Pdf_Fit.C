@@ -76,6 +76,13 @@ void Pdf_Fit::setRelations()
   RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",relConfs.getD("bu_n_DD"),
                                         relConfs.getD("bu_n_DD_LimL"),relConfs.getD("bu_n_DD_LimU") );
 
+/*
+  RooRealVar* bu_alpha_LL = new RooRealVar("bu_alpha_LL","",100.,100.,100.);
+  RooRealVar* bu_n_LL = new RooRealVar("bu_n_LL","",0.,0.,0.);
+  RooRealVar* bu_alpha_DD = new RooRealVar("bu_alpha_DD","",100.,100.,100.);
+  RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",0.,0.,0.);
+*/
+
   RooRealVar* bu_alpha_mix = new RooRealVar("bu_alpha_mix","",relConfs.getD("bu_alpha_mix"),
                                        relConfs.getD("bu_alpha_mix_LimL"),relConfs.getD("bu_alpha_mix_LimU") );
   RooRealVar* bu_n_mix = new RooRealVar("bu_n_mix","",relConfs.getD("bu_n_mix"),
@@ -149,6 +156,8 @@ void Pdf_Fit::setRelations()
   std::cout << std::endl << "PdfFit: Setting parameters constant" << std::endl;
   fixedParams = new std::vector <RooRealVar*>;
 
+  //fixedParams->push_back(bu_mean);
+  //fixedParams->push_back(bu_width);
   fixedParams->push_back(bu_alpha_LL);
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);

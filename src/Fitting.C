@@ -332,9 +332,9 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   gROOT->cd();		// Copy the TTree into memory otherwise new tree will try to write to the old file
   TTree* reducedtree = (TTree*) tree->CopyTree(exclusionString);
   double bm(0);
-  double cla(0);
+  //double cla(0);
   reducedtree->SetBranchAddress("Bu_D0constKS0constPVconst_M",&bm);
-  reducedtree->SetBranchAddress("BDTG",&cla);
+  //reducedtree->SetBranchAddress("BDTG",&cla);
 
   /*
   TTree* newtree = new TTree("TTT","");
@@ -458,7 +458,7 @@ void Fitting::RunFullFit(bool draw=true)
   //mB.setBins(65);
   RooSimultaneous* sim = model->getFitPdf();
   std::cout << "Simultaneous PDF:" << std::endl;
-  sim->Print();
+  //sim->Print();
   std::cout << std::endl;
 
   std::cout << "Fixed parameters" << std::endl;
@@ -615,6 +615,10 @@ void Fitting::RunFullFit(bool draw=true)
         }
       }
 
+      std::string unblind = _genConfs->get("UNBLIND");
+      // When generating toys, do not want blinded
+      if(_genConfs->get("genToys")=="true") unblind = "true";
+      double sidebands, total;
 
       std::cout<<" canvases made "<<std::endl;
 
@@ -632,50 +636,108 @@ void Fitting::RunFullFit(bool draw=true)
             std::string tag = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
             catNew->setLabel(tag.c_str());
 
+            if(unblind=="false") {
+          	  mB.setRange("lowersideband",_genConfs->getD("fit_limit_low"),5230);
+          	  mB.setRange("uppersideband",5329,_genConfs->getD("fit_limit_high"));
+          	  // Determine yield in sidebands for normalisation
+          	  sidebands = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries("1","uppersideband");//,lowersideband");
+          	  total = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries();
+          	  std::cout << sidebands << std::endl;
+            }
+
             //////////////////////////////////////////////////////
             // Plot the separated, standard LL,DD plots
             //////////////////////////////////////////////////////
-            data->plotOn(plot[*c][*t][*a],
+            if(*m == "d2pik" && unblind=="false") {
+                data->plotOn(plot[*c][*t][*a],RooFit::CutRange("uppersideband"),
                          RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
                          RooFit::MarkerStyle(6));
+            }
+            else {
+                data->plotOn(plot[*c][*t][*a],
+                         RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
+                         RooFit::MarkerStyle(6));
+            }
 				
             std::cout<<" data to plot: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
 
             if(drawProjections=="true"){
-              //plot total PDF
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                             RooFit::LineWidth(3) );
-              if(v_canRes[*t][*a]) {
-            	  cout << "Make residuals: " <<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
-                residualHist = plot[*c][*t][*a]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
-              }
-              //Bu - CB
-              std::cout<<" plotting Bu "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
+            	//plot total PDF
+            	if(*m == "d2pik" && unblind=="false") {
+            		sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+            				RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
+            	}
+            	else {
+            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            				RooFit::LineWidth(3) );
+            	}
+            	if(v_canRes[*t][*a]) {
+            		cout << "Make residuals: " <<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+            		residualHist = plot[*c][*t][*a]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
+            	}
+            	//Bu - CB
+            	std::cout<<" plotting Bu "<<std::endl;
+            	if(*m == "d2pik" && unblind=="false") {
+            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
+            				RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+            				RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
+            	}
+            	else {
+            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            				RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
+            	}
 
-              if(_genConfs->get("MCsimfit")!="true") {
-              // Combinatoric
-              std::cout <<" plotting combinatoric "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
+            	if(_genConfs->get("MCsimfit")!="true") {
+            		// Combinatoric
+            		std::cout <<" plotting combinatoric "<<std::endl;
+            		if(*m == "d2pik" && unblind=="false") {
+            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
+            					RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+            					RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            					RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
+            		}
+            		else {
+            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            					RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            					RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
+            		}
 
-              //Bu -> D*K* - regexp to pick up also version split by helamp
-              std::cout<<" plotting Bu -> D*K*  "<<std::endl;
-              sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-                           RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-                           //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
-                           //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
-                           //),
-                           RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
+
+            		//Bu -> D*K* - regexp to pick up also version split by helamp
+            		std::cout<<" plotting Bu -> D*K*  "<<std::endl;
+            		if(*m == "d2pik" && unblind=="false") {
+            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            					RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+            					RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            					//RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+            					//                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+            					//),
+            					RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
+            		}
+            		else {
+            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            					RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            					//RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+            					//                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+            					//),
+            					RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
+            		}
+
               }
             }
 
             //plot total PDF again
-            sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            		RooFit::LineWidth(3) );
+            if(*m == "d2pik" && unblind=="false") {
+            	sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+            			RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
+            }
+            else {
+            	sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+            			RooFit::LineWidth(3) );
+            }
+
             //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
 
             if (result)
@@ -1132,8 +1194,8 @@ void Fitting::NewOrderToys(int n)
         resfile << par->GetName() << ' '
                 << par->getVal() << ' '
                 << par->getError() << ' ' // HESSE
-                //<< par->getAsymErrorLo() << ' '
-                //<< par->getAsymErrorHi() << ' '
+                << par->getAsymErrorLo() << ' '
+                << par->getAsymErrorHi() << ' '
                 << result->covQual()<< ' '
                 << _genConfs->getI("startSeed") << ' '
                 << i << ' '

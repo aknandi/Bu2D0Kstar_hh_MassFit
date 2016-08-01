@@ -13,6 +13,7 @@
 #include "RooFormulaVar.h"
 #include "RooSimultaneous.h"
 #include "RooSuperCategory.h"
+#include "RooUnblindPrecision.h"
 #include "InternalStorage.h"
 #include "Base.h"
 //#include "CommonTools.h"
@@ -39,7 +40,8 @@ class Yields
   // Yields can be accessed by Model.
   // Bu
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsArg*> > > > n_bu_gen;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsArg*> > > > n_bu_fit;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsReal*> > > > n_bu_fit;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsReal*> > > > n_bu_fit_blind;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb_gen;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_dstkst;
@@ -48,6 +50,8 @@ class Yields
   std::map<std::string, RooRealVar*> A;
   std::map<std::string, RooRealVar*> R;
   std::map<std::string, std::map<std::string, RooRealVar*> > N_kpi;
+  RooUnblindPrecision* Rplus_unblind;
+  RooUnblindPrecision* Rminus_unblind;
 
   //std::map<std::string, std::map<std::string, std::map<std::string,  RooRealVar*> > >n_totsigs; //no pid & no bins
   //std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooFormulaVar*> > > > stdBinFracs; //no pid part
@@ -59,7 +63,7 @@ class Yields
 //
 
 
-  std::vector< RooRealVar* > ParametersOfFit;
+  //std::vector< RooRealVar* > ParametersOfFit;
 
 
 

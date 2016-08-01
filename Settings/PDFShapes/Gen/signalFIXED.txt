@@ -1,9 +1,9 @@
 bu_mean 5279
 bu_mean_LimL 5270
 bu_mean_LimU 5288
-bu_width 15.0
+bu_width 12.0
 bu_width_LimL 0.0
-bu_width_LimU 20.0
+bu_width_LimU 30.0
 bu_alpha_LL 2.6
 bu_alpha_LL_LimU 2.6
 bu_alpha_LL_LimL 2.6

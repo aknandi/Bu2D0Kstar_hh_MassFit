@@ -86,6 +86,12 @@ RooSimultaneous* Model::getGenPdf()
             cout << " " << par->GetName() << " " << par->getVal() << endl;
           }
 
+          TIter pdfPar(pdflist.createIterator());
+          RooRealVar * par2;
+          while ((par2 = (RooRealVar *)pdfPar())) {
+            cout << " " << par2->GetName() << " " << par2->getVal() << endl;
+          }
+
           RooAddPdf* pdf = new RooAddPdf(Form("GENpdf_%s",tag.c_str()) ,"",pdflist,nevents);
           pdf->Print();
           sim->addPdf(*pdf,Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str()));
@@ -297,7 +303,9 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double integyield_bu;
           double integyield_bu_err;
           if(_genConfs->isChargeSeparated()) {
-        	  RooFormulaVar* n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+        	  RooFormulaVar* n_bu_fit_asRooFormulaVar;
+        	  if(*m == "d2pik" && _genConfs->get("UNBLIND")=="false") n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit_blind[*m][*c][*t][*a]);
+        	  else n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
         	  integyield_bu = integral_bu * n_bu_fit_asRooFormulaVar->getVal();
         	  integyield_bu_err = integral_bu * n_bu_fit_asRooFormulaVar->getPropagatedError(*result);
           }

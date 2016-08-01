@@ -1,3 +1,28 @@
+---Temp
+bu_mean 5279                                                                                                                                                                                                 
+bu_width 12.0                                                                                                                                                                                                
+d2kpi_exp_DD_combs_slope -0.0014                                                                                                                                                                             
+d2kpi_exp_LL_combs_slope -0.0024                                                                                                                                                                             
+n_comb_d2kk_minus_DD_all 224.766                                                                                                                                                                             
+n_comb_d2kk_minus_LL_all 25.1868                                                                                                                                                                             
+n_comb_d2kk_plus_DD_all 224.766                                                                                                                                                                              
+n_comb_d2kk_plus_LL_all 25.1868                                                                                                                                                                              
+n_comb_d2kpi_minus_DD_all 1123.83                                                                                                                                                                            
+n_comb_d2kpi_minus_LL_all 96.8725                                                                                                                                                                            
+n_comb_d2kpi_plus_DD_all 1123.83                                                                                                                                                                             
+n_comb_d2kpi_plus_LL_all 96.8725                                                                                                                                                                             
+n_comb_d2pik_minus_DD_all 299.687                                                                                                                                                                            
+n_comb_d2pik_minus_LL_all 96.8725                                                                                                                                                                            
+n_comb_d2pik_plus_DD_all 299.687                                                                                                                                                                             
+n_comb_d2pik_plus_LL_all 96.8725                                                                                                                                                                             
+n_comb_d2pipi_minus_DD_all 146.098                                                                                                                                                                           
+n_comb_d2pipi_minus_LL_all 22.2807                                                                                                                                                                           
+n_comb_d2pipi_plus_DD_all 146.098                                                                                                                                                                            
+n_comb_d2pipi_plus_LL_all 22.2807
+
+------
+--------Original
+--------
 A_d2kpi 0.0
 A_d2kk 0.09884
 R_d2kk 0.95076
@@ -5,3 +30,89 @@ A_d2pipi 0.09884
 R_d2pipi 0.95076
 Rplus_d2pik 0.02157
 Rminus_d2pik 0.01302
+-------
+-------deltaB 190--------
+------
+A_d2kpi 0.0
+A_d2kk -0.03462
+R_d2kk 0.94264
+A_d2pipi -0.03462
+R_d2pipi 0.94264
+Rplus_d2pik 0.01418
+Rminus_d2pik 0.02072
+-----
+-------Genscale 10------
+-----
+n_comb_d2kk_minus_DD_all 224.766
+n_comb_d2kk_minus_LL_all 25.1868
+n_comb_d2kk_plus_DD_all 224.766
+n_comb_d2kk_plus_LL_all 25.1868
+n_comb_d2kpi_minus_DD_all 1123.83
+n_comb_d2kpi_minus_LL_all 96.8725
+n_comb_d2kpi_plus_DD_all 1123.83
+n_comb_d2kpi_plus_LL_all 96.8725
+n_comb_d2pik_minus_DD_all 299.687
+n_comb_d2pik_minus_LL_all 96.8725
+n_comb_d2pik_plus_DD_all 299.687
+n_comb_d2pik_plus_LL_all 96.8725
+n_comb_d2pipi_minus_DD_all 146.098
+n_comb_d2pipi_minus_LL_all 22.2807
+n_comb_d2pipi_plus_DD_all 146.098
+n_comb_d2pipi_plus_LL_all 22.2807
+-----
+-------Genscale 15------
+-----
+n_comb_d2kk_minus_DD_all 337.148
+n_comb_d2kk_minus_LL_all 37.7803
+n_comb_d2kk_plus_DD_all 337.148
+n_comb_d2kk_plus_LL_all 37.7803
+n_comb_d2kpi_minus_DD_all 1679.03
+n_comb_d2kpi_minus_LL_all 145.309
+n_comb_d2kpi_plus_DD_all 1679.03
+n_comb_d2kpi_plus_LL_all 145.309
+n_comb_d2pik_minus_DD_all 449.53
+n_comb_d2pik_minus_LL_all 145.309
+n_comb_d2pik_plus_DD_all 449.53
+n_comb_d2pik_plus_LL_all 145.309
+n_comb_d2pipi_minus_DD_all 219.146
+n_comb_d2pipi_minus_LL_all 33.421
+n_comb_d2pipi_plus_DD_all 219.146
+n_comb_d2pipi_plus_LL_all 33.421
+-----
+-------Genscale 20------
+-----
+n_comb_d2kk_minus_DD_all 449.532
+n_comb_d2kk_minus_LL_all 50.3736
+n_comb_d2kk_plus_DD_all 449.532
+n_comb_d2kk_plus_LL_all 50.3736
+n_comb_d2kpi_minus_DD_all 2247.66
+n_comb_d2kpi_minus_LL_all 193.745
+n_comb_d2kpi_plus_DD_all 2247.66
+n_comb_d2kpi_plus_LL_all 193.745
+n_comb_d2pik_minus_DD_all 599.374
+n_comb_d2pik_minus_LL_all 193.745
+n_comb_d2pik_plus_DD_all 599.374
+n_comb_d2pik_plus_LL_all 193.745
+n_comb_d2pipi_minus_DD_all 292.196
+n_comb_d2pipi_minus_LL_all 44.5614
+n_comb_d2pipi_plus_DD_all 292.196
+n_comb_d2pipi_plus_LL_all 44.5614
+-----
+-------Genscale 10 with extra LL------
+-----
+n_comb_d2kk_minus_DD_all 224.766
+n_comb_d2kk_minus_LL_all 111.853
+n_comb_d2kk_plus_DD_all 224.766
+n_comb_d2kk_plus_LL_all 111.853
+n_comb_d2kpi_minus_DD_all 1123.83
+n_comb_d2kpi_minus_LL_all 430.206
+n_comb_d2kpi_plus_DD_all 1123.83
+n_comb_d2kpi_plus_LL_all 430.206
+n_comb_d2pik_minus_DD_all 299.687
+n_comb_d2pik_minus_LL_all 430.206
+n_comb_d2pik_plus_DD_all 299.687
+n_comb_d2pik_plus_LL_all 430.206
+n_comb_d2pipi_minus_DD_all 146.098
+n_comb_d2pipi_minus_LL_all 98.9473
+n_comb_d2pipi_plus_DD_all 146.098
+n_comb_d2pipi_plus_LL_all 98.9473

@@ -26,7 +26,7 @@ class Model : public Base
 
   void printYieldsAndPurities(string, double, double, RooFitResult*);
   std::map< std::string,std::map< std::string, std::map< std::string,std::map< std::string, std::map<std::string,double > > > > > plotNums;
-  std::vector< RooRealVar* > getMyLowComb(){return yields->ParametersOfFit;};
+  //std::vector< RooRealVar* > getMyLowComb(){return yields->ParametersOfFit;};
 
   std::vector <RooRealVar*> *GetFixedParameters() {return fitPdf.GetFixedParameters();}
 

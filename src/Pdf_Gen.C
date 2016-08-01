@@ -116,14 +116,17 @@ void Pdf_Gen::setRelations()
   
   std::cout << std::endl << "PdfGen : fixed parameters " << std::endl;
   fixedParams = new std::vector <RooRealVar*>;
+
+  //fixedParams->push_back(bu_mean);
+  //fixedParams->push_back(bu_width);
   fixedParams->push_back(bu_alpha_LL);
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
   //fixedParams->push_back(bu_alpha_mix);
   //fixedParams->push_back(bu_n_mix);
-  fixedParams->push_back(combs_slope_LL);
-  fixedParams->push_back(combs_slope_DD);
+  //fixedParams->push_back(combs_slope_LL);
+  //fixedParams->push_back(combs_slope_DD);
   //fixedParams->push_back(frac010_LL);
   //fixedParams->push_back(frac010_DD);
   fixedParams->push_back(coef010_LL);
