@@ -6,7 +6,7 @@
 #include "Settings.h"
 #include "Pdf_Base.h"
 #include "myGaussian.h"
-#include "myCrystalBall.h"
+#include "DoubleCrystalBall.h"
 #include "Exponential.h"
 #include "PartRecoDstKst.h"
 
@@ -30,7 +30,7 @@ class Pdf_Gen
   Settings* _fileList;
   std::string _MCsimfit;
   // PDFs
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myCrystalBall*> > > > bu;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,DoubleCrystalBall*> > > > bu;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Exponential*> > > > comb;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;

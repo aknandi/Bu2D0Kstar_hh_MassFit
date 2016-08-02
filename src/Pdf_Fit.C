@@ -3,7 +3,7 @@
 //#include "PartRecoDstKst.h"
 #include "Exponential.h"
 #include "RooFormulaVar.h"
-#include "myCrystalBall.h"
+#include "DoubleCrystalBall.h"
 #include "PartRecoDstKst.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
@@ -30,7 +30,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
     for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
-          bu[*mode][*charge][*trackType][*run]  = new myCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
+          bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
           dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"));
         }
@@ -63,7 +63,6 @@ void Pdf_Fit::setRelations()
   //Signal -- Double Crystal Ball
   RooRealVar* bu_mean = new RooRealVar("bu_mean","",relConfs.getD("bu_mean"),
                                               relConfs.getD("bu_mean_LimL"),relConfs.getD("bu_mean_LimU") );
-
   RooRealVar* bu_width = new RooRealVar("bu_width","",relConfs.getD("bu_width"),
                                               relConfs.getD("bu_width_LimL"),relConfs.getD("bu_width_LimU") );
 
@@ -75,6 +74,20 @@ void Pdf_Fit::setRelations()
                                        relConfs.getD("bu_alpha_DD_LimL"),relConfs.getD("bu_alpha_DD_LimU") );
   RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",relConfs.getD("bu_n_DD"),
                                         relConfs.getD("bu_n_DD_LimL"),relConfs.getD("bu_n_DD_LimU") );
+  RooRealVar* bu_width_ratio_LL = new RooRealVar("bu_width_ratio_LL","",relConfs.getD("bu_width_ratio_LL"),
+                                          relConfs.getD("bu_width_ratio_LL_LimL"),relConfs.getD("bu_width_ratio_LL_LimU") );
+  RooRealVar* bu_width_ratio_DD = new RooRealVar("bu_width_ratio_DD","",relConfs.getD("bu_width_ratio_DD"),
+                                          relConfs.getD("bu_width_ratio_DD_LimL"),relConfs.getD("bu_width_ratio_DD_LimU") );
+  RooRealVar* bu_frac = new RooRealVar("bu_frac","",relConfs.getD("bu_frac"),
+                                          relConfs.getD("bu_frac_LimL"),relConfs.getD("bu_frac_LimU") );
+
+  RooRealVar* bu_alpha_mix = new RooRealVar("bu_alpha_mix","",relConfs.getD("bu_alpha_mix"),
+                                         relConfs.getD("bu_alpha_mix_LimL"),relConfs.getD("bu_alpha_mix_LimU") );
+  RooRealVar* bu_n_mix = new RooRealVar("bu_n_mix","",relConfs.getD("bu_n_mix"),
+                                          relConfs.getD("bu_n_mix_LimL"),relConfs.getD("bu_n_mix_LimU") );
+  RooRealVar* bu_width_ratio_mix = new RooRealVar("bu_width_ratio_mix","",relConfs.getD("bu_width_ratio_mix"),
+                                          relConfs.getD("bu_width_ratio_mix_LimL"),relConfs.getD("bu_width_ratio_mix_LimU") );
+
 
 /*
   RooRealVar* bu_alpha_LL = new RooRealVar("bu_alpha_LL","",100.,100.,100.);
@@ -83,11 +96,7 @@ void Pdf_Fit::setRelations()
   RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",0.,0.,0.);
 */
 
-  RooRealVar* bu_alpha_mix = new RooRealVar("bu_alpha_mix","",relConfs.getD("bu_alpha_mix"),
-                                       relConfs.getD("bu_alpha_mix_LimL"),relConfs.getD("bu_alpha_mix_LimU") );
-  RooRealVar* bu_n_mix = new RooRealVar("bu_n_mix","",relConfs.getD("bu_n_mix"),
-                                        relConfs.getD("bu_n_mix_LimL"),relConfs.getD("bu_n_mix_LimU") );
-
+  // Combs- exponential
   RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
                                                    relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
 
@@ -100,8 +109,16 @@ void Pdf_Fit::setRelations()
   std::string kshelcut = relConfs.get("Kshelcut");
   std::string lowRange = relConfs.get("fit_limit_low");
   // frac010 = (n010*eff010)/(n101*eff101), different for DD and LL
-  double frac010LL = (relConfs.getD(Form("N_dstkst010_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
-  double frac010DD = (relConfs.getD(Form("N_dstkst010_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
+  double frac010LL, frac010DD;
+
+  if(_genConfs->get("genToys")=="true") {
+	  frac010LL = (relConfs.getD(Form("N_dstkst010_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_LL_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_LL_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_LL_%s",kshelcut.c_str())));
+	  frac010DD = (relConfs.getD(Form("N_dstkst010_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff010_DD_%s",kshelcut.c_str())))/(relConfs.getD(Form("N_dstkst101_d2kpi_DD_%s",lowRange.c_str()))*relConfs.getD(Form("eff101_DD_%s",kshelcut.c_str())));
+  }
+  else {
+	  frac010LL = relConfs.getD("frac010_LL");
+	  frac010DD = relConfs.getD("frac010_DD");
+  }
 
   double coef010LL = frac010LL/(1+frac010LL);
   double coef101LL = 1/(1+frac010LL);
@@ -162,6 +179,9 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
   fixedParams->push_back(bu_n_DD);
+  fixedParams->push_back(bu_width_ratio_LL);
+  fixedParams->push_back(bu_width_ratio_DD);
+  fixedParams->push_back(bu_frac);
   //fixedParams->push_back(frac010_LL);
   //fixedParams->push_back(frac010_DD);
   fixedParams->push_back(coef010_LL);
@@ -191,11 +211,13 @@ void Pdf_Fit::setRelations()
 
           //Signal
           bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
-          bu[*mode][*charge][*trackType][*run]->setWidth(bu_width);
+          bu[*mode][*charge][*trackType][*run]->setSigma(bu_width);
+          bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac);
 
           if(*trackType=="LL")  {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
+        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_LL);
@@ -203,6 +225,7 @@ void Pdf_Fit::setRelations()
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
+        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_DD);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
@@ -210,6 +233,7 @@ void Pdf_Fit::setRelations()
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
+        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
@@ -220,12 +244,12 @@ void Pdf_Fit::setRelations()
     }
   }
 
-
   // Finally, create map of RooPdfs to return
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
     for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
+        	std::cout << "Start getting pdfs" << std::endl;
           roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_comb[*mode][*charge][*trackType][*run]      = comb[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_dstkst[*mode][*charge][*trackType][*run]  = dstkst[*mode][*charge][*trackType][*run]->getPdf();

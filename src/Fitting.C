@@ -680,12 +680,12 @@ void Fitting::RunFullFit(bool draw=true)
             	if(*m == "d2pik" && unblind=="false") {
             		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
             				RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            				RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            				RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
             				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
             	}
             	else {
             		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            				RooFit::Components(Form("myCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+            				RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
             				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
             	}
 
