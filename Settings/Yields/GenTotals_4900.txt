@@ -15,12 +15,12 @@ Rminus_d2pik 0.01302
 * 
 * Change to deltab of 190 (or to all same with no asymmetry- test blinding)
 * A_d2kpi 0.0
-* A_d2kk -0.03462
-* R_d2kk 9.4264
-* A_d2pipi -0.03462
-* R_d2pipi 9.4264
-* Rplus_d2pik 1.418
-* Rminus_d2pik 2.072
+* A_d2kk 0.0
+* R_d2kk 1.964
+* A_d2pipi 0.0
+* R_d2pipi 2.3264
+* Rplus_d2pik 0.068
+* Rminus_d2pik 0.062
 * 
 * Taken from single fit
 N_bu_d2kpi_all_LL_4900 346.013

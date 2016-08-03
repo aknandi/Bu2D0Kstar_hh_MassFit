@@ -4,6 +4,7 @@
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "DoubleCrystalBall.h"
+#include "myGaussian.h"
 #include "PartRecoDstKst.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
@@ -31,6 +32,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
           bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
+          //bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
           dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"));
         }
@@ -88,13 +90,6 @@ void Pdf_Fit::setRelations()
   RooRealVar* bu_width_ratio_mix = new RooRealVar("bu_width_ratio_mix","",relConfs.getD("bu_width_ratio_mix"),
                                           relConfs.getD("bu_width_ratio_mix_LimL"),relConfs.getD("bu_width_ratio_mix_LimU") );
 
-
-/*
-  RooRealVar* bu_alpha_LL = new RooRealVar("bu_alpha_LL","",100.,100.,100.);
-  RooRealVar* bu_n_LL = new RooRealVar("bu_n_LL","",0.,0.,0.);
-  RooRealVar* bu_alpha_DD = new RooRealVar("bu_alpha_DD","",100.,100.,100.);
-  RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",0.,0.,0.);
-*/
 
   // Combs- exponential
   RooRealVar *combs_slope_mix = new RooRealVar("d2kpi_exp_mix_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
@@ -175,6 +170,7 @@ void Pdf_Fit::setRelations()
 
   //fixedParams->push_back(bu_mean);
   //fixedParams->push_back(bu_width);
+
   fixedParams->push_back(bu_alpha_LL);
   fixedParams->push_back(bu_n_LL);
   fixedParams->push_back(bu_alpha_DD);
@@ -182,6 +178,7 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(bu_width_ratio_LL);
   fixedParams->push_back(bu_width_ratio_DD);
   fixedParams->push_back(bu_frac);
+
   //fixedParams->push_back(frac010_LL);
   //fixedParams->push_back(frac010_DD);
   fixedParams->push_back(coef010_LL);
@@ -211,13 +208,13 @@ void Pdf_Fit::setRelations()
 
           //Signal
           bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
-          bu[*mode][*charge][*trackType][*run]->setSigma(bu_width);
+          bu[*mode][*charge][*trackType][*run]->setWidth(bu_width);
           bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac);
 
           if(*trackType=="LL")  {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_LL);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_LL);
@@ -225,7 +222,7 @@ void Pdf_Fit::setRelations()
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_DD);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_DD);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
@@ -233,7 +230,7 @@ void Pdf_Fit::setRelations()
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_mix);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);

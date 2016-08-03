@@ -11,8 +11,8 @@ class DoubleCrystalBall : public Pdf_Base
   DoubleCrystalBall(RooRealVar*, std::string,std::string,std::string,std::string,std::string,std::string);
 
   void setMean(RooAbsReal*);
-  void setSigma(RooAbsReal*);
-  void setSigmaRatio(RooAbsReal*);
+  void setWidth(RooAbsReal*);
+  void setWidthRatio(RooAbsReal*);
   void setAlpha(RooAbsReal*);
   void setN(RooAbsReal*);
   void setFrac(RooAbsReal*);

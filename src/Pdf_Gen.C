@@ -166,13 +166,13 @@ void Pdf_Gen::setRelations()
 
           //Signal
           bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
-          bu[*mode][*charge][*trackType][*run]->setSigma(bu_width);
+          bu[*mode][*charge][*trackType][*run]->setWidth(bu_width);
           bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac);
 
           if(*trackType=="LL")  {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_LL);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_LL);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef010_LL);
@@ -181,7 +181,7 @@ void Pdf_Gen::setRelations()
           else if(*trackType=="DD") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_DD);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_LL);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_LL);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
@@ -189,7 +189,7 @@ void Pdf_Gen::setRelations()
           else if(*trackType=="mix") {
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
-        	  bu[*mode][*charge][*trackType][*run]->setSigmaRatio(bu_width_ratio_mix);
+        	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_mix);
         	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);

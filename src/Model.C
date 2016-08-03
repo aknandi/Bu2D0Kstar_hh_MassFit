@@ -304,8 +304,9 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double integyield_bu_err;
           if(_genConfs->isChargeSeparated()) {
         	  RooFormulaVar* n_bu_fit_asRooFormulaVar;
-        	  if(*m == "d2pik" && _genConfs->get("UNBLIND")=="false") n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit_blind[*m][*c][*t][*a]);
-        	  else n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+        	  //if(*m == "d2pik" && _genConfs->get("UNBLIND")=="false") n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
+        	  //else
+        	  n_bu_fit_asRooFormulaVar = static_cast<RooFormulaVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
         	  integyield_bu = integral_bu * n_bu_fit_asRooFormulaVar->getVal();
         	  integyield_bu_err = integral_bu * n_bu_fit_asRooFormulaVar->getPropagatedError(*result);
           }

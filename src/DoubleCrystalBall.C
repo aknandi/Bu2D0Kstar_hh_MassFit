@@ -38,12 +38,12 @@ void DoubleCrystalBall::setMean(RooAbsReal* newMean)
 	setRelation("mean",newMean);
 }
 
-void DoubleCrystalBall::setSigma(RooAbsReal* newSigma)
+void DoubleCrystalBall::setWidth(RooAbsReal* newSigma)
 {
 	setRelation("sigma1",newSigma);
 }
 
-void DoubleCrystalBall::setSigmaRatio(RooAbsReal* newSigmaRatio)
+void DoubleCrystalBall::setWidthRatio(RooAbsReal* newSigmaRatio)
 {
 	setRelation("sigma_ratio",newSigmaRatio);
 }

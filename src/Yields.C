@@ -9,6 +9,7 @@
 #include "RooConstVar.h"
 #include "RooArgSet.h"
 #include "RooUnblindPrecision.h"
+#include "RooUnblindUniform.h"
 using namespace std;
 using namespace RooFit;
 
@@ -177,9 +178,13 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
     		A[*m] = new RooRealVar(Form("Rplus_%s",(*m).c_str()),"",Rplus_pik,-5.0,10.0);
     		R[*m] = new RooRealVar(Form("Rminus_%s",(*m).c_str()),"",Rminus_pik,-5.0,10.0);
 
-	    	if(_genConfs->get("UNBLIND")=="false") {
-	    		Rplus_unblind = new RooUnblindPrecision(Form("Rplus_%s_unblind",(*m).c_str()),"Rplus unblind","StringToBlindRplus",-1.0,1.0,*A[*m]);
-	    		Rminus_unblind = new RooUnblindPrecision(Form("Rminus_%s_unblind",(*m).c_str()),"Rminus unblind","StringToBlindRminus",-1.0,1.0,*R[*m]);
+	    	if(_genConfs->get("UNBLIND")=="false" && _genConfs->get("genToys")=="false") {
+	    		Rplus = new RooUnblindUniform(Form("Rplus_%s_unblind",(*m).c_str()),"Rplus unblind","StringToBlindRplus",0.1,*A[*m]);
+	    		Rminus = new RooUnblindUniform(Form("Rminus_%s_unblind",(*m).c_str()),"Rminus unblind","StringToBlindRminus",0.1,*R[*m]);
+	    	}
+	    	else {
+	    		Rplus = A[*m];
+	    		Rminus = R[*m];
 	    	}
 
 	    }
@@ -214,7 +219,6 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 			// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
 			if(_genConfs->isChargeSeparated())
 			{
-
 				if(*m == "d2kpi") {
 					if(*c == "plus") {
 						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
@@ -249,30 +253,15 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s",(*t).c_str()),"",efficiencyVeto);
 					RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s",(*t).c_str()),"",efficiencyBdt);
 
-					if(_genConfs->get("UNBLIND")=="false") {
-						if(*c == "plus") {
-							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus_unblind));
-							n_bu_fit_blind[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus_unblind));
-						}
-						else if (*c == "minus") {
-							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus_unblind));
-							n_bu_fit_blind[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus_unblind));
-						}
-						n_bu_fit[*m][*c][*t][*a] = new RooUnblindPrecision(Form("n_bu_fit_%s_unblind",identifier),"Yield unblind",Form("StringToBlindYield_%s",identifier),1000.,2.,*n_bu_fit_blind[*m][*c][*t][*a]);
+					if(*c == "plus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus));
 					}
-					else {
-						if(*c == "plus") {
-							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*A[*m]));
-							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*A[*m]));
-						}
-						else if (*c == "minus") {
-							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*R[*m]));
-							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*R[*m]));
-						}
+					else if (*c == "minus") {
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus));
 					}
-
 				}
-
 			}
 
 
