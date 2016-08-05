@@ -208,12 +208,18 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std::string bdtcutLL,std::string bdtcutDD,std::string bdtadsLL,std::string bdtadsDD)
 {
 	RooRealVar* effCorrection;
+	RooRealVar* prodAsymmetry;
+	RooRealVar* detAsymmetry;
   for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
     for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
       for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
         for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
 
         	const char* identifier = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+        	double productionAsymmetry = input->getD(Form("A_prod_%s_%s",(*a).c_str(),(*t).c_str()));
+        	double detectionAsymmetry = input->getD(Form("A_prod_%s_%s",(*a).c_str(),(*t).c_str()));
+        	prodAsymmetry = new RooRealVar(Form("prodAsymmetry_%s_%s",(*a).c_str(),(*t).c_str()),"",productionAsymmetry);
+        	detAsymmetry = new RooRealVar(Form("detAsymmetry_%s_%s",(*a).c_str(),(*t).c_str()),"",detectionAsymmetry);
 
 			// If fit is charge separated fit to the asymmetries
 			// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
@@ -221,12 +227,12 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 			{
 				if(*m == "d2kpi") {
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)",RooArgList(*N_kpi[*t][*a],*A[*m]));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
 					}
 				}
 				else if(*m == "d2kk" || *m == "d2pipi") {
@@ -235,12 +241,12 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					effCorrection = new RooRealVar(Form("effCorrection_%s_%s",(*m).c_str(),(*t).c_str()),"",efficiencyCorrection);
 
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2/@3",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2/@3",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m],*effCorrection));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2/@3",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2/@3",RooArgList(*N_kpi[*t][*a],*A[*m],*R[*m],*effCorrection));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
 					}
 
 				}
@@ -254,12 +260,12 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s",(*t).c_str()),"",efficiencyBdt);
 
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rplus));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rplus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rplus));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+@1)*@2*@3*@4",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*effVeto,*effBdt,*Rminus));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rminus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rminus));
 					}
 				}
 			}
