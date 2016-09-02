@@ -35,7 +35,7 @@ Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> 
   input->readPairStringsToMap(_fileList->get("PathnameToFitRatios"));
 
   //myMaps.Initialize(fileList, modeList,chargeList,trackList,binList);
-  genscale = 10.; // scale yields for generation
+  genscale = 1.; // scale yields for generation
   limitlow = _genConfs->get("fit_limit_low");
   unblind=_genConfs->get("UNBLIND");
   std::string kstmasscut = _genConfs->get("Kstmasscut");
@@ -198,7 +198,7 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 	        	  double N_kpifromFit;
 	        	  if(*t == "LL") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*genscale;
 	        	  if(*t == "DD") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*genscale;
-	        	  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,-1000.,1000000.);
+	        	  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,-10.,1000000.);
 
 	          }
 	        }
@@ -229,42 +229,46 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 			{
 				if(*m == "d2kpi") {
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry));
 					}
 				}
 				else if(*m == "d2kk" || *m == "d2pipi") {
-					double efficiencyCorrection = (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))) / (input->getD("BR_d2kpi") * input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())));
+					//double efficiencyCorrection = (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))) / (input->getD("BR_d2kpi") * input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())));
+					double efficiencyCorrection = input->getD(Form("kpitod2kpi_%s",(*t).c_str()))/input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()));
 					effCorrection = new RooRealVar(Form("effCorrection_%s_%s",(*m).c_str(),(*t).c_str()),"",efficiencyCorrection);
 
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3))*@4/@5",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry,*R[*m],*effCorrection));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3))*@4/@5",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry,*R[*m],*effCorrection));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))*@3/@4",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*R[*m],*effCorrection));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3))*@4/@5",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry,*R[*m],*effCorrection));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3))*@4/@5",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAsymmetry,*R[*m],*effCorrection));
 					}
 
 				}
 				else if(*m == "d2pik") {
 					// Account for the efficiencies of the double misID veto and different BDT cut in ADS mode
 					double efficiencyVeto = input->getD(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()));
-					double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
+					double efficiencyBdt;
+					if (*t == "LL") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsLL.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()));
+					if (*t == "DD") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()));
+					//double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
 					RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s",(*t).c_str()),"",efficiencyVeto);
 					RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s",(*t).c_str()),"",efficiencyBdt);
 
 					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rplus));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rplus));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3))*@4*@5*@6",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*detAsymmetry,*effVeto,*effBdt,*Rplus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3))*@4*@5*@6",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*detAsymmetry,*effVeto,*effBdt,*Rplus));
 					}
 					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rminus));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2))*@3*@4*@5",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*effVeto,*effBdt,*Rminus));
+						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3))*@4*@5*@6",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*detAsymmetry,*effVeto,*effBdt,*Rminus));
+						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3))*@4*@5*@6",RooArgList(*N_kpi[*t][*a],*A["d2kpi"],*prodAsymmetry,*detAsymmetry,*effVeto,*effBdt,*Rminus));
 					}
 				}
 			}
@@ -293,7 +297,7 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 				if(*m != "d2pik") N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			}
-			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,-1000.,100000.);
+			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,-10.,100000.);
 
 			//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
@@ -306,10 +310,10 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 				if(*m != "d2pik") N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcutDD.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtadsDD.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			}
-			n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-1000.,100000.);
+			n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-10.,100000.);
 
 			// --- Fit yields ---
-			n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,-1000.,100000.);
+			n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,-10.,100000.);
 			n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst);//,0.,100000.);
 
 

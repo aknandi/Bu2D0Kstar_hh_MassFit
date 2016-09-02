@@ -88,7 +88,8 @@ class Fitting : public Base
   std::map<std::string,std::map<std::string,std::map<std::string,std::map<std::string,string> > > > title;
   std::map<std::string,std::map<std::string,int> > nVeto;
   
-  TPaveText *lhcbpreliminary;
+  TPaveText *lhcbpreliminaryRun1;
+  TPaveText *lhcbpreliminaryRun2;
 };
 
 

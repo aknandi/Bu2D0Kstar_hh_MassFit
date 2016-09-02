@@ -98,12 +98,17 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   gStyle->SetTitleOffset(1.05,"Y");
 
   //'LHCb preliminary' box
-  lhcbpreliminary = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
-  lhcbpreliminary->SetBorderSize(0); lhcbpreliminary->SetFillStyle(0);
-  lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.075); 
+  lhcbpreliminaryRun1 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
+  lhcbpreliminaryRun1->SetBorderSize(0); lhcbpreliminaryRun1->SetFillStyle(0);
+  lhcbpreliminaryRun1->SetTextFont(132); lhcbpreliminaryRun1->SetTextSize(0.075);
+  lhcbpreliminaryRun1->AddText("#scale[0.5]{#int }L d#it{t} = 3.0 fb^{-1}");
+
+  lhcbpreliminaryRun2 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
+  lhcbpreliminaryRun2->SetBorderSize(0); lhcbpreliminaryRun2->SetFillStyle(0);
+  lhcbpreliminaryRun2->SetTextFont(132); lhcbpreliminaryRun2->SetTextSize(0.075);
+  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 0.294 fb^{-1}");
   //lhcbpreliminary->AddText("LHCb 2013");
   //lhcbpreliminary->AddText("LHCb preliminary");
-  lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 3.0 fb^{-1}");
 
   // Setup the file for fit projections output
   saveOutputForPlottingMacro = new TFile("output/saveOutputForPlottingMacro.root","RECREATE");
@@ -828,7 +833,11 @@ void Fitting::RunFullFit(bool draw=true)
                 pav->SetTextFont(132); pav->SetTextSize(0.8);
                 pav->Draw();
              */
-            //if(genToys=="false") lhcbpreliminary->Draw();
+            if(genToys=="false") {
+            	if(*a == "run1") lhcbpreliminaryRun1->Draw();
+            	if(*a == "run2") lhcbpreliminaryRun2->Draw();
+            }
+
             if(plot[*c][*t][*a]->GetMaximum()>maxH)
             {
             	maxH=plot[*c][*t][*a]->GetMaximum();
