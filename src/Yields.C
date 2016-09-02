@@ -178,14 +178,16 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
     		A[*m] = new RooRealVar(Form("Rplus_%s",(*m).c_str()),"",Rplus_pik,-5.0,10.0);
     		R[*m] = new RooRealVar(Form("Rminus_%s",(*m).c_str()),"",Rminus_pik,-5.0,10.0);
 
+
 	    	if(_genConfs->get("UNBLIND")=="false" && _genConfs->get("genToys")=="false") {
-	    		Rplus = new RooUnblindUniform(Form("Rplus_%s_unblind",(*m).c_str()),"Rplus unblind","StringToBlindRplus",0.1,*A[*m]);
-	    		Rminus = new RooUnblindUniform(Form("Rminus_%s_unblind",(*m).c_str()),"Rminus unblind","StringToBlindRminus",0.1,*R[*m]);
+	    		Rplus = new RooUnblindUniform(Form("Rplus_%s_unblind",(*m).c_str()),"Rplus unblind","StringToBlindRplus",0.01,*A[*m]);
+	    		Rminus = new RooUnblindUniform(Form("Rminus_%s_unblind",(*m).c_str()),"Rminus unblind","StringToBlindRminus",0.01,*R[*m]);
 	    	}
 	    	else {
 	    		Rplus = A[*m];
 	    		Rminus = R[*m];
 	    	}
+
 
 	    }
 	    else if(*m == "d2kpi") {
@@ -236,8 +238,7 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					}
 				}
 				else if(*m == "d2kk" || *m == "d2pipi") {
-					//double efficiencyCorrection = input->getD("BR_d2kpi")/input->getD(Form("BR_%s",(*m).c_str()));
-					double efficiencyCorrection = input->getD(Form("kpitod2kpi_%s",(*t).c_str()))/input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()));
+					double efficiencyCorrection = (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))) / (input->getD("BR_d2kpi") * input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())));
 					effCorrection = new RooRealVar(Form("effCorrection_%s_%s",(*m).c_str(),(*t).c_str()),"",efficiencyCorrection);
 
 					if(*c == "plus") {
@@ -251,11 +252,9 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 
 				}
 				else if(*m == "d2pik") {
-					// Account for the efficiencies of the double misID veto adn different BDT cut in ADS mode
-					double efficiencyVeto = input->getD(Form("effVeto_%s",(*t).c_str()));
-					double efficiencyBdt;
-					if (*t == "LL") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsLL.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()));
-					if (*t == "DD") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()));
+					// Account for the efficiencies of the double misID veto and different BDT cut in ADS mode
+					double efficiencyVeto = input->getD(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()));
+					double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
 					RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s",(*t).c_str()),"",efficiencyVeto);
 					RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s",(*t).c_str()),"",efficiencyBdt);
 

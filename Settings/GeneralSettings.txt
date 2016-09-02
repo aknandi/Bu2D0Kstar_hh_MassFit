@@ -50,5 +50,5 @@ UNBLIND true
 * CATEGORIES
 chargeSeparated true
 trackSeparated true
-runSeparated false
+runSeparated true
 

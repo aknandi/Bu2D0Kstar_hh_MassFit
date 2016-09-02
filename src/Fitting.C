@@ -725,7 +725,9 @@ void Fitting::RunFullFit(bool draw=true)
             					RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
             		}
 
+
               }
+
             }
 
             //plot total PDF again
@@ -737,6 +739,7 @@ void Fitting::RunFullFit(bool draw=true)
             	sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
             			RooFit::LineWidth(3) );
             }
+
 
             //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
 
