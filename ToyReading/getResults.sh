@@ -2,7 +2,7 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-08-18_runSeparate_diffSignalShape_nogenscale/"
+SUBDIR="2016-09-04_currentStatus/"
 MIN=1
 MAX=2000
 GAP=40

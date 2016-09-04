@@ -106,7 +106,7 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   lhcbpreliminaryRun2 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
   lhcbpreliminaryRun2->SetBorderSize(0); lhcbpreliminaryRun2->SetFillStyle(0);
   lhcbpreliminaryRun2->SetTextFont(132); lhcbpreliminaryRun2->SetTextSize(0.075);
-  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 0.294 fb^{-1}");
+  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 0.517 fb^{-1}");
   //lhcbpreliminary->AddText("LHCb 2013");
   //lhcbpreliminary->AddText("LHCb preliminary");
 

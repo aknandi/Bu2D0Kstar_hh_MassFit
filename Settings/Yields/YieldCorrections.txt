@@ -17,6 +17,12 @@ effSel_d2pipi_run1_LL 0.108
 effSel_d2pipi_run1_DD 0.256
 effSel_d2pipi_run2_LL 0.085
 effSel_d2pipi_run2_DD 0.256
+effSel_d2kpi_all_LL 0.100
+effSel_d2kpi_all_DD 0.248
+effSel_d2kk_all_LL 0.099
+effSel_d2kk_all_DD 0.243
+effSel_d2pipi_all_LL 0.108
+effSel_d2pipi_all_DD 0.256
 *
 PID efficiencies
 effPid_d2kpi_run1_LL 0.734
@@ -31,6 +37,12 @@ effPid_d2pipi_run1_LL 0.670
 effPid_d2pipi_run1_DD 0.676
 effPid_d2pipi_run2_LL 0.779
 effPid_d2pipi_run2_DD 0.789
+effPid_d2kpi_all_LL 0.734
+effPid_d2kpi_all_DD 0.746
+effPid_d2kk_all_LL 0.812
+effPid_d2kk_all_DD 0.826
+effPid_d2pipi_all_LL 0.670
+effPid_d2pipi_all_DD 0.676
 *
 BDT efficiency for CF and ADS
 effBdt_d2kpi_run1_LL 0.951
@@ -41,12 +53,18 @@ effBdt_d2pik_run1_LL 0.951
 effBdt_d2pik_run1_DD 0.767
 effBdt_d2pik_run2_LL 0.950
 effBdt_d2pik_run2_DD 0.935
+effBdt_d2kpi_all_LL 0.951
+effBdt_d2kpi_all_DD 0.875
+effBdt_d2pik_all_LL 0.951
+effBdt_d2pik_all_DD 0.767
 *
 Double misID efficiency veto for ADS
 effVeto_run1_LL 0.929
 effVeto_run1_DD 0.929
 effVeto_run2_LL 0.936
 effVeto_run2_DD 0.935
+effVeto_all_LL 0.929
+effVeto_all_DD 0.929
 * 
 * Yield fractions for signal for other D modes (BRs, MC efficiencies, pid efficiencies)
 kpitod2kpi_LL 1.0

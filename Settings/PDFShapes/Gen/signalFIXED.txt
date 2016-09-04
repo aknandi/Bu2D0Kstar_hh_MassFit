@@ -1,13 +1,13 @@
 bu_mean 5279
 bu_mean_LimL 5270
 bu_mean_LimU 5288
-bu_width_all 11.0
+bu_width_all 12.0
 bu_width_all_LimL 0.0
 bu_width_all_LimU 30.0
-bu_width_run1 10.5
+bu_width_run1 11.5
 bu_width_run1_LimL 0.0
 bu_width_run1_LimU 30.0
-bu_width_run2 11.5
+bu_width_run2 12.5
 bu_width_run2_LimL 0.0
 bu_width_run2_LimU 30.0
 bu_width_ratio_all_LL 1.91
