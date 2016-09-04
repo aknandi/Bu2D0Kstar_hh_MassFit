@@ -39,6 +39,7 @@ OutputFileNameAndLOC TOYS/test/PlotFile.root
 dataSetLists Settings/DataSets.txt
 *
 * SYSTEMATICS - set to zero if you don't want to run
+doublepartrecoyield 0
 inputTwoStageFitErrors 0
 makeCorrelationMatrix false
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should
