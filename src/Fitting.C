@@ -636,8 +636,9 @@ void Fitting::RunFullFit(bool draw=true)
         for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
           for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
 
-            int numbins = 40;
-            plot[*c][*t][*a] = mB.frame(RooFit::Bins(numbins));
+            //int numbins = 40;
+            double binwidth = 10;
+            plot[*c][*t][*a] = mB.frame((_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low"))/binwidth);//RooFit::Bins(numbins));
             std::string tag = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
             catNew->setLabel(tag.c_str());
 
@@ -801,7 +802,7 @@ void Fitting::RunFullFit(bool draw=true)
             // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
             plot[*c][*t][*a]->SetTitle("");
             plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
-            double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
+            //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
             plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
             //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
             plot[*c][*t][*a]->GetXaxis()->SetTitleOffset(1.05);

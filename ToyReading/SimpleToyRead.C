@@ -7,6 +7,8 @@
 #include "TTree.h"
 #include "TH1F.h"
 #include "TCanvas.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 SimpleToyRead::SimpleToyRead(){
 
@@ -27,6 +29,7 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
   //  return;
  // }
 
+  std::string tempvar;
   float  var, evar, ivar, seed, run, pull, cov, junk, evarPlus, evarMinus;
   //Int_t ncols=0;
   Int_t nlines = 0;
@@ -43,9 +46,11 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
   tree->Branch("cov",&cov,"cov/F");
 
   //while (inputfile) {
-  while (inputfile  >> var >> evar >> evarMinus >> evarPlus >> cov >> seed >> run >> ivar){
+  while (inputfile) {
+    inputfile >> var >> evar >> evarMinus >> evarPlus >> cov >> seed >> run >> ivar;
+    if (nlines > 1200) std::cout << nlines << std::endl;//std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
+    if(isnan(var)==0) { 
     if (nlines < 3) std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
-
     //if(var>trueval) evarHigh = evar;
     //if(var<trueval) evarLow = evar;
 
@@ -55,7 +60,10 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
     //pull = (var-trueval)/evar;
 
     tree->Fill();
+    //if(nlines==1214) nlines++;
+    }
     nlines++;
+
   }
 
   std::cout << Form(" found %d points\n",nlines) << std::endl;
