@@ -9,6 +9,7 @@
 #include "TCanvas.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <string>
 
 SimpleToyRead::SimpleToyRead(){
 
@@ -47,9 +48,9 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
 
   //while (inputfile) {
   while (inputfile) {
-    inputfile >> var >> evar >> evarMinus >> evarPlus >> cov >> seed >> run >> ivar;
-    if (nlines > 1200) std::cout << nlines << std::endl;//std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
-    if(isnan(var)==0) { 
+    inputfile >> tempvar >> evar >> evarMinus >> evarPlus >> cov >> seed >> run >> ivar;
+    if(tempvar!="nan") {
+      var = atof(tempvar.c_str());
     if (nlines < 3) std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
     //if(var>trueval) evarHigh = evar;
     //if(var<trueval) evarLow = evar;

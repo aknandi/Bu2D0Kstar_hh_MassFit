@@ -2,7 +2,7 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-09-04_currentStatus/"
+SUBDIR="2016-09-08_test_delta111/"
 MIN=1
 MAX=2000
 GAP=40

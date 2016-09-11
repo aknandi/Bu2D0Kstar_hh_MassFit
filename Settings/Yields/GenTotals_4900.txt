@@ -3,15 +3,15 @@
 DEBUG_runInHighStatsMode 0
 *
 * Calculated from rb, deltab and gamma
-A_d2kpi 0.0
-A_d2kk 0.09884
-R_d2kk 0.95076
-A_d2pipi 0.09884
-R_d2pipi 0.95076
-A_d2pik -0.25354
-R_d2pik 0.01738
-Rplus_d2pik 0.02157
-Rminus_d2pik 0.01302
+* A_d2kpi 0.0
+* A_d2kk 0.09884
+* R_d2kk 0.95076
+* A_d2pipi 0.09884
+* R_d2pipi 0.95076
+* A_d2pik -0.25354
+* R_d2pik 0.01738
+* Rplus_d2pik 0.02157
+* Rminus_d2pik 0.01302
 * 
 * Asymmetry corrections
 A_prod_all_LL -0.005
@@ -23,14 +23,14 @@ A_prod_run2_DD 0.000
 A_det_LL 0.0
 A_det_DD 0.0
 * 
-* Change to deltab of 190 (or to all same with no asymmetry- test blinding)
-* A_d2kpi 0.0
-* A_d2kk 0.0
-* R_d2kk 1.964
-* A_d2pipi 0.0
-* R_d2pipi 2.3264
-* Rplus_d2pik 0.068
-* Rminus_d2pik 0.062
+* Change to deltab of 111
+A_d2kpi 0.0
+A_d2kk 0.01553
+R_d2kk 0.98549
+A_d2pipi 0.01553
+R_d2pipi 0.98549
+Rplus_d2pik 0.02518
+Rminus_d2pik 0.00563
 * 
 * Taken from single fit with BDT >-0.8
 N_bu_d2kpi_all_LL_4900 346.013
