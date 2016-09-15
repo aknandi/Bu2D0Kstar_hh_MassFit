@@ -92,7 +92,7 @@ void SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueva
   mytree->SetBranchAddress("pull",&valp);
   mytree->SetBranchAddress("cov",&cov);
 
-  mytree->GetEntry(0);
+  mytree->GetEntry(1);
   TH1F * var = new TH1F("var",name_var.c_str(),40,val-10*eval,val+10*eval);
   TH1F * err = new TH1F("err",(name_var+"_err").c_str(),40,0,2*eval);
   //TH1F * errHigh = new TH1F("errHigh",(name_var+"_errHigh").c_str(),30,0,2*eval);
@@ -113,6 +113,10 @@ void SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueva
     //errHigh->Fill(evalHigh);
     //errLow->Fill(evalLow);
     pull->Fill(valp);
+  }
+
+  if(name_var.compare("adsSignificance")==0) {
+    var->Fit("gaus","EM");
   }
 
   if(pull->GetEntries()>0)

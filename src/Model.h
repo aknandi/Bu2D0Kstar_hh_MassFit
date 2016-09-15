@@ -30,6 +30,9 @@ class Model : public Base
 
   std::vector <RooRealVar*> *GetFixedParameters() {return fitPdf.GetFixedParameters();}
 
+  double totalSignificance = 0;
+  double errSignificance = 0;
+
  private:
   Yields* yields;
 
@@ -47,6 +50,8 @@ class Model : public Base
   std::vector<std::string> _trackList;
   std::vector<std::string> _runList;
   
+
+
 };
 
 

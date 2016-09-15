@@ -42,6 +42,7 @@ Model::Model(Settings* genConfs, RooRealVar* pmB, RooCategory* cat, std::vector<
   pdf_fit_settings->readPairStringsToMap("Settings/PDFShapes/ControlFiles_FitPdf.txt");
   pdf_fit_settings->readPairStringsToMap("Settings/PDFShapes/ControlFiles_GenPdf.txt");
   fitPdf = Pdf_Fit(pdf_fit_settings,_genConfs,mB,_modeList,_chargeList,_trackList,_runList,_genConfs->getI("inputTwoStageFitErrors"),_genConfs->get("MCsimfit"));
+
 }
 
 RooSimultaneous* Model::getGenPdf()
@@ -283,6 +284,9 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 
   }
 
+  double adsSignal = 0, adsBackground = 0;
+  double erradsSignalsq = 0, erradsBackgroundsq = 0;
+  double erradsSignal = 0, erradsBackground = 0;
 
   for(std::vector<std::string>::iterator m=_modeList.begin();m!=_modeList.end();m++){
     for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
@@ -359,13 +363,27 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           // Not sure if the yield give should be in the B mass region or the total yield of signal peak
           // nS and nSerr- inside or outside the if statement?
           if(b!="full") {
-          plotNums[*m][*c][*t][*a]["val"]= nS;
-          plotNums[*m][*c][*t][*a]["err"]= nSerr;
-          plotNums[*m][*c][*t][*a]["purity_val"]=purity;
-          plotNums[*m][*c][*t][*a]["purity_err"]=purity_err;
-          cout << "PURITY: " << purity << " +- " << purity_err << endl;
-          cout << "SIGNIFICANCE: " << significance << " +- " << significance_err <<endl;
+        	  plotNums[*m][*c][*t][*a]["val"]= nS;
+        	  plotNums[*m][*c][*t][*a]["err"]= nSerr;
+        	  plotNums[*m][*c][*t][*a]["purity_val"]=purity;
+        	  plotNums[*m][*c][*t][*a]["purity_err"]=purity_err;
+        	  cout << "PURITY: " << purity << " +- " << purity_err << endl;
+        	  cout << "SIGNIFICANCE: " << significance << " +- " << significance_err <<endl;
+        	  if(*m=="d2pik") {
+                  adsSignal += nS;
+        	  	  erradsSignalsq += pow(integyield_bu_err,2);
+                  adsBackground += nB;
+                  erradsBackgroundsq += pow(integyield_comb,2) + pow(integyield_dstkst,2);
+
+        	  }
           }
+
+        if(b!="full") {
+        	erradsSignal = sqrt(erradsSignalsq);
+        	erradsBackground = sqrt(erradsBackgroundsq);
+        	totalSignificance = adsSignal/sqrt(adsSignal+adsBackground);
+        	errSignificance = sqrt(adsSignal*adsSignal*(pow(adsSignal+adsBackground+adsBackground,2)*erradsSignal*erradsSignal + adsSignal*adsSignal*erradsBackground*erradsBackground)/(4*pow(adsSignal+adsBackground,4)));
+        }
 
           //////////////////////////////////////////////////////////////////////
           // Latex style

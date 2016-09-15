@@ -2,7 +2,7 @@
 INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-SUBDIR="2016-09-08_test_delta111/"
+SUBDIR="2016-09-13_rB1deltaB70/"
 MIN=1
 MAX=2000
 GAP=40
@@ -57,6 +57,8 @@ VARS=("A_d2kpi"
 #      "n_comb_d2pipi_minus_LL_all"
 #      "n_comb_d2pipi_plus_DD_all"
 #      "n_comb_d2pipi_plus_LL_all"
+       "adsSignificance"
+#       "significanceMinus"
       )
 
 rm results/*.txt

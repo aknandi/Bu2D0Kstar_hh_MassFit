@@ -1213,9 +1213,18 @@ void Fitting::NewOrderToys(int n)
                 << _genConfs->getI("startSeed") << ' '
                 << i << ' '
                 << result->status() << std::endl;
+
                 //<< result->edm() << std::endl;
         delete initpar;
       }
+
+      double integ_limit_low  = 5279 - _genConfs->getD("integ_range_low");
+      double integ_limit_high = 5279 + _genConfs->getD("integ_range_high");
+      model->printYieldsAndPurities("Bu",integ_limit_low,integ_limit_high,result);
+
+      resfile << "adsSignificance " << model->totalSignificance << ' ' << model->errSignificance << ' ' << model->errSignificance <<  ' ' << model->errSignificance << ' '
+    		  << result->covQual() << ' ' << _genConfs->getI("startSeed") << ' ' << i << ' ' << result->status() << std::endl;
+
       delete par;
 /*
       if(i==0) {

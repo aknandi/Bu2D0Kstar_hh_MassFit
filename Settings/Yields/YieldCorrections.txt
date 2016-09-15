@@ -27,16 +27,16 @@ effSel_d2pipi_all_DD 0.256
 PID efficiencies
 effPid_d2kpi_run1_LL 0.734
 effPid_d2kpi_run1_DD 0.746
-effPid_d2kpi_run2_LL 0.816
+effPid_d2kpi_run2_LL 0.813
 effPid_d2kpi_run2_DD 0.826
 effPid_d2kk_run1_LL 0.812
 effPid_d2kk_run1_DD 0.826
-effPid_d2kk_run2_LL 0.848
+effPid_d2kk_run2_LL 0.845
 effPid_d2kk_run2_DD 0.861
 effPid_d2pipi_run1_LL 0.670
 effPid_d2pipi_run1_DD 0.676
-effPid_d2pipi_run2_LL 0.779
-effPid_d2pipi_run2_DD 0.789
+effPid_d2pipi_run2_LL 0.778
+effPid_d2pipi_run2_DD 0.790
 effPid_d2kpi_all_LL 0.734
 effPid_d2kpi_all_DD 0.746
 effPid_d2kk_all_LL 0.812
@@ -83,8 +83,8 @@ effComb_kpitod2kk_LL 0.26
 effComb_kpitod2kk_DD 0.20
 effComb_kpitod2pipi_LL 0.23
 effComb_kpitod2pipi_DD 0.13
-effComb_kpitod2pik_LL 1.0
-effComb_kpitod2pik_DD 1.0
+effComb_kpitod2pik_LL 0.25
+effComb_kpitod2pik_DD 0.1
 * 
 * efficiencies of kst mass and ks helicity cuts and BDT cuts
 effSig_LL_100_0_-0.8 1
