@@ -15,7 +15,7 @@ using namespace RooFit;
 
 class InternalStorage;
 
-Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allrunList, std::string unblind)
+Yields::Yields(Settings* genConfs, Settings* fileList, std::vector<std::string> allmodeList, std::vector<std::string>allchargeList, std::vector<std::string>alltrackList, std::vector<std::string>allrunList, std::string unblind) : Base()
 {
 
   _genConfs = genConfs;
@@ -211,97 +211,106 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 {
 	RooRealVar* effCorrection;
 	RooRealVar* prodAsymmetry;
-	RooRealVar* detAkpi;
-	RooRealVar* detApi;
+
 	RooRealVar* pidAsymmetry;
-  for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
-    for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
-      for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
-        for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
+	double Akpi = input->getD("A_det_kpi");
+	double Api = input->getD("A_det_pi");
+	RooRealVar* detAkpi = new RooRealVar("detAsymmetry_kpi","",Akpi + (_genConfs->get("detectionAsymmetry")=="1"?gRandom->Gaus(0,input->getD("A_det_kpi_err")):0.));;
+	RooRealVar* detApi = new RooRealVar("detAsymmetry_pi","",Api + (_genConfs->get("detectionAsymmetry")=="1"?gRandom->Gaus(0,input->getD("A_det_pi_err")):0.));
 
-        	const char* identifier = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
-        	double productionAsymmetry = input->getD(Form("A_prod_%s",(*a).c_str()));
-        	double Akpi = input->getD("A_det_kpi");
-        	double Api = input->getD("A_det_pi");
-        	double Apid = input->getD(Form("A_pid_%s",(*a).c_str()));
-        	prodAsymmetry = new RooRealVar(Form("prodAsymmetry_%s",(*a).c_str()),"",productionAsymmetry);
-        	detAkpi = new RooRealVar("detAsymmetry_kpi","",Akpi);
-        	detApi = new RooRealVar("detAsymmetry_pi","",Api);
-        	pidAsymmetry = new RooRealVar(Form("pidAsymmetry_%s",(*a).c_str()),"",Apid);
+	for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
-			// If fit is charge separated fit to the asymmetries
-			// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
-			if(_genConfs->isChargeSeparated())
-			{
-				if(*m == "d2kpi") {
-					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
-					}
-					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
-					}
-				}
-				else if(*m == "d2kk" || *m == "d2pipi") {
-					double efficiencyCorrection = (input->getD("BR_d2kpi") * input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()))) / (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())));
-					//double efficiencyCorrection = input->getD(Form("kpitod2kpi_%s",(*t).c_str()))/input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()));
-					effCorrection = new RooRealVar(Form("effCorrection_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyCorrection);
+		std::cout << gRandom->GetSeed() <<std::endl;
+		double productionAsymmetry = input->getD(Form("A_prod_%s",(*a).c_str()));
+		double Apid = input->getD(Form("A_pid_%s",(*a).c_str()));
+		// If switch in on in GeneralSettings, run the systematic
+		prodAsymmetry = new RooRealVar(Form("prodAsymmetry_%s",(*a).c_str()),"",productionAsymmetry + (_genConfs->get("productionAsymmetry")=="1"?gRandom->Gaus(0,input->getD(Form("A_prod_%s_err",(*a).c_str()))):0.));
+		pidAsymmetry = new RooRealVar(Form("pidAsymmetry_%s",(*a).c_str()),"",Apid + (_genConfs->get("pidAsymmetry")=="1"?gRandom->Gaus(0,input->getD(Form("A_pid_%s_err",(*a).c_str()))):0.));
 
-					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-					}
-					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-					}
+		for(std::vector<std::string>::iterator m=modeList.begin(); m!=modeList.end(); m++){
+			for(std::vector<std::string>::iterator t=trackList.begin(); t!=trackList.end(); t++){
+				for(std::vector<std::string>::iterator c=chargeList.begin(); c!=chargeList.end();c++){
 
-				}
-				else if(*m == "d2pik") {
-					// Account for the efficiencies of the double misID veto and different BDT cut in ADS mode
-					double efficiencyVeto = input->getD(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()));
-					/*
+					const char* identifier = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+
+
+					// If fit is charge separated fit to the asymmetries
+					// Need to write the signal yields in terms of the fit parameters (A, R, Ni)
+					if(_genConfs->isChargeSeparated())
+					{
+						if(*m == "d2kpi") {
+							if(*c == "plus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
+							}
+							else if (*c == "minus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4+@5))",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detAkpi,*detApi,*pidAsymmetry));
+							}
+						}
+						else if(*m == "d2kk" || *m == "d2pipi") {
+							double efficiencyCorrection = (input->getD("BR_d2kpi") * input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()))) / (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())));
+							double errEfficiencyCorrection = efficiencyCorrection * sqrt(pow(input->getD(Form("effSel_d2kpi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2) + pow(0.002/input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effSel_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(0.002/input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2));
+							double errBranchingRatio = efficiencyCorrection * sqrt(pow(input->getD("BR_d2kpi_err")/input->getD("BR_d2kpi"),2) + pow(input->getD(Form("BR_%s_err",(*m).c_str()))/input->getD(Form("BR_%s",(*m).c_str())),2));
+							//double efficiencyCorrection = input->getD(Form("kpitod2kpi_%s",(*t).c_str()))/input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()));
+							effCorrection = new RooRealVar(Form("effCorrection_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyCorrection + (_genConfs->get("efficiencies")=="1"?gRandom->Gaus(0,errEfficiencyCorrection):0.) + (_genConfs->get("branchingRatios")=="1"?gRandom->Gaus(0,errBranchingRatio):0.));
+
+							if(*c == "plus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+							}
+							else if (*c == "minus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+							}
+
+						}
+						else if(*m == "d2pik") {
+							// Account for the efficiencies of the double misID veto and different BDT cut in ADS mode
+							double efficiencyVeto = input->getD(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()));
+							double errEfficiencyVeto = input->getD(Form("effVeto_%s_%s_err",(*a).c_str(),(*t).c_str()));
+							/*
 					double efficiencyBdt;
 					if (*t == "LL") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsLL.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()));
 					if (*t == "DD") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()));
-					*/
-					double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
-					RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()),"",efficiencyVeto);
-					RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt);
+							 */
+							double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
+							double errEfficiencyBdt = efficiencyBdt * sqrt(pow(input->getD(Form("effBdt_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effBdt_d2kpi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2));
+							RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()),"",efficiencyVeto + (_genConfs->get("efficiencies")=="1"?gRandom->Gaus(0,errEfficiencyVeto):0.));
+							RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt + (_genConfs->get("efficiencies")=="1"?gRandom->Gaus(0,errEfficiencyBdt):0.));
 
-					if(*c == "plus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2*@3/(2*@4+1)",RooArgList(*n_bu_gen["d2kpi"]["plus"][*t][*a],*effVeto,*effBdt,*Rplus,*detAkpi));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*@3/(2*@4+1)",RooArgList(*n_bu_fit["d2kpi"]["plus"][*t][*a],*effVeto,*effBdt,*Rplus,*detAkpi));
+							if(*c == "plus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2*@3/(2*@4+1)",RooArgList(*n_bu_gen["d2kpi"]["plus"][*t][*a],*effVeto,*effBdt,*Rplus,*detAkpi));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*@3/(2*@4+1)",RooArgList(*n_bu_fit["d2kpi"]["plus"][*t][*a],*effVeto,*effBdt,*Rplus,*detAkpi));
+							}
+							else if (*c == "minus") {
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2*@3*(2*@4+1)",RooArgList(*n_bu_gen["d2kpi"]["minus"][*t][*a],*effVeto,*effBdt,*Rminus,*detAkpi));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*@3*(2*@4+1)",RooArgList(*n_bu_fit["d2kpi"]["minus"][*t][*a],*effVeto,*effBdt,*Rminus,*detAkpi));
+							}
+						}
 					}
-					else if (*c == "minus") {
-						n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2*@3*(2*@4+1)",RooArgList(*n_bu_gen["d2kpi"]["minus"][*t][*a],*effVeto,*effBdt,*Rminus,*detAkpi));
-						n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*@3*(2*@4+1)",RooArgList(*n_bu_gen["d2kpi"]["minus"][*t][*a],*effVeto,*effBdt,*Rminus,*detAkpi));
+
+
+					// If fit is not charge separated fit to the signal yields
+					if(!_genConfs->isChargeSeparated())
+					{
+
+						double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+						n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
+
+						n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,0.,100000.);
 					}
-				}
-			}
 
+					// The rest of the pdf shapes are always fitted for yields
+					// --- Gen yields ---
+					//double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+					// ncomb = 0.5 * kpi comb yield * efficiency of kst selection (account for split by charge)
+					double N_comb;
+					//if(*m == "d2pik" && *t == "DD")  N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effComb_%s_d2kpi_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effComb_%s_d2kpi_75_0.3_0.7_25",(*t).c_str())))*genscale;
+					if(*m == "d2pik") N_comb = input->getD(Form("N_comb_d2pik_%s_%s",(*c).c_str(),(*t).c_str()));
+					else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 
-			// If fit is not charge separated fit to the signal yields
-			if(!_genConfs->isChargeSeparated())
-			{
-
-				double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-				n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
-
-				n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,0.,100000.);
-			}
-
-			// The rest of the pdf shapes are always fitted for yields
-			// --- Gen yields ---
-			//double N_comb = input->getD(Form("N_comb_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			// ncomb = 0.5 * kpi comb yield * efficiency of kst selection (account for split by charge)
-			double N_comb;
-			//if(*m == "d2pik" && *t == "DD")  N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effComb_%s_d2kpi_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effComb_%s_d2kpi_75_0.3_0.7_25",(*t).c_str())))*genscale;
-			if(*m == "d2pik") N_comb = input->getD(Form("N_comb_d2pik_%s_%s",(*c).c_str(),(*t).c_str()));
-			else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
-
-			/* // Used for optimisation of cuts
+					/* // Used for optimisation of cuts
 			if(*t == "LL") {
 				if(*m != "d2pik") N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsLL.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
@@ -310,17 +319,17 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 				if(*m != "d2pik") N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpi_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			}
-			 */
+					 */
 
-			n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,-10.,100000.);
+					n_comb_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_gen_%s",identifier),"",N_comb,-10.,100000.);
 
-			//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-			// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
-			double N_dstkst;
-			if(*m == "d2pik" && *t == "DD") N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effSig_%s_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effSig_%s_75_0.3_0.7_25",(*t).c_str())))*genscale;
-			else N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+					//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+					// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
+					double N_dstkst;
+					if(*m == "d2pik" && *t == "DD") N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effSig_%s_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effSig_%s_75_0.3_0.7_25",(*t).c_str())))*genscale;
+					else N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 
-			/* // Used for optimisation of cuts
+					/* // Used for optimisation of cuts
 			if(*t == "LL") {
 				if(*m != "d2pik") N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcutLL.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtadsLL.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
@@ -329,14 +338,14 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 				if(*m != "d2pik") N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtcutDD.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 				else N_dstkst = 0.5*(input->getD(Form("N_dstkst010_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff010_%s",(*t).c_str()))*input->getD(Form("eff010_%s_%s",(*t).c_str(),kshelcut.c_str())) + input->getD(Form("N_dstkst101_d2kpi_%s_%s",(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEff101_%s",(*t).c_str()))*input->getD(Form("eff101_%s_%s",(*t).c_str(),kshelcut.c_str())))*input->getD(Form("effSig_%s_%s_0_%s",(*t).c_str(),kstmasscut.c_str(),bdtadsDD.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 			}
-			 */
+					 */
 
-			if(_genConfs->get("doublepartrecoyield") == "0") n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-10.,100000.);
-			else n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",2*N_dstkst,-10.,100000.);
+					if(_genConfs->get("doublepartrecoyield") == "0") n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-10.,100000.);
+					else n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",2*N_dstkst,-10.,100000.);
 
-			// --- Fit yields ---
-			n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0.,100000.);
-			n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst);//,0.,100000.);
+					// --- Fit yields ---
+					n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0.,100000.);
+					n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst);//,0.,100000.);
 
 
         }

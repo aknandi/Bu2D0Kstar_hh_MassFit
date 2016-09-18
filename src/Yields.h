@@ -20,7 +20,7 @@
 //#include "CommonTools.h"
 #include "Settings.h"
 
-class Yields
+class Yields : public Base
 {
 
  public :

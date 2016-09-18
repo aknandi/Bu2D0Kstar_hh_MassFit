@@ -128,6 +128,7 @@ RooSimultaneous* Model::getFitPdf()
           pdflist.add(*(fitPdf.roopdf_bu[*m][*c][*t][*a]));
           nevents.add(*(yields->n_bu_fit[*m][*c][*t][*a]));
 
+
           if(_genConfs->get("MCsimfit")!="true")
             {
               // Combinatorics
@@ -142,14 +143,14 @@ RooSimultaneous* Model::getFitPdf()
           RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
 
           // --- The Gaussian Constraints --- 
-          RooAddPdf* addpdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
-          RooArgSet constpdfset(*addpdf);
+          //RooAddPdf* addpdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
+          //RooArgSet constpdfset(*addpdf);
 
           if(_genConfs->get("genToys")=="true")
           {
-            int seed = _genConfs->getD("startSeed");
-            TRandom3* rand = new TRandom3();
-            rand->SetSeed(seed*2);
+            //int seed = _genConfs->getD("startSeed");
+            //TRandom3* rand = new TRandom3();
+            //rand->SetSeed(seed*2);
 
 /*            // Set up sampling Gaussians to fit toys
             double f010_mean(0.), f010_err(0.);

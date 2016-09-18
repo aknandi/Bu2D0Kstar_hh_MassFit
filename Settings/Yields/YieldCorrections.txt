@@ -1,22 +1,38 @@
 * BRs
-BR_d2kpi 0.0388
-BR_d2kk 0.00396
-BR_d2pipi 0.0011402
-BR_d2pik 0.0001380
+BR_d2kpi 0.0393
+BR_d2kpi_err 0.0004
+BR_d2kk 0.00401
+BR_d2kk_err 0.00007
+BR_d2pipi 0.001421
+BR_d2pipi_err 0.000025
+BR_d2pik 0.0001399
+BR_d2pik_err 0.0000027
 *
 Selection efficiencies
 effSel_d2kpi_run1_LL 0.100
+effSel_d2kpi_run1_LL_err 0.002
 effSel_d2kpi_run1_DD 0.248
+effSel_d2kpi_run1_DD_err 0.003
 effSel_d2kpi_run2_LL 0.081
+effSel_d2kpi_run2_LL_err 0.003
 effSel_d2kpi_run2_DD 0.249
+effSel_d2kpi_run2_DD_err 0.005
 effSel_d2kk_run1_LL 0.099
+effSel_d2kk_run1_LL_err 0.002
 effSel_d2kk_run1_DD 0.243
+effSel_d2kk_run1_DD_err 0.003
 effSel_d2kk_run2_LL 0.076
+effSel_d2kk_run2_LL_err 0.003
 effSel_d2kk_run2_DD 0.236
+effSel_d2kk_run2_DD_err 0.005
 effSel_d2pipi_run1_LL 0.108
+effSel_d2pipi_run1_LL_err 0.002
 effSel_d2pipi_run1_DD 0.256
+effSel_d2pipi_run1_DD_err 0.003
 effSel_d2pipi_run2_LL 0.085
+effSel_d2pipi_run2_LL_err 0.003
 effSel_d2pipi_run2_DD 0.256
+effSel_d2pipi_run2_DD_err 0.005
 effSel_d2kpi_all_LL 0.100
 effSel_d2kpi_all_DD 0.248
 effSel_d2kk_all_LL 0.099
@@ -43,16 +59,25 @@ effPid_d2kk_all_LL 0.812
 effPid_d2kk_all_DD 0.826
 effPid_d2pipi_all_LL 0.670
 effPid_d2pipi_all_DD 0.676
+effPid_err 0.002
 *
 BDT efficiency for CF and ADS
 effBdt_d2kpi_run1_LL 0.951
+effBdt_d2kpi_run1_LL_err 0.005
 effBdt_d2kpi_run1_DD 0.875
+effBdt_d2kpi_run1_DD_err 0.004
 effBdt_d2kpi_run2_LL 0.950
+effBdt_d2kpi_run2_LL_err 0.007
 effBdt_d2kpi_run2_DD 0.896
+effBdt_d2kpi_run2_DD_err 0.006
 effBdt_d2pik_run1_LL 0.951
+effBdt_d2pik_run1_LL_err 0.0.005
 effBdt_d2pik_run1_DD 0.767
+effBdt_d2pik_run1_DD_err 0.0.005
 effBdt_d2pik_run2_LL 0.950
-effBdt_d2pik_run2_DD 0.935
+effBdt_d2pik_run2_LL_err 0.007
+effBdt_d2pik_run2_DD 0.809
+effBdt_d2pik_run2_DD_err 0.0.007
 effBdt_d2kpi_all_LL 0.951
 effBdt_d2kpi_all_DD 0.875
 effBdt_d2pik_all_LL 0.951
@@ -60,9 +85,13 @@ effBdt_d2pik_all_DD 0.767
 *
 Double misID efficiency veto for ADS
 effVeto_run1_LL 0.929
+effVeto_run1_LL_err 0.011
 effVeto_run1_DD 0.929
+effVeto_run1_DD_err 0.007
 effVeto_run2_LL 0.936
+effVeto_run2_LL_err 0.012
 effVeto_run2_DD 0.935
+effVeto_run2_DD_err 0.007
 effVeto_all_LL 0.929
 effVeto_all_DD 0.929
 * 

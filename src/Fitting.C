@@ -114,8 +114,8 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   saveOutputForPlottingMacro = new TFile("output/saveOutputForPlottingMacro.root","RECREATE");
   // Set up the random generator reproducibly	
   RooRandom::randomGenerator()->SetSeed(_genConfs->getI("startSeed"));
-  gRandom=RooRandom::randomGenerator();
-	
+  gRandom = new TRandom3(_genConfs->getI("startSeed"));
+
   // Create model object and super category from which can be retrieved the fit/gen pdfs
   DefineRooCategories();
   cat = new RooSuperCategory("cat","mode/charge/track/run",RooArgSet(mode,charge,track,run));
@@ -148,7 +148,13 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
           cout << "Ready to read in data" << endl;
           LoadDataSet();
           PrintDataSet(false);
-          RunFullFit(true);
+
+          if(_genConfs->get("manyDataFits")=="true") {
+        	  RunManyFits();
+          }
+          else {
+        	  RunFullFit(true);
+          }
         }
       else
         {
@@ -499,6 +505,7 @@ void Fitting::RunFullFit(bool draw=true)
 
       std::cout << "End fitTo" << std::endl;
 
+      if(!draw) {resultTemp = result;}
 
       // Get mean in order to calculate yields and purities in Bu region
       RooArgList allPars = result->floatParsFinal();
@@ -949,22 +956,43 @@ void Fitting::RunFullFit(bool draw=true)
 
 void Fitting::RunManyFits()
 {
-  unsigned int n = 10;
-  std::string filebase = "./fit_";
-  for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++){filebase+=(*m)+underscore;}
-  //  model->R_ADS_b2dk_d2pik_b->setConstant();
-  //model->A_ADS_b2dk_d2pik_b->setConstant();
-  for(unsigned int i=0;i<n;i++){
-    int secs=time(NULL);
-   
-    //change stuff around here for systematics i guess
-    //model->R_ADS_b2dk_d2pik_b->setVal(gRandom.Uniform( 0.,0.03));
-    //model->A_ADS_b2dk_d2pik_b->setVal(gRandom.Uniform(-1.,1.));
-    std::string autofile = filebase+std::string(Form("%i.root",secs));  
-    TFile f(autofile.c_str(),"RECREATE");
-    RunFullFit(false);
-    f.Close();
-  }
+	unsigned int n = _genConfs->getI("nToys");
+	std::string filebase = "../toySeed_"+_genConfs->get("startSeed")+"/";
+	std::string autofile = filebase+std::string(Form("toy_%i.txt",_genConfs->getI("startSeed")));
+	ofstream resfile(autofile);
+
+	for(unsigned int i=0;i<n;i++){
+
+		model = new Model(_genConfs,&mB,catNew,modeList,chargeList,trackList,runList);
+		RunFullFit(false);
+		//Writing the results file
+		resfile<<gRandom->GetSeed()<<'\n';
+		resultTemp->floatParsFinal().Print() ;
+		TIter initPar(resultTemp->floatParsInit().createIterator());
+		TIter finalPar(resultTemp->floatParsFinal().createIterator());
+		RooRealVar * par;
+		while ((par = (RooRealVar *)finalPar())) {
+			double trueVal=0;
+			RooRealVar *initpar;
+			while((initpar=(RooRealVar *)initPar())){
+				if(0==strcmp(par->GetName(),initpar->GetName())){
+					trueVal = initpar->getVal();  // doesn't always work because Pdf_Gen might be different from Pdf_Fit
+				}
+			}
+			resfile << par->GetName() << ' '
+					<< par->getVal() << ' '
+					<< par->getError() << ' ' // HESSE
+					<< par->getAsymErrorLo() << ' '
+					<< par->getAsymErrorHi() << ' '
+					<< resultTemp->covQual()<< ' '
+					<< _genConfs->getI("startSeed") << ' '
+					<< gRandom->GetSeed() << ' '
+					<< resultTemp->status() << std::endl;
+			delete initpar;
+		}
+		delete par;
+
+	}
 }
 
 void Fitting::RunManyToys()
