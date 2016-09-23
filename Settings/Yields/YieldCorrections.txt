@@ -71,13 +71,13 @@ effBdt_d2kpi_run2_LL_err 0.007
 effBdt_d2kpi_run2_DD 0.896
 effBdt_d2kpi_run2_DD_err 0.006
 effBdt_d2pik_run1_LL 0.951
-effBdt_d2pik_run1_LL_err 0.0.005
+effBdt_d2pik_run1_LL_err 0.005
 effBdt_d2pik_run1_DD 0.767
-effBdt_d2pik_run1_DD_err 0.0.005
+effBdt_d2pik_run1_DD_err 0.005
 effBdt_d2pik_run2_LL 0.950
 effBdt_d2pik_run2_LL_err 0.007
 effBdt_d2pik_run2_DD 0.809
-effBdt_d2pik_run2_DD_err 0.0.007
+effBdt_d2pik_run2_DD_err 0.007
 effBdt_d2kpi_all_LL 0.951
 effBdt_d2kpi_all_DD 0.875
 effBdt_d2pik_all_LL 0.951

@@ -1,5 +1,7 @@
 #include <vector>
 #include <iostream>
+#include <ios>
+#include <iomanip>
 #include <fstream>
 #include <ostream>
 #include <sstream>
@@ -582,6 +584,26 @@ void Fitting::RunFullFit(bool draw=true)
           f_fitOutput->Close();
         }
 
+      bool latextable = true;
+      if(latextable) {
+    		TIter initPar(result->floatParsInit().createIterator());
+    		TIter finalPar(result->floatParsFinal().createIterator());
+    		RooRealVar * par;
+    		while ((par = (RooRealVar *)finalPar())) {
+    			double trueVal=0;
+    			RooRealVar *initpar;
+    			while((initpar=(RooRealVar *)initPar())){
+    				if(0==strcmp(par->GetName(),initpar->GetName())){
+    					trueVal = initpar->getVal();  // doesn't always work because Pdf_Gen might be different from Pdf_Fit
+    				}
+    			}
+    			std::cout << setprecision(4);
+    			std::cout << par->GetName() << " & $" << par->getVal() << "$ & $" << par->getAsymErrorLo() << "$ & $" << par->getAsymErrorHi() << "$ \\\\" << std::endl;
+    			delete initpar;
+    		}
+    		delete par;
+
+      }
     } // end of doFit = true
 
   if (!draw) return;
@@ -950,6 +972,7 @@ void Fitting::RunFullFit(bool draw=true)
         }
       }
     }
+
   
 }
 
