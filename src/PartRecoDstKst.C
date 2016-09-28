@@ -4,7 +4,7 @@
 #include "Settings.h"
 #include "PartRecoDstKst.h"
 #include "PartRecoShapes.h"
-PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, std::string t, std::string a, std::string fileName)
+PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, std::string t, std::string a, std::string fileName, bool pdfgen)
 {
   _mB=pmB;
   _name="PartRecoDstKst_"+m+"_"+c+"_"+t+"_"+a;
@@ -25,7 +25,7 @@ PartRecoDstKst::PartRecoDstKst(RooRealVar* pmB, std::string m, std::string c, st
   _intVars["coef101"] = 0;
 
   // Read in PARAMETRIC low mass pdf
-  PartRecoShapes* prs = new PartRecoShapes(_mB, true, t);
+  PartRecoShapes* prs = new PartRecoShapes(_mB, true, t, pdfgen);
   pdf_bu_gamma_101  = prs->pdf_Bu_DstKst_D0gamma_101;
   pdf_bu_gamma_010  = prs->pdf_Bu_DstKst_D0gamma_010;
   pdf_bu_pi_101 = prs->pdf_Bu_DstKst_D0pi0_101;

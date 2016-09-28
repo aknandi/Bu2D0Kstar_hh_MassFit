@@ -4,13 +4,14 @@
 #include "RooGaussian.h"
 #include "RooAddPdf.h"
 #include "RooArgSet.h"
+#include "Settings.h"
 
 #include "PartRecoShapes.h"
 #include "RooHORNSdini.h"
 #include "RooHILLdini.h"
 #include "RooLITTLEHORNSdini.h"
 
-PartRecoShapes::PartRecoShapes(RooRealVar *x,bool f, std::string _t)
+PartRecoShapes::PartRecoShapes(RooRealVar *x,bool f, std::string _t, bool pdfgen)
 : Base()
 , fixed(f)
 , t(_t) // Ks Type 
@@ -20,7 +21,16 @@ PartRecoShapes::PartRecoShapes(RooRealVar *x,bool f, std::string _t)
 
 //  modeToUseFor[d2kspipi] = d2kspipi;
 //  modeToUseFor[d2kskk]   = d2kspipi;
-  
+  Settings genConfs = Settings("GenSettings");
+  genConfs.readPairStringsToMap("Settings/GeneralSettings.txt");
+  partrecosystematic = false;
+  if(genConfs.get("partrecoShape")==1) {
+	  partrecosystematic = true;
+  }
+  if(!pdfgen) {
+	  partrecosystematic = false;
+  }
+
 }
 
 void PartRecoShapes::buildShapes(RooRealVar *x)
@@ -29,6 +39,15 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   // Endpoints are allowed to vary within range +-TOLERANCE
   double TOLERANCE = 0;
   /////////////////////
+
+  /// Smear width
+  double smearSigma;
+  if(t=="LL") {
+	  smearSigma = 0.04;
+  }
+  if(t=="DD") {
+	  smearSigma = 0.06;
+  }
 
   // Kinematic endpoints /////////////////
   double smearshift = 0; // due to MC-data difference and fitting to smeared MC
@@ -106,12 +125,12 @@ void PartRecoShapes::buildShapes(RooRealVar *x)
   shift_bd_p010 = new RooRealVar("shift_bd_pi010" ,"",		shift_p010_bd);
   shift_bd_p101 = new RooRealVar("shift_bd_pi101" ,"",		shift_p101_bd);
 
-  sigma_bu_p010 = new RooRealVar("sigma_bu_pi010" ,"", 		sigma_p010);
-  sigma_bu_g010 = new RooRealVar("sigma_bu_gamma010" ,"", 	sigma_g010);
-  sigma_bu_p101 = new RooRealVar("sigma_bu_pi101" ,"", 		sigma_p101);
-  sigma_bu_g101 = new RooRealVar("sigma_bu_gamma101" ,"", 	sigma_g101);
-  sigma_bd_p010 = new RooRealVar("sigma_bd_pi010" ,"",		sigma_p010_bd);
-  sigma_bd_p101 = new RooRealVar("sigma_bd_pi101" ,"",		sigma_p101_bd);
+  sigma_bu_p010 = new RooRealVar("sigma_bu_pi010" ,"", 		sigma_p010 * (1 + (partrecosystematic?smearSigma:0.)));
+  sigma_bu_g010 = new RooRealVar("sigma_bu_gamma010" ,"", 	sigma_g010 * (1 + (partrecosystematic?smearSigma:0.)));
+  sigma_bu_p101 = new RooRealVar("sigma_bu_pi101" ,"", 		sigma_p101 * (1 + (partrecosystematic?smearSigma:0.)));
+  sigma_bu_g101 = new RooRealVar("sigma_bu_gamma101" ,"", 	sigma_g101 * (1 + (partrecosystematic?smearSigma:0.)));
+  sigma_bd_p010 = new RooRealVar("sigma_bd_pi010" ,"",		sigma_p010_bd * (1 + (partrecosystematic?smearSigma:0.)));
+  sigma_bd_p101 = new RooRealVar("sigma_bd_pi101" ,"",		sigma_p101_bd * (1 + (partrecosystematic?smearSigma:0.)));
 
   ratio_sigma_bu_p010 = new RooRealVar("ratio_sigma_bu_pi010" ,"", 		ratio_sigma_p010);
   ratio_sigma_bu_g010 = new RooRealVar("ratio_sigma_bu_gamma010" ,"", 	ratio_sigma_g010);

@@ -12,7 +12,7 @@ class RooGaussian;
 // todo Does this need to inherit from Base?
 class PartRecoShapes : public Base {
 public :
-  PartRecoShapes(RooRealVar*,bool=false,std::string=""); 
+  PartRecoShapes(RooRealVar*,bool=false,std::string="",bool=true);
   ~PartRecoShapes(){}
 
   RooAbsPdf* pdf_Bu_DstKst_D0pi0_010;
@@ -30,6 +30,7 @@ protected :
 
 private:
   bool fixed;
+  bool partrecosystematic;
 
   std::string t; // FC
 

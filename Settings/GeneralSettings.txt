@@ -27,10 +27,10 @@ doMinosErrors_xy false
 * TOYS
 startSeed 100
 nToys 1
-genToys false
+genToys true
 readToys false
 manyDataFits false
-readData true
+readData false
 * refreshQuickDataSet true
 numCPUsToUse 1
 toyLocation TOYS/test/
@@ -40,9 +40,12 @@ OutputFileNameAndLOC TOYS/test/PlotFile.root
 dataSetLists Settings/DataSets.txt
 *
 * SYSTEMATICS - set to 1 to run, 0 to not run
-doublepartrecoyield 0
+* Systematics from toys
 partrecoShape 0
 signalShape 0
+combinatoricShape 0
+charmless 0
+* Systematics from data
 productionAsymmetry 0
 detectionAsymmetry 0
 pidAsymmetry 0
@@ -50,7 +53,7 @@ mcefficiencies 0
 pidefficiencies 0
 vetoefficiencies 0
 branchingRatios 0
-charmless 0
+signalShapeData 0
 inputTwoStageFitErrors 0
 makeCorrelationMatrix false
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should

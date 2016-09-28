@@ -9,7 +9,7 @@
 class PartRecoDstKst : public Pdf_Base
 {
  public:
-  PartRecoDstKst(RooRealVar*, std::string,std::string,std::string,std::string,std::string);
+  PartRecoDstKst(RooRealVar*, std::string,std::string,std::string,std::string,std::string,bool);
   void setCoef010(RooAbsReal*);
   void setCoef101(RooAbsReal*);
 

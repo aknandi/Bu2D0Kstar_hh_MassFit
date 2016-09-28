@@ -34,7 +34,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
           bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           //bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
-          dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"));
+          dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"),false);
         }
       }
     }
@@ -97,22 +97,14 @@ void Pdf_Fit::setRelations()
                                        relConfs.getD("bu_alpha_run1_DD_LimL"),relConfs.getD("bu_alpha_run1_DD_LimU") );
   RooRealVar* bu_alpha_run2_DD = new RooRealVar("bu_alpha_run2_DD","",relConfs.getD("bu_alpha_run2_DD"),
                                        relConfs.getD("bu_alpha_run2_DD_LimL"),relConfs.getD("bu_alpha_run2_DD_LimU") );
-  RooRealVar* bu_width_ratio_run1_LL = new RooRealVar("bu_width_ratio_run1_LL","",relConfs.getD("bu_width_ratio_run1_LL"),
-                                        relConfs.getD("bu_width_ratio_run1_LL_LimL"),relConfs.getD("bu_width_ratio_run1_LL_LimU") );
-  RooRealVar* bu_width_ratio_run1_DD = new RooRealVar("bu_width_ratio_run1_DD","",relConfs.getD("bu_width_ratio_run1_DD"),
-                                        relConfs.getD("bu_width_ratio_run1_DD_LimL"),relConfs.getD("bu_width_ratio_run1_DD_LimU") );
-  RooRealVar* bu_width_ratio_run2_LL = new RooRealVar("bu_width_ratio_run2_LL","",relConfs.getD("bu_width_ratio_run2_LL"),
-                                        relConfs.getD("bu_width_ratio_run2_LL_LimL"),relConfs.getD("bu_width_ratio_run2_LL_LimU") );
-  RooRealVar* bu_width_ratio_run2_DD = new RooRealVar("bu_width_ratio_run2_DD","",relConfs.getD("bu_width_ratio_run2_DD"),
-                                        relConfs.getD("bu_width_ratio_run2_DD_LimL"),relConfs.getD("bu_width_ratio_run2_DD_LimU") );
-  RooRealVar* bu_frac_run1_LL = new RooRealVar("bu_frac_run1_LL","",relConfs.getD("bu_frac_run1_LL"),
-                                        relConfs.getD("bu_frac_run1_LL_LimL"),relConfs.getD("bu_frac_run1_LL_LimU") );
-  RooRealVar* bu_frac_run1_DD = new RooRealVar("bu_frac_run1_DD","",relConfs.getD("bu_frac_run1_DD"),
-                                        relConfs.getD("bu_frac_run1_DD_LimL"),relConfs.getD("bu_frac_run1_DD_LimU") );
-  RooRealVar* bu_frac_run2_LL = new RooRealVar("bu_frac_run2_LL","",relConfs.getD("bu_frac_run2_LL"),
-                                        relConfs.getD("bu_frac_run2_LL_LimL"),relConfs.getD("bu_frac_run2_LL_LimU") );
-  RooRealVar* bu_frac_run2_DD = new RooRealVar("bu_frac_run2_DD","",relConfs.getD("bu_frac_run2_DD"),
-                                        relConfs.getD("bu_frac_run2_DD_LimL"),relConfs.getD("bu_frac_run2_DD_LimU") );
+  RooRealVar* bu_width_ratio_run1_LL = new RooRealVar("bu_width_ratio_run1_LL","",relConfs.getD("bu_width_ratio_run1_LL") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.16):0.));
+  RooRealVar* bu_width_ratio_run1_DD = new RooRealVar("bu_width_ratio_run1_DD","",relConfs.getD("bu_width_ratio_run1_DD") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.09):0.));
+  RooRealVar* bu_width_ratio_run2_LL = new RooRealVar("bu_width_ratio_run2_LL","",relConfs.getD("bu_width_ratio_run2_LL") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.3):0.));
+  RooRealVar* bu_width_ratio_run2_DD = new RooRealVar("bu_width_ratio_run2_DD","",relConfs.getD("bu_width_ratio_run2_DD") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.2):0.));
+  RooRealVar* bu_frac_run1_LL = new RooRealVar("bu_frac_run1_LL","",relConfs.getD("bu_frac_run1_LL") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.07):0.));
+  RooRealVar* bu_frac_run1_DD = new RooRealVar("bu_frac_run1_DD","",relConfs.getD("bu_frac_run1_DD") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.04):0.));
+  RooRealVar* bu_frac_run2_LL = new RooRealVar("bu_frac_run2_LL","",relConfs.getD("bu_frac_run2_LL") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.06):0.));
+  RooRealVar* bu_frac_run2_DD = new RooRealVar("bu_frac_run2_DD","",relConfs.getD("bu_frac_run2_DD") + (_genConfs->get("signalShapeData")=="1"?gRandom->Gaus(0,0.04):0.));
 
   RooRealVar* bu_alpha_all_mix = new RooRealVar("bu_alpha_all_mix","",relConfs.getD("bu_alpha_all_mix"),
                                        relConfs.getD("bu_alpha_all_mix_LimL"),relConfs.getD("bu_alpha_all_mix_LimU") );

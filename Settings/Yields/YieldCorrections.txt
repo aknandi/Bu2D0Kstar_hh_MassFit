@@ -95,6 +95,24 @@ effVeto_run2_DD_err 0.007
 effVeto_all_LL 0.929
 effVeto_all_DD 0.929
 * 
+* Charmless yields
+charmless_d2kk_LL_run1 0.0
+err_charmless_d2kk_LL_run1 0.0
+charmless_d2kk_DD_run1 0.0
+err_charmless_d2kk_DD_run1 0.0
+charmless_d2kk_LL_run2 0.0
+err_charmless_d2kk_LL_run2 0.0
+charmless_d2kk_DD_run2 0.0
+err_charmless_d2kk_DD_run2 0.0
+charmless_d2pipi_LL_run1 1.2
+err_charmless_d2pipi_LL_run1 1.6
+charmless_d2pipi_DD_run1 2.2
+err_charmless_d2pipi_DD_run1 1.7
+charmless_d2pipi_LL_run2 0.0
+err_charmless_d2pipi_LL_run2 0.4
+charmless_d2pipi_DD_run2 0.4
+err_charmless_d2pipi_DD_run2 1.3
+*
 * Yield fractions for signal for other D modes (BRs, MC efficiencies, pid efficiencies)
 kpitod2kpi_LL 1.0
 kpitod2kpi_DD 1.0

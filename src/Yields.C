@@ -211,7 +211,8 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 {
 	RooRealVar* effCorrection;
 	RooRealVar* prodAsymmetry;
-
+	RooRealVar* charmlessContributionPlus;
+	RooRealVar* charmlessContributionMinus;
 	RooRealVar* pidAsymmetry;
 	double Akpi = input->getD("A_det_kpi");
 	double Api = input->getD("A_det_pi");
@@ -220,7 +221,6 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 
 	for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
-		std::cout << gRandom->GetSeed() <<std::endl;
 		double productionAsymmetry = input->getD(Form("A_prod_%s",(*a).c_str()));
 		double Apid = input->getD(Form("A_pid_%s",(*a).c_str()));
 		// If switch in on in GeneralSettings, run the systematic
@@ -253,16 +253,24 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							double errmcEfficiencyCorrection = efficiencyCorrection * sqrt(5)*sqrt(pow(input->getD(Form("effSel_d2kpi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effSel_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effSel_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2));
 							double errpidEfficiencyCorrection = efficiencyCorrection * sqrt(pow(0.002/input->getD(Form("effPid_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2) + pow(0.002/input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2));
 							double errBranchingRatio = efficiencyCorrection * sqrt(pow(input->getD("BR_d2kpi_err")/input->getD("BR_d2kpi"),2) + pow(input->getD(Form("BR_%s_err",(*m).c_str()))/input->getD(Form("BR_%s",(*m).c_str())),2));
+							double charmlessEvents = round(gRandom->Gaus(input->getD(Form("charmless_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str())),input->getD(Form("err_charmless_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()))));
+							if(charmlessEvents<=0) charmlessEvents = 0;
+							double charmlessPlus = round(gRandom->Poisson(0.5*charmlessEvents));
+							double charmlessMinus = charmlessEvents - charmlessPlus;
+							//cout << "charmless_" << *m << "_" << *t<< "_" << *a << "\t" << charmlessEvents << " " << charmlessPlus << " " << charmlessMinus << std::endl;
 							//double efficiencyCorrection = input->getD(Form("kpitod2kpi_%s",(*t).c_str()))/input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()));
 							effCorrection = new RooRealVar(Form("effCorrection_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyCorrection + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errmcEfficiencyCorrection):0.) + (_genConfs->get("pidefficiencies")=="1"?gRandom->Gaus(0,errpidEfficiencyCorrection):0.) + (_genConfs->get("branchingRatios")=="1"?gRandom->Gaus(0,errBranchingRatio):0.));
 
+
 							if(*c == "plus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								charmlessContributionPlus = new RooRealVar(Form("charmlessEvents_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",(_genConfs->get("charmless")=="1"?charmlessPlus:0.));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6) + @7",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection,*charmlessContributionPlus));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6) + @7",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection,*charmlessContributionPlus));
 							}
 							else if (*c == "minus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*@5/@6",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								charmlessContributionMinus = new RooRealVar(Form("charmlessEvents_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",(_genConfs->get("charmless")=="1"?charmlessMinus:0.));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6) + @7",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection,*charmlessContributionMinus));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6) + @7",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection,*charmlessContributionMinus));
 							}
 
 						}
@@ -326,9 +334,10 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 
 					//double N_dstkst = input->getD(Form("N_dstkst_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 					// ndstkst = 0.5 * (dstkst010*eff010 + dstkst101*eff101) * efficiency of kst selection * D mode fraction (account for split by charge)
+					// Total D*K* NOT split by charge- below need to add asymmetry as systematic
 					double N_dstkst;
-					if(*m == "d2pik" && *t == "DD") N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effSig_%s_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effSig_%s_75_0.3_0.7_25",(*t).c_str())))*genscale;
-					else N_dstkst = 0.5*input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+					if(*m == "d2pik" && *t == "DD") N_dstkst = input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effSig_%s_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effSig_%s_75_0.3_0.7_25",(*t).c_str())))*genscale;
+					else N_dstkst = input->getD(Form("N_dstkst_d2kpi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 
 					/* // Used for optimisation of cuts
 			if(*t == "LL") {
@@ -341,12 +350,35 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 			}
 					 */
 
-					if(_genConfs->get("doublepartrecoyield") == "0") n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-10.,100000.);
-					else n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",2*N_dstkst,-10.,100000.);
+					if(_genConfs->get("partrecoShape") == "0") {
+						// Assume no asymmetry
+						n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",0.5*N_dstkst,-10.,100000.);
+						//Fit Yield
+						n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",0.5*N_dstkst);//,0.,100000.);
+					}
+					else {
+						if(!_genConfs->isChargeSeparated()) {
+							n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",1.2*N_dstkst,-10.,100000.);
+						}
+						else {
+							// Add asymmetry N+ = 1.2 * 0.5*(1+asym) * N_tot
+							double partRecoAsym = 0.1;
+							if(*c == "plus") {
+								n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",1.2*0.5*(1+partRecoAsym)*N_dstkst,-10.,100000.);
+								n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",0.5*N_dstkst);//,0.,100000.);
+							}
+							if(*c == "minus") {
+								n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",1.2*0.5*(1-partRecoAsym)*N_dstkst,-10.,100000.);
+								n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",0.5*N_dstkst);//,0.,100000.);
+							}
+						}
+
+					}
+
 
 					// --- Fit yields ---
 					n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0.,100000.);
-					n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst);//,0.,100000.);
+
 
 
         }

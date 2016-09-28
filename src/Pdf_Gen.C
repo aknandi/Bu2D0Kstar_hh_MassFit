@@ -26,8 +26,9 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
         	bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
+        	//bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
-        	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"));
+        	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
            }
       }
     }
@@ -112,13 +113,13 @@ void Pdf_Gen::setRelations()
                                         relConfs.getD("bu_width_ratio_all_mix_LimL"),relConfs.getD("bu_width_ratio_all_mix_LimU") );
 
   // Combs- exponential
-  RooRealVar *combs_slope_mix = new RooRealVar("exp_combs_slope","",relConfs.getD("d2kpi_exp_mix_combs_slope"),
-                                                   relConfs.getD("d2kpi_exp_mix_combs_slope_LimL"), relConfs.getD("d2kpi_exp_mix_combs_slope_LimU") );
+  RooRealVar *combs_slope_mix = new RooRealVar("exp_combs_slope","",relConfs.getD("exp_mix_combs_slope"),
+                                                   relConfs.getD("exp_mix_combs_slope_LimL"), relConfs.getD("exp_mix_combs_slope_LimU") );
 
-  RooRealVar *combs_slope_LL = new RooRealVar("d2kpi_exp_LL_combs_slope","",relConfs.getD("d2kpi_exp_LL_combs_slope"),
-                                                 relConfs.getD("d2kpi_exp_LL_combs_slope_LimL"), relConfs.getD("d2kpi_exp_LL_combs_slope_LimU") );
-  RooRealVar *combs_slope_DD = new RooRealVar("d2kpi_exp_DD_combs_slope","",relConfs.getD("d2kpi_exp_DD_combs_slope"),
-                                                 relConfs.getD("d2kpi_exp_DD_combs_slope_LimL"), relConfs.getD("d2kpi_exp_DD_combs_slope_LimU") );
+  RooRealVar *combs_slope_LL = new RooRealVar("exp_LL_combs_slope","",relConfs.getD("exp_LL_combs_slope"),
+                                                 relConfs.getD("exp_LL_combs_slope_LimL"), relConfs.getD("exp_LL_combs_slope_LimU") );
+  RooRealVar *combs_slope_DD = new RooRealVar("exp_DD_combs_slope","",relConfs.getD("exp_DD_combs_slope"),
+                                                 relConfs.getD("exp_DD_combs_slope_LimL"), relConfs.getD("exp_DD_combs_slope_LimU") );
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");
@@ -163,6 +164,7 @@ void Pdf_Gen::setRelations()
 
   //fixedParams->push_back(bu_mean);
   //fixedParams->push_back(bu_width);
+
   fixedParams->push_back(bu_alpha_all_LL);
   fixedParams->push_back(bu_alpha_run1_LL);
   fixedParams->push_back(bu_alpha_run2_LL);
@@ -183,6 +185,7 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(bu_frac_run1_DD);
   fixedParams->push_back(bu_frac_run2_LL);
   fixedParams->push_back(bu_frac_run2_DD);
+
   //fixedParams->push_back(bu_alpha_mix);
   //fixedParams->push_back(bu_n_mix);
   //fixedParams->push_back(combs_slope_LL);
@@ -225,6 +228,7 @@ void Pdf_Gen::setRelations()
           }
 
           if(*trackType=="LL")  {
+
         	  if(*run=="all") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_LL);
@@ -242,12 +246,13 @@ void Pdf_Gen::setRelations()
         	  }
 
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_LL);
-        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL);
+        	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_LL); }
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_LL);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef010_LL);
 
           }
           else if(*trackType=="DD") {
+
         	  if(*run=="all") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_DD);
@@ -265,16 +270,18 @@ void Pdf_Gen::setRelations()
         	  }
 
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_DD);
-        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD);
+        	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_DD); }
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
           }
           else if(*trackType=="mix") {
+
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
         	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_mix);
-        	  comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix);
         	  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_all_LL);
+
+        	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_mix); }
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
           }

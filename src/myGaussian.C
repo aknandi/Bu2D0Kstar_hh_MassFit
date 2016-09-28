@@ -14,10 +14,12 @@ myGaussian::myGaussian(RooRealVar* pmB, std::string m,std::string p, std::string
   mySettings.readPairStringsToMap(fileName);
 
   // Read in the relevant parameters
+  /*
   _mean=mySettings.getD(m+"_"+p+"_"+t+"_gaussian_mean");
   _width=mySettings.getD(m+"_"+p+"_"+t+"_gaussian_width");
   std::cout << "myGaussian" << std::endl;
   std::cout << " mean: " << _mean <<  " width: " << _width << std::endl;
+  */
 
   // Create any RooRealVars you'll need
   _intVars["mean"]=0;

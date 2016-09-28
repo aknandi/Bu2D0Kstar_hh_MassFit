@@ -15,7 +15,7 @@ Exponential::Exponential(RooRealVar* pmB, std::string m,std::string p, std::stri
 
   // Read in the relevant parameters
   _coef=mySettings.getD(m+"_"+p+"_"+t+"_combs_slope");
-  std::cout << "Exponential" << std::endl;
+  std::cout << "Exponential_" << m << "_" << p << "_" << c << "_" << t << "_" << a << std::endl;
   std::cout << " slope: " << _coef << std::endl;
 
   // Create any RooRealVars you'll need

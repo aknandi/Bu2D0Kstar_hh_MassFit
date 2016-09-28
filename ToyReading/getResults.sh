@@ -3,10 +3,10 @@ INPUTFILES=()
 
 INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
 #INPUTDIR="/data/lhcb/users/nandia/B2DKstar/Systematics/"
-SUBDIR="2016-09-13_original/"
+SUBDIR="2016-09-28_charmless/"
 MIN=1
-MAX=2000 #2000
-GAP=40 #40
+MAX=1000 #2000
+GAP=20 #40
 
 for (( i=$MIN; i <= $MAX; i+=$GAP ))
 do

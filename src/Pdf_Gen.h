@@ -6,6 +6,7 @@
 #include "Settings.h"
 #include "Pdf_Base.h"
 #include "myGaussian.h"
+#include "DoubleGaussian.h"
 #include "DoubleCrystalBall.h"
 #include "Exponential.h"
 #include "PartRecoDstKst.h"
