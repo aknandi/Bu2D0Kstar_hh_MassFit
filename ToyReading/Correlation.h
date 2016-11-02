@@ -7,10 +7,12 @@
 #include "TCanvas.h"
 #include "TString.h"
 #include "TH2F.h"
+#include <vector>
 
 #include <string>
 #include <map>
 #include <iostream>
+#include <fstream>
 using namespace std;
 
 /** @class Correlation Correlation.h ToyReading/Correlation.h
@@ -26,8 +28,8 @@ public:
   void MakeHost(TString);
   void MakeFriends(TString);
   void Get2DHist(TString,TString);
-  void DrawMatrix();
-
+  void DrawMatrix(TString);
+  vector<TString> observables;
   virtual ~Correlation( ); ///< Destructor
 
   std::map<TString, std::map<TString, double> > results;

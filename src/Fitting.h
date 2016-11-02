@@ -90,6 +90,8 @@ class Fitting : public Base
   
   TPaveText *lhcbpreliminaryRun1;
   TPaveText *lhcbpreliminaryRun2;
+  TPaveText *lhcbpreliminary;
+  TPaveText *modeOnPlot;
 
   RooFitResult* resultTemp;
 };

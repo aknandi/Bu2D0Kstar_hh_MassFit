@@ -26,7 +26,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
         	bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
-        	//bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
+        	//bu[*mode][*charge][*trackType][*run]  = new DoubleGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
         	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
            }

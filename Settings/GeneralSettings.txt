@@ -55,12 +55,12 @@ vetoefficiencies 0
 branchingRatios 0
 signalShapeData 0
 inputTwoStageFitErrors 0
-makeCorrelationMatrix false
+makeCorrelationMatrix true
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should
 * be 'false' for data)
 MCsimfit false
 *
-UNBLIND false
+UNBLIND true
 * 
 * CATEGORIES
 chargeSeparated true

@@ -8,6 +8,7 @@
 #include <map>
 #include <math.h>
 #include <time.h>
+#include <string>
 
 #include "TSystem.h"
 #include "TApplication.h"
@@ -38,6 +39,7 @@
 #include "RooDataSet.h"
 #include "RooMCStudy.h"
 #include "Roo1DTable.h"
+#include "RooArgSet.h"
 
 #include "Fitting.h"
 #include "CommonTools.h"
@@ -103,14 +105,23 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   lhcbpreliminaryRun1 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
   lhcbpreliminaryRun1->SetBorderSize(0); lhcbpreliminaryRun1->SetFillStyle(0);
   lhcbpreliminaryRun1->SetTextFont(132); lhcbpreliminaryRun1->SetTextSize(0.075);
+  //lhcbpreliminaryRun1->AddText("LHCb 2016");
+  //lhcbpreliminaryRun1->AddText("LHCb preliminary");
   lhcbpreliminaryRun1->AddText("#scale[0.5]{#int }L d#it{t} = 3.0 fb^{-1}");
 
   lhcbpreliminaryRun2 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
   lhcbpreliminaryRun2->SetBorderSize(0); lhcbpreliminaryRun2->SetFillStyle(0);
   lhcbpreliminaryRun2->SetTextFont(132); lhcbpreliminaryRun2->SetTextSize(0.075);
   lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 1.0 fb^{-1}");
-  //lhcbpreliminary->AddText("LHCb 2013");
-  //lhcbpreliminary->AddText("LHCb preliminary");
+  //lhcbpreliminaryRun2->AddText("LHCb 2016");
+  //lhcbpreliminaryRun2->AddText("LHCb preliminary");
+
+  lhcbpreliminary = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
+  lhcbpreliminary->SetBorderSize(0); lhcbpreliminary->SetFillStyle(0);
+  lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.075);
+  //lhcbpreliminary->AddText("LHCb 2016");
+  lhcbpreliminary->AddText("LHCb preliminary");
+  lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.0 fb^{-1}");
 
   // Setup the file for fit projections output
   saveOutputForPlottingMacro = new TFile("output/saveOutputForPlottingMacro.root","RECREATE");
@@ -540,11 +551,25 @@ void Fitting::RunFullFit(bool draw=true)
               v_varNames.push_back(par->GetName());
             }
           std::cout << "Correlation and covariance matrices" << std::endl;
+          if(true) {
+        	  std::cout << setprecision(7);
+        	  std::cout << "\\begin{tabular}{c|ccccccc} \n\\hline \n& $A_{K\\pi}$ & $A_{KK}$ & $A_{\\pi\\pi}$ & $R_{KK}$ & $R_{\\pi\\pi}$ & $R^+$ & $R^-$ \\\\ \n \\hline" << std::endl;
+        	  std::cout << "$A_{K\\pi}$ & " << result->correlation("A_d2kpi","A_d2kpi") << " & " << result->correlation("A_d2kpi","A_d2kk") << "  & " << result->correlation("A_d2kpi","A_d2pipi") << "  & " << result->correlation("A_d2kpi","R_d2kk") << "  & " << result->correlation("A_d2kpi","R_d2pipi") << "  & " << result->correlation("A_d2kpi","Rplus_d2pik") << "  & " << result->correlation("A_d2kpi","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$A_{KK}$ & " << result->correlation("A_d2kk","A_d2kpi") << " & " << result->correlation("A_d2kk","A_d2kk") << "  & " << result->correlation("A_d2kk","A_d2pipi") << "  & " << result->correlation("A_d2kk","R_d2kk") << "  & " << result->correlation("A_d2kk","R_d2pipi") << "  & " << result->correlation("A_d2kk","Rplus_d2pik") << "  & " << result->correlation("A_d2kk","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$A_{\\pi\\pi}$ & " << result->correlation("A_d2pipi","A_d2kpi") << " & " << result->correlation("A_d2pipi","A_d2kk") << "  & " << result->correlation("A_d2pipi","A_d2pipi") << "  & " << result->correlation("A_d2pipi","R_d2kk") << "  & " << result->correlation("A_d2pipi","R_d2pipi") << "  & " << result->correlation("A_d2pipi","Rplus_d2pik") << "  & " << result->correlation("A_d2pipi","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$R_{KK}$ & " << result->correlation("R_d2kk","A_d2kpi") << " & " << result->correlation("R_d2kk","A_d2kk") << "  & " << result->correlation("R_d2kk","A_d2pipi") << "  & " << result->correlation("R_d2kk","R_d2kk") << "  & " << result->correlation("R_d2kk","R_d2pipi") << "  & " << result->correlation("R_d2kk","Rplus_d2pik") << "  & " << result->correlation("R_d2kk","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$R_{\\pi\\pi}$ & " << result->correlation("R_d2pipi","A_d2kpi") << " & " << result->correlation("R_d2pipi","A_d2kk") << "  & " << result->correlation("R_d2pipi","A_d2pipi") << "  & " << result->correlation("R_d2pipi","R_d2kk") << "  & " << result->correlation("R_d2pipi","R_d2pipi") << "  & " << result->correlation("R_d2pipi","Rplus_d2pik") << "  & " << result->correlation("R_d2pipi","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$R^+$ & " << result->correlation("Rplus_d2pik","A_d2kpi") << " & " << result->correlation("Rplus_d2pik","A_d2kk") << "  & " << result->correlation("Rplus_d2pik","A_d2pipi") << "  & " << result->correlation("Rplus_d2pik","R_d2kk") << "  & " << result->correlation("Rplus_d2pik","R_d2pipi") << "  & " << result->correlation("Rplus_d2pik","Rplus_d2pik") << "  & " << result->correlation("Rplus_d2pik","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "$R^-$ & " << result->correlation("Rminus_d2pik","A_d2kpi") << " & " << result->correlation("Rminus_d2pik","A_d2kk") << "  & " << result->correlation("Rminus_d2pik","A_d2pipi") << "  & " << result->correlation("Rminus_d2pik","R_d2kk") << "  & " << result->correlation("Rminus_d2pik","R_d2pipi") << "  & " << result->correlation("Rminus_d2pik","Rplus_d2pik") << "  & " << result->correlation("Rminus_d2pik","Rminus_d2pik") << "  \\\\" << std::endl;
+        	  std::cout << "\\hline \n\\end{tabular}" << std::endl;
+          }
+
           std::cout << std::endl << "Correlation matrix (symmetric)" << std::endl << std::endl;
           result->correlationMatrix().Print();
           std::cout << std::endl << "Covariance matrix (symmetric)" << std::endl << std::endl;
           result->covarianceMatrix().Print();
           
+
           const int varNum = varNames.getSize();
           TVectorD varValues(varNum);
           TVectorD varErrors(varNum);
@@ -616,365 +641,664 @@ void Fitting::RunFullFit(bool draw=true)
 
   bool drawpulls = false;
 
-  //create canvases
+  ////////
+  // Merged plots for paper
+  ////////
+
+  for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++) {
+	  TCanvas* canvas = new TCanvas(Form("canvas_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,250);
+	  if (drawpulls) canvas->Divide(chargeList.size()*2,1);
+	  else           canvas->Divide(chargeList.size(),1);
+
+	  // create canvas for residual distributions- these are actually not plotted at the moment
+	  // Are they really needed if they can be chosen to be plotted on the fits canvas?
+	  TCanvas* canRes = 0;
+	  if(doFit=="true"){
+		  canRes = new TCanvas(Form("canres_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,250);
+		  canRes->Divide(chargeList.size(),1);
+	  }
+
+	  std::string unblind = _genConfs->get("UNBLIND");
+	  // When generating toys, do not want blinded
+	  if(_genConfs->get("genToys")=="true") unblind = "true";
+	  double sidebands, total;
+
+	  std::cout<<" canvases made "<<std::endl;
+
+	  RooHist* residualHist = 0;
+	  float maxH = 0.;
+	  std::map<std::string,RooPlot*> plot;
+
+	  for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
+		  //int numbins = 40;
+		  double binwidth = 10;
+		  plot[*c] = mB.frame((_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low"))/binwidth);//RooFit::Bins(numbins));
+		  mode.setLabel(Form("%s",(*m).c_str()));
+		  charge.setLabel(Form("%s",(*c).c_str()));
+
+		  if(unblind=="false") {
+			  mB.setRange("lowersideband",_genConfs->getD("fit_limit_low"),5230);
+			  mB.setRange("uppersideband",5329,_genConfs->getD("fit_limit_high"));
+			  // Determine yield in sidebands for normalisation
+			  sidebands = data->reduce(RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())))->sumEntries("1","uppersideband");//,lowersideband");
+			  total = data->reduce(RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())))->sumEntries();
+			  std::cout << sidebands << std::endl;
+		  }
+
+		  //////////////////////////////////////////////////////
+		  // Plot the separated, standard LL,DD plots
+		  //////////////////////////////////////////////////////
+
+		  if(*m == "d2pik" && unblind=="false") {
+			  data->plotOn(plot[*c],RooFit::CutRange("uppersideband"),RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())),RooFit::MarkerStyle(20),RooFit::MarkerSize(0.7));
+		  }
+		  else {
+			  data->plotOn(plot[*c],RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())),RooFit::MarkerStyle(20),RooFit::MarkerSize(0.7));
+		  }
+
+		  std::cout<<" data to plot: "<<*m<<std::endl;
+
+		  std::map<std::string,std::map<std::string,string>> mergedSignal;
+		  std::map<std::string,std::map<std::string,string>> mergedCombinatoic;
+		  std::map<std::string,std::map<std::string,string>> mergedPartreco;
+		  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
+			  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
+				  mergedSignal[*m][*c] += Form("DoubleCrystalBall_%s_bu_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+				  mergedCombinatoic[*m][*c] += Form("Exponential_%s_exp_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+				  mergedPartreco[*m][*c] += Form("PartRecoDstKst_%s_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+				  /*
+					  mergedSignal[*m][*c].add(*model->getFitPdf()->getPdf(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
+					  mergedCombinatoic[*m][*c].add(*model->getFitPdf()->getPdf(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
+					  mergedPartreco[*m][*c].add(*model->getFitPdf()->getPdf(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
+				   */
+			  }
+		  }
+		  mergedSignal[*m][*c] = mergedSignal[*m][*c].substr(0, mergedSignal[*m][*c].size()-1);
+		  mergedCombinatoic[*m][*c] = mergedCombinatoic[*m][*c].substr(0, mergedCombinatoic[*m][*c].size()-1);
+		  mergedPartreco[*m][*c] = mergedPartreco[*m][*c].substr(0, mergedPartreco[*m][*c].size()-1);
+
+		  if(drawProjections=="true"){
+
+			  if(*m == "d2pik" && unblind=="false") {
+				  sim->plotOn( plot[*c],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+						  RooFit::Slice(RooArgSet(mode,charge)),RooFit::ProjWData(RooArgSet(mode,charge),*data),
+						  RooFit::Components(Form("%s,%s,%s",mergedSignal[*m][*c].c_str(),mergedCombinatoic[*m][*c].c_str(),mergedPartreco[*m][*c].c_str())),
+						  RooFit::LineColor(kBlack),RooFit::LineWidth(2) );
+			  }
+			  else {
+				  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+						  RooFit::Components(Form("%s,%s,%s",mergedSignal[*m][*c].c_str(),mergedCombinatoic[*m][*c].c_str(),mergedPartreco[*m][*c].c_str())),
+						  RooFit::LineColor(kBlack),RooFit::LineWidth(2) );
+			  }
+			  if(canRes) {
+				  cout << "Make residuals: " <<*m<<" "<<*c<<std::endl;
+				  residualHist = plot[*c]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
+			  }
+
+			  //Bu - CB
+			  std::cout<<" plotting Bu "<<std::endl;
+			  if(*m == "d2pik" && unblind=="false") {
+				  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)),RooFit::ProjWData(RooArgSet(mode,charge),*data),
+						  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+						  RooFit::Components(Form("%s",mergedSignal[*m][*c].c_str())),
+						  RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(2), RooFit::Name("sig") );
+			  }
+			  else {
+				  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+						  RooFit::Components(Form("%s",mergedSignal[*m][*c].c_str())),
+						  RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(2), RooFit::Name("sig") );
+			  }
+
+			  if(_genConfs->get("MCsimfit")!="true") {
+				  // Combinatoric
+				  std::cout <<" plotting combinatoric "<<std::endl;
+				  if(*m == "d2pik" && unblind=="false") {
+					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)),RooFit::ProjWData(RooArgSet(mode,charge),*data),
+							  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+							  RooFit::Components(Form("%s",mergedCombinatoic[*m][*c].c_str())),
+							  RooFit::LineStyle(kSolid), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
+				  }
+				  else {
+					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+							  RooFit::Components(Form("%s",mergedCombinatoic[*m][*c].c_str())),
+							  RooFit::LineStyle(kSolid), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
+				  }
+
+
+				  //Bu -> D*K* - regexp to pick up also version split by helamp
+				  std::cout<<" plotting Bu -> D*K*  "<<std::endl;
+				  if(*m == "d2pik" && unblind=="false") {
+					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+							  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+							  RooFit::Components(Form("%s",mergedPartreco[*m][*c].c_str())),
+							  //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+							  //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+							  //),
+							  RooFit::LineStyle(kDashed),RooFit::LineColor(kGreen+2), RooFit::LineWidth(2), RooFit::Name("partreco"));
+				  }
+				  else {
+					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+							  RooFit::Components(Form("%s",mergedPartreco[*m][*c].c_str())),
+							  //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+							  //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+							  //),
+							  RooFit::LineStyle(kDashed),RooFit::LineColor(kGreen+2), RooFit::LineWidth(2), RooFit::Name("partreco"));
+				  }
+			  }
+		  }
+
+		  //plot total PDF again
+		  if(*m == "d2pik" && unblind=="false") {
+			  sim->plotOn( plot[*c],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+					  RooFit::Slice(RooArgSet(mode,charge)),RooFit::ProjWData(RooArgSet(mode,charge),*data),
+					  RooFit::Components(Form("%s,%s,%s",mergedSignal[*m][*c].c_str(),mergedCombinatoic[*m][*c].c_str(),mergedPartreco[*m][*c].c_str())),
+					  RooFit::LineColor(kBlack),RooFit::LineWidth(2) );
+		  }
+		  else {
+			  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+					  RooFit::Components(Form("%s,%s,%s",mergedSignal[*m][*c].c_str(),mergedCombinatoic[*m][*c].c_str(),mergedPartreco[*m][*c].c_str())),
+					  RooFit::LineColor(kBlack),RooFit::LineWidth(2) );
+		  }
+
+
+
+
+		  int ipad = 0;
+		  if(*c==both)
+		  {
+			  ipad = 1;
+			  canvas->cd(ipad);
+			  if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();
+			  gPad->SetTicks(1, 1);//upper and right-hand ticks
+			  //resize pad if drawing pulls (makes pads too small if not drawing pulls)
+			  //if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
+
+		  }
+		  if(*c==minus)
+		  {
+			  ipad = 1;
+			  canvas->cd(ipad);
+		  }
+		  if(*c==plus)
+		  {
+			  // Need to make this different whether pulls are plotted or not
+			  ipad = 2;
+			  if(drawpulls) ipad = 3;
+			  canvas->cd(ipad);
+		  }
+		  plot[*c]->SetMinimum(0.1);
+		  //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
+		  plot[*c]->Draw();
+
+		  plot[*c]->SetTitle("");
+		  plot[*c]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
+		  //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
+		  plot[*c]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
+		  //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
+		  plot[*c]->GetXaxis()->SetTitleOffset(1.05);
+		  plot[*c]->GetYaxis()->SetTitleOffset(0.7);
+
+		  //draw legend
+		  Double_t legtop = 0.75;
+		  TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
+		  leg->SetFillStyle(0);
+		  leg->SetBorderSize(0);
+		  leg->SetTextFont(132);
+		  leg->AddEntry((TObject*)0,"","");
+		  leg->AddEntry(plot[*c]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
+		  if(_genConfs->get("MCsimfit")!="true") {
+			  //leg->AddEntry((TObject*)0,"","");
+			  leg->AddEntry(plot[*c]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
+			  //leg->AddEntry((TObject*)0,"","");
+			  leg->AddEntry(plot[*c]->findObject("comb"),"Combinatorial","l");
+		  }
+
+		  //do not draw legend if a log plot or pulls are drawn
+		  //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
+		  if(_genConfs->get("setLogScale")!="true") leg->Draw();
+
+		  const char* decayMode;
+		  if(*m=="d2kpi") {
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{-} #pi^{+} ]_{D} K^{*-}";
+			  else decayMode = "B^{+} #rightarrow [ K^{+} #pi^{-} ]_{D} K^{*+}";
+		  }
+		  if(*m=="d2kk") {
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{-} K^{+} ]_{D} K^{*-}";
+			  else decayMode = "B^{+} #rightarrow [ K^{+} K^{-} ]_{D} K^{*+}";
+		  }
+		  if(*m=="d2pipi") {
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ #pi^{-} #pi^{+} ]_{D} K^{*-}";
+			  else decayMode = "B^{+} #rightarrow [ #pi^{+} #pi^{-} ]_{D} K^{*+}";
+		  }
+		  if(*m=="d2pik") {
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{+} #pi^{-} ]_{D} K^{*-}";
+			  else decayMode = "B^{+} #rightarrow [ K^{-} #pi^{+} ]_{D} K^{*+}";
+		  }
+
+		  modeOnPlot = new TPaveText(0.4,0.6,0.65,0.8,"TR NDC");
+		  modeOnPlot->SetBorderSize(0); modeOnPlot->SetFillStyle(0);
+		  modeOnPlot->AddText(decayMode);
+		  modeOnPlot->Draw();
+
+		  if(genToys=="false") lhcbpreliminary->Draw();
+
+		  if(plot[*c]->GetMaximum()>maxH)
+		  {
+			  maxH=plot[*c]->GetMaximum();
+		  }
+
+		  // Draw pulls
+		  if(residualHist && drawpulls)
+		  {
+			  std::cout<<" plotting pulls: "<<*m<<" "<<*c<<std::endl;
+			  canvas->cd(ipad+1);
+			  //gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
+			  RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
+			  frame->GetYaxis()->SetNdivisions(515);//,kTrue);
+			  frame->SetXTitle("");//#it{m}(DK^{#pm}#pi^{#mp}) (MeV/c^{2})");
+			  residualHist->SetFillColor(4);
+			  residualHist->SetLineColor(4);
+			  frame->addPlotable(residualHist,"BEX0");
+			  frame->Draw();
+			  frame->SetTitle("");
+		  }
+
+		  // Save data and pdf to draw projections in external macro
+		  saveOutputForPlottingMacro->cd();
+		  //if(*t=="LL") plot_combLLDD[*c][*a]->Write(Form("%s_%s_comb_%s",m->c_str(),c->c_str(),a->c_str()));
+		  plot[*c]->Write(Form("%s_%s",m->c_str(),c->c_str()));
+
+	  }
+
+	  //fonts and y-axis minimum
+	  for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
+		  plot[*c]->SetTitleFont(132,"X"); plot[*c]->SetLabelFont(132,"X");
+		  plot[*c]->SetTitleFont(132,"Y"); plot[*c]->SetLabelFont(132,"Y");
+		  if(_genConfs->get("setLogScale")=="true") plot[*c]->SetMinimum(0.100001);
+		  else                                      plot[*c]->SetMinimum(0.000001);
+	  }
+
+	  //save plots
+	  if(_genConfs->get("setLogScale")=="true")
+	  {
+		  canvas->Print(Form("figs/fits/%s_log.pdf",canvas->GetName()));
+		  canvas->Print(Form("figs/fits/%s_log.C",canvas->GetName()));
+		  if(canRes) canRes->Print(Form("figs/residuals/%s_log.pdf",canRes->GetName()));
+		  if(canRes) canRes->Print(Form("figs/residuals/%s_log.C",canRes->GetName()));
+	  }
+	  else
+	  {
+		  canvas->Print(Form("figs/fits/%s.pdf",canvas->GetName()));
+		  //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
+		  canvas->Print(Form("figs/fits/%s.C",canvas->GetName()));
+		  if(canRes) canRes->Print(Form("figs/residuals/%s.pdf",canRes->GetName()));
+		  if(canRes) canRes->Print(Form("figs/residuals/%s.C",canRes->GetName()));
+	  }
+
+  }
+
+
+  ///////
+  // Individual plots
+  ///////
+
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++)
-    {
-      std::map< std::string, std::map<std::string, TCanvas* > > v_canvas;
-      std::map< std::string, std::map<std::string, TCanvas* > > v_canRes;
-      std::map< std::string, std::map<std::string, TCanvas* > > v_canvaslog;
-      for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
-        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
+  {
+	  std::map< std::string, std::map<std::string, TCanvas* > > v_canvas;
+	  std::map< std::string, std::map<std::string, TCanvas* > > v_canRes;
+	  std::map< std::string, std::map<std::string, TCanvas* > > v_canvaslog;
+	  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
+		  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
 
-        	const char* identifier = Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str());
+			  const char* identifier = Form("%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str());
 
-        	// create canvas for normal data and fit
-        	TCanvas* canvas = new TCanvas(Form("canvas_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
-        	if (drawpulls) canvas->Divide(1,chargeList.size()*2);
-        	else           canvas->Divide(1,chargeList.size());
-        	v_canvas[*t][*a] = canvas;
+			  // create canvas for normal data and fit
+			  TCanvas* canvas = new TCanvas(Form("canvas_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+			  if (drawpulls) canvas->Divide(1,chargeList.size()*2);
+			  else           canvas->Divide(1,chargeList.size());
+			  v_canvas[*t][*a] = canvas;
 
-        	// create canvas for residual distributions- these are actually not plotted at the moment
-        	// Are they really needed if they can be chosen to be plotted on the fits canvas?
-        	TCanvas* canRes = 0;
-        	if(doFit=="true"){
-				canRes = new TCanvas(Form("canres_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
-				canRes->Divide(1,chargeList.size());
-				v_canRes[*t][*a] = canRes;
-        	}
+			  // create canvas for residual distributions- these are actually not plotted at the moment
+			  // Are they really needed if they can be chosen to be plotted on the fits canvas?
+			  TCanvas* canRes = 0;
+			  if(doFit=="true"){
+				  canRes = new TCanvas(Form("canres_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+				  canRes->Divide(1,chargeList.size());
+				  v_canRes[*t][*a] = canRes;
+			  }
 
-        	// create canvas for log plot of data and fit
-        	TCanvas* canvaslog = new TCanvas(Form("canvaslog_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
-        	canvaslog->Divide(1,chargeList.size());
-        	v_canvaslog[*t][*a] = canvaslog;
-        }
-      }
+			  // create canvas for log plot of data and fit
+			  TCanvas* canvaslog = new TCanvas(Form("canvaslog_%s",identifier),Form("%s",identifier),30,30,500,chargeList.size()*250);
+			  canvaslog->Divide(1,chargeList.size());
+			  v_canvaslog[*t][*a] = canvaslog;
+		  }
+	  }
 
-      std::string unblind = _genConfs->get("UNBLIND");
-      // When generating toys, do not want blinded
-      if(_genConfs->get("genToys")=="true") unblind = "true";
-      double sidebands, total;
+	  std::string unblind = _genConfs->get("UNBLIND");
+	  // When generating toys, do not want blinded
+	  if(_genConfs->get("genToys")=="true") unblind = "true";
+	  double sidebands, total;
 
-      std::cout<<" canvases made "<<std::endl;
+	  std::cout<<" canvases made "<<std::endl;
 
-      RooHist* residualHist = 0;
-      float maxH = 0.;
-      std::map<std::string,std::map<std::string,std::map<std::string,RooPlot*> > > plot;
+	  RooHist* residualHist = 0;
+	  float maxH = 0.;
+	  std::map<std::string,std::map<std::string,std::map<std::string,RooPlot*> > > plot;
 
-      //draw each fit
-      for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
-        for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
+	  //draw each fit
+	  for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
+		  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
+			  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
 
-            //int numbins = 40;
-            double binwidth = 10;
-            plot[*c][*t][*a] = mB.frame((_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low"))/binwidth);//RooFit::Bins(numbins));
-            std::string tag = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
-            catNew->setLabel(tag.c_str());
+				  //int numbins = 40;
+				  double binwidth = 10;
+				  plot[*c][*t][*a] = mB.frame((_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low"))/binwidth);//RooFit::Bins(numbins));
+				  std::string tag = Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
+				  catNew->setLabel(tag.c_str());
 
-            if(unblind=="false") {
-          	  mB.setRange("lowersideband",_genConfs->getD("fit_limit_low"),5230);
-          	  mB.setRange("uppersideband",5329,_genConfs->getD("fit_limit_high"));
-          	  // Determine yield in sidebands for normalisation
-          	  sidebands = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries("1","uppersideband");//,lowersideband");
-          	  total = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries();
-          	  std::cout << sidebands << std::endl;
-            }
+				  if(unblind=="false") {
+					  mB.setRange("lowersideband",_genConfs->getD("fit_limit_low"),5230);
+					  mB.setRange("uppersideband",5329,_genConfs->getD("fit_limit_high"));
+					  // Determine yield in sidebands for normalisation
+					  sidebands = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries("1","uppersideband");//,lowersideband");
+					  total = data->reduce(RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())))->sumEntries();
+					  std::cout << sidebands << std::endl;
+				  }
 
-            //////////////////////////////////////////////////////
-            // Plot the separated, standard LL,DD plots
-            //////////////////////////////////////////////////////
-            if(*m == "d2pik" && unblind=="false") {
-                data->plotOn(plot[*c][*t][*a],RooFit::CutRange("uppersideband"),
-                         RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
-                         RooFit::MarkerStyle(6));
-            }
-            else {
-                data->plotOn(plot[*c][*t][*a],
-                         RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
-                         RooFit::MarkerStyle(6));
-            }
-				
-            std::cout<<" data to plot: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+				  //////////////////////////////////////////////////////
+				  // Plot the separated, standard LL,DD plots
+				  //////////////////////////////////////////////////////
+				  if(*m == "d2pik" && unblind=="false") {
+					  data->plotOn(plot[*c][*t][*a],RooFit::CutRange("uppersideband"),
+							  RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
+							  RooFit::MarkerStyle(6));
+				  }
+				  else {
+					  data->plotOn(plot[*c][*t][*a],
+							  RooFit::Cut(Form("catNew==catNew::%s",tag.c_str())),
+							  RooFit::MarkerStyle(6));
+				  }
 
-            if(drawProjections=="true"){
-            	//plot total PDF
-            	if(*m == "d2pik" && unblind=="false") {
-            		sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            				RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
-            	}
-            	else {
-            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            				RooFit::LineWidth(3) );
-            	}
-            	if(v_canRes[*t][*a]) {
-            		cout << "Make residuals: " <<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
-            		residualHist = plot[*c][*t][*a]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
-            	}
-            	//Bu - CB
-            	std::cout<<" plotting Bu "<<std::endl;
-            	if(*m == "d2pik" && unblind=="false") {
-            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
-            				RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            				RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
-            	}
-            	else {
-            		sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            				RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            				RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
-            	}
+				  std::cout<<" data to plot: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
 
-            	if(_genConfs->get("MCsimfit")!="true") {
-            		// Combinatoric
-            		std::cout <<" plotting combinatoric "<<std::endl;
-            		if(*m == "d2pik" && unblind=="false") {
-            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
-            					RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            					RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            					RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
-            		}
-            		else {
-            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            					RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            					RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
-            		}
+				  if(drawProjections=="true"){
+					  //plot total PDF
+					  if(*m == "d2pik" && unblind=="false") {
+						  sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+								  RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
+					  }
+					  else {
+						  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+								  RooFit::LineWidth(3) );
+					  }
+					  if(v_canRes[*t][*a]) {
+						  cout << "Make residuals: " <<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+						  residualHist = plot[*c][*t][*a]->pullHist(); residualHist->GetYaxis()->SetNdivisions(515);residualHist->setYAxisLimits(-5,5);
+					  }
+					  //Bu - CB
+					  std::cout<<" plotting Bu "<<std::endl;
+					  if(*m == "d2pik" && unblind=="false") {
+						  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
+								  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+								  RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+								  RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
+					  }
+					  else {
+						  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+								  RooFit::Components(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+								  RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(3), RooFit::Name("sig") );
+					  }
 
-
-            		//Bu -> D*K* - regexp to pick up also version split by helamp
-            		std::cout<<" plotting Bu -> D*K*  "<<std::endl;
-            		if(*m == "d2pik" && unblind=="false") {
-            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            					RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            					RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            					//RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
-            					//                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
-            					//),
-            					RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
-            		}
-            		else {
-            			sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            					RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
-            					//RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
-            					//                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
-            					//),
-            					RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
-            		}
+					  if(_genConfs->get("MCsimfit")!="true") {
+						  // Combinatoric
+						  std::cout <<" plotting combinatoric "<<std::endl;
+						  if(*m == "d2pik" && unblind=="false") {
+							  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),
+									  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+									  RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+									  RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
+						  }
+						  else {
+							  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+									  RooFit::Components(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+									  RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
+						  }
 
 
-              }
+						  //Bu -> D*K* - regexp to pick up also version split by helamp
+						  std::cout<<" plotting Bu -> D*K*  "<<std::endl;
+						  if(*m == "d2pik" && unblind=="false") {
+							  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+									  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+									  RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+									  //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+									  //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+									  //),
+									  RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
+						  }
+						  else {
+							  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+									  RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())),
+									  //RooFit::Components(Form("PartRecoDstKst_%s_%s_%s_%s010, PartRecoDstKst_%s_%s_%s_%s101",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str(),
+									  //                                                                                               (*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())
+									  //),
+									  RooFit::LineStyle(kDashed),RooFit::LineColor(kBlack), RooFit::LineWidth(3), RooFit::Name("partreco"));
+						  }
 
-            }
 
-            //plot total PDF again
-            if(*m == "d2pik" && unblind=="false") {
-            	sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
-            			RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
-            }
-            else {
-            	sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
-            			RooFit::LineWidth(3) );
-            }
+					  }
+
+				  }
+
+				  //plot total PDF again
+				  if(*m == "d2pik" && unblind=="false") {
+					  sim->plotOn( plot[*c][*t][*a],RooFit::Range("uppersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
+							  RooFit::Slice(RooArgSet(*catNew)),RooFit::ProjWData(RooArgSet(*catNew),*data),RooFit::LineWidth(3) );
+				  }
+				  else {
+					  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+							  RooFit::LineWidth(3) );
+				  }
 
 
-            //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
+				  //std::cout << "RooPlot chi^2: " << plot[*c][*t][*a]->chiSquare() << std::endl; //wrong - need number of floating parameters
 
-            if (result)
-            {
-            	Double_t chisquareperDoF = plot[*c][*t][*a]->chiSquare(nFloatParams);
-            	Int_t nBins = plot[*c][*t][*a]->GetNbinsX();
-            	Int_t nDoF = nBins - nFloatParams;
-            	Double_t chisquare = chisquareperDoF * (Double_t)nDoF;
-            	std::cout << "RooPlot chi^2/DoF: " << chisquareperDoF << std::endl;
-            	std::cout << "Number of bins: " << nBins << std::endl;
-            	std::cout << "Number of degrees of freedom: " << nDoF << std::endl;
-            	std::cout << "chi^2: " << chisquare << std::endl;
-            	std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
-            }
+				  if (result)
+				  {
+					  Double_t chisquareperDoF = plot[*c][*t][*a]->chiSquare(nFloatParams);
+					  Int_t nBins = plot[*c][*t][*a]->GetNbinsX();
+					  Int_t nDoF = nBins - nFloatParams;
+					  Double_t chisquare = chisquareperDoF * (Double_t)nDoF;
+					  std::cout << "RooPlot chi^2/DoF: " << chisquareperDoF << std::endl;
+					  std::cout << "Number of bins: " << nBins << std::endl;
+					  std::cout << "Number of degrees of freedom: " << nDoF << std::endl;
+					  std::cout << "chi^2: " << chisquare << std::endl;
+					  std::cout << "Probability: " << TMath::Prob(chisquare, nDoF) << std::endl;
+				  }
 
-            int ipad = 0;
-            if(*c==both)
-            {
-            	ipad = 1;
-            	v_canvas[*t][*a]->cd(ipad);
-            	if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();
-            	gPad->SetTicks(1, 1);//upper and right-hand ticks
-            	//resize pad if drawing pulls (makes pads too small if not drawing pulls)
-            	//if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
+				  int ipad = 0;
+				  if(*c==both)
+				  {
+					  ipad = 1;
+					  v_canvas[*t][*a]->cd(ipad);
+					  if(_genConfs->get("setLogScale")=="true") gPad->SetLogy();
+					  gPad->SetTicks(1, 1);//upper and right-hand ticks
+					  //resize pad if drawing pulls (makes pads too small if not drawing pulls)
+					  //if (drawpulls) gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0,0.0,1,1,0.3,0,-1);
 
-            }
-            if(*c==plus)
-            {
-            	ipad = 1;
-            	v_canvas[*t][*a]->cd(ipad);
-            }
-            if(*c==minus)
-            {
-            	// Need to make this different whether pulls are plotted or not
-            	ipad = 2;
-            	if(drawpulls) ipad = 3;
-            	v_canvas[*t][*a]->cd(ipad);
-            }
-            plot[*c][*t][*a]->SetMinimum(0.1);
-            //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
-            plot[*c][*t][*a]->Draw();
-            // Add yields and purities to the plots
-            // Cannot do yet as yields are of type RooAbsArg so cannot call getVal()
-            char num[100];
-            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["val"]); TString ts_yield(num);
-            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["err"]); TString ts_yielderr(num);
-            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_val"]*100); TString ts_purity(num);
-            sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_err"]*100); TString ts_purityerr(num);
-            //write signal yield and purity on plots (not done by default)
-            // TLatex *latex_yield = new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.70,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
-            // if(_genConfs->get("setLogScale")!="true") latex_yield->Draw();
-            // TLatex *latex_purity= new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.60,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
-            // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
-            plot[*c][*t][*a]->SetTitle("");
-            plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
-            //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
-            plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
-            //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
-            plot[*c][*t][*a]->GetXaxis()->SetTitleOffset(1.05);
-            plot[*c][*t][*a]->GetYaxis()->SetTitleOffset(1.3);
+				  }
+				  if(*c==plus)
+				  {
+					  ipad = 1;
+					  v_canvas[*t][*a]->cd(ipad);
+				  }
+				  if(*c==minus)
+				  {
+					  // Need to make this different whether pulls are plotted or not
+					  ipad = 2;
+					  if(drawpulls) ipad = 3;
+					  v_canvas[*t][*a]->cd(ipad);
+				  }
+				  plot[*c][*t][*a]->SetMinimum(0.1);
+				  //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
+				  plot[*c][*t][*a]->Draw();
+				  // Add yields and purities to the plots
+				  // Cannot do yet as yields are of type RooAbsArg so cannot call getVal()
+				  char num[100];
+				  sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["val"]); TString ts_yield(num);
+				  sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["err"]); TString ts_yielderr(num);
+				  sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_val"]*100); TString ts_purity(num);
+				  sprintf(num,"%.1f",model->plotNums[*m][*c][*t][*a]["purity_err"]*100); TString ts_purityerr(num);
+				  //write signal yield and purity on plots (not done by default)
+				  // TLatex *latex_yield = new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.70,"N_{Sig} = "+ts_yield+" #pm "+ts_yielderr);
+				  // if(_genConfs->get("setLogScale")!="true") latex_yield->Draw();
+				  // TLatex *latex_purity= new TLatex(5350,plot[*c][*t][*a]->GetMaximum()*0.60,"Purity = "+ts_purity+" #pm "+ts_purityerr+" %");
+				  // if(_genConfs->get("setLogScale")!="true") latex_purity->Draw();
+				  plot[*c][*t][*a]->SetTitle("");
+				  plot[*c][*t][*a]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
+				  //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
+				  plot[*c][*t][*a]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
+				  //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
+				  plot[*c][*t][*a]->GetXaxis()->SetTitleOffset(1.05);
+				  plot[*c][*t][*a]->GetYaxis()->SetTitleOffset(1.3);
 
-            //draw legend
-            Double_t legtop = 0.75;
-            TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
-            leg->SetFillStyle(0);
-            leg->SetBorderSize(0);
-            leg->SetTextFont(132);
-            leg->AddEntry((TObject*)0,"","");
-            leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
-            if(_genConfs->get("MCsimfit")!="true") {
-            leg->AddEntry((TObject*)0,"","");
-            leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
-            leg->AddEntry((TObject*)0,"","");
-            leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
-            }
+				  //draw legend
+				  Double_t legtop = 0.75;
+				  TLegend *leg = new TLegend(0.65, 0.35, 0.85, legtop);
+				  leg->SetFillStyle(0);
+				  leg->SetBorderSize(0);
+				  leg->SetTextFont(132);
+				  leg->AddEntry((TObject*)0,"","");
+				  leg->AddEntry(plot[*c][*t][*a]->findObject("sig"),"B_{u} #rightarrow D^{0}K*","l");
+				  if(_genConfs->get("MCsimfit")!="true") {
+					  leg->AddEntry((TObject*)0,"","");
+					  leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
+					  leg->AddEntry((TObject*)0,"","");
+					  leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
+				  }
 
-            //do not draw legend if a log plot or pulls are drawn
-            //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
-            if(_genConfs->get("setLogScale")!="true") leg->Draw();
+				  //do not draw legend if a log plot or pulls are drawn
+				  //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
+				  if(_genConfs->get("setLogScale")!="true") leg->Draw();
 
-            //do not draw title
-            /*
+				  //do not draw title
+				  /*
                 TPaveLabel *pav = new TPaveLabel(0.13,0.9,0.97,0.99,title[*m][*c][*t][*a].c_str(),"NDC");
                 pav->SetBorderSize(0); pav->SetFillStyle(0);
                 pav->SetTextFont(132); pav->SetTextSize(0.8);
                 pav->Draw();
-             */
-            if(genToys=="false") {
-            	if(*a == "run1") lhcbpreliminaryRun1->Draw();
-            	if(*a == "run2") lhcbpreliminaryRun2->Draw();
-            }
+				   */
+				  if(genToys=="false") {
+					  if(*a == "run1") lhcbpreliminaryRun1->Draw();
+					  if(*a == "run2") lhcbpreliminaryRun2->Draw();
+				  }
 
-            if(plot[*c][*t][*a]->GetMaximum()>maxH)
-            {
-            	maxH=plot[*c][*t][*a]->GetMaximum();
-            }
+				  if(plot[*c][*t][*a]->GetMaximum()>maxH)
+				  {
+					  maxH=plot[*c][*t][*a]->GetMaximum();
+				  }
 
-            // Draw pulls
-            if(residualHist && drawpulls)
-            {
-            	std::cout<<" plotting pulls: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
-            	v_canvas[*t][*a]->cd(ipad+1);
-            	//gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
-            	RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
-            	frame->GetYaxis()->SetNdivisions(515);//,kTrue);
-            	frame->SetXTitle("");//#it{m}(DK^{#pm}#pi^{#mp}) (MeV/c^{2})");
-            	residualHist->SetFillColor(4);
-            	residualHist->SetLineColor(4);
-            	frame->addPlotable(residualHist,"BEX0");
-            	frame->Draw();
-            	frame->SetTitle("");
-            }
+				  // Draw pulls
+				  if(residualHist && drawpulls)
+				  {
+					  std::cout<<" plotting pulls: "<<*m<<" "<<*c<<" "<<*t<<" "<<*a<<std::endl;
+					  v_canvas[*t][*a]->cd(ipad+1);
+					  //gPad->SetPad(Form("fit_%s_%s",t->c_str(),a->c_str()),"",0.,0.0,1.0,0.3,0,0,-1);
+					  RooPlot* frame = mB.frame(RooFit::Title("Residual Distribution"));
+					  frame->GetYaxis()->SetNdivisions(515);//,kTrue);
+					  frame->SetXTitle("");//#it{m}(DK^{#pm}#pi^{#mp}) (MeV/c^{2})");
+					  residualHist->SetFillColor(4);
+					  residualHist->SetLineColor(4);
+					  frame->addPlotable(residualHist,"BEX0");
+					  frame->Draw();
+					  frame->SetTitle("");
+				  }
 
-            // Save data and pdf to draw projections in external macro
-            saveOutputForPlottingMacro->cd();
-            //if(*t=="LL") plot_combLLDD[*c][*a]->Write(Form("%s_%s_comb_%s",m->c_str(),c->c_str(),a->c_str()));
-            plot[*c][*t][*a]->Write(Form("%s_%s_%s_%s",m->c_str(),c->c_str(),t->c_str(),a->c_str()));
+				  // Save data and pdf to draw projections in external macro
+				  saveOutputForPlottingMacro->cd();
+				  //if(*t=="LL") plot_combLLDD[*c][*a]->Write(Form("%s_%s_comb_%s",m->c_str(),c->c_str(),a->c_str()));
+				  plot[*c][*t][*a]->Write(Form("%s_%s_%s_%s",m->c_str(),c->c_str(),t->c_str(),a->c_str()));
 
-            //=== log plots ===//
+				  //=== log plots ===//
 
-            ipad = 0;
-            if(*c==both)
-            {
-            	ipad = 1;
-            	v_canvaslog[*t][*a]->cd(ipad);
-            	gPad->SetLogy();
-            	gPad->SetTicks(1, 1);//upper and right-hand ticks
-            }
-            if(*c==plus)
-            {
-            	ipad = 1;
-            	v_canvaslog[*t][*a]->cd(ipad);
-            	gPad->SetLogy();
-            }
-            if(*c==minus)
-            {
-            	ipad = 2;
-            	v_canvaslog[*t][*a]->cd(ipad);
-            	gPad->SetLogy();
-            }
-            plot[*c][*t][*a]->Draw();
-          }
-        }
-      }
+				  ipad = 0;
+				  if(*c==both)
+				  {
+					  ipad = 1;
+					  v_canvaslog[*t][*a]->cd(ipad);
+					  gPad->SetLogy();
+					  gPad->SetTicks(1, 1);//upper and right-hand ticks
+				  }
+				  if(*c==plus)
+				  {
+					  ipad = 1;
+					  v_canvaslog[*t][*a]->cd(ipad);
+					  gPad->SetLogy();
+				  }
+				  if(*c==minus)
+				  {
+					  ipad = 2;
+					  v_canvaslog[*t][*a]->cd(ipad);
+					  gPad->SetLogy();
+				  }
+				  plot[*c][*t][*a]->Draw();
+			  }
+		  }
+	  }
 
-      //fonts and y-axis minimum
-      for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
-        for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
-            plot[*c][*t][*a]->SetTitleFont(132,"X"); plot[*c][*t][*a]->SetLabelFont(132,"X");
-            plot[*c][*t][*a]->SetTitleFont(132,"Y"); plot[*c][*t][*a]->SetLabelFont(132,"Y");
-            if(_genConfs->get("setLogScale")=="true") plot[*c][*t][*a]->SetMinimum(0.100001);
-            else                                      plot[*c][*t][*a]->SetMinimum(0.000001);
-          }
-        }
-      }
-    
-      //save plots
-      for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
-          if(_genConfs->get("setLogScale")=="true")
-            {
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvas[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.pdf",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.C",v_canRes[*t][*a]->GetName()));
-            }
-          else
-            {
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s.pdf",v_canvas[*t][*a]->GetName()));
-              //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
-              v_canvas[*t][*a]->Print(Form("figs/fits/%s.C",v_canvas[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.pdf",v_canRes[*t][*a]->GetName()));
-              if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.C",v_canRes[*t][*a]->GetName()));
-            }
-        }
-      }
-      
-      //=== log plots ===//
+	  //fonts and y-axis minimum
+	  for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
+		  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
+			  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
+				  plot[*c][*t][*a]->SetTitleFont(132,"X"); plot[*c][*t][*a]->SetLabelFont(132,"X");
+				  plot[*c][*t][*a]->SetTitleFont(132,"Y"); plot[*c][*t][*a]->SetLabelFont(132,"Y");
+				  if(_genConfs->get("setLogScale")=="true") plot[*c][*t][*a]->SetMinimum(0.100001);
+				  else                                      plot[*c][*t][*a]->SetMinimum(0.000001);
+			  }
+		  }
+	  }
 
-      //fonts and y-axis minimum
-      for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
-        for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-          for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
-            //plot[*c][*t][*a]->SetMinimum(0.100001);
-            plot[*c][*t][*a]->SetMinimum(0.001);
-          }
-        }
-      }
-      for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
-        for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
-          v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvaslog[*t][*a]->GetName()));
-          v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvaslog[*t][*a]->GetName()));
-        }
-      }
-    }
+	  //save plots
+	  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
+		  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
+			  if(_genConfs->get("setLogScale")=="true")
+			  {
+				  v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvas[*t][*a]->GetName()));
+				  v_canvas[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvas[*t][*a]->GetName()));
+				  if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.pdf",v_canRes[*t][*a]->GetName()));
+				  if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s_log.C",v_canRes[*t][*a]->GetName()));
+			  }
+			  else
+			  {
+				  v_canvas[*t][*a]->Print(Form("figs/fits/%s.pdf",v_canvas[*t][*a]->GetName()));
+				  //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
+				  v_canvas[*t][*a]->Print(Form("figs/fits/%s.C",v_canvas[*t][*a]->GetName()));
+				  if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.pdf",v_canRes[*t][*a]->GetName()));
+				  if(v_canRes[*t][*a]) v_canRes[*t][*a]->Print(Form("figs/residuals/%s.C",v_canRes[*t][*a]->GetName()));
+			  }
+		  }
+	  }
 
-  
+	  //=== log plots ===//
+
+	  //fonts and y-axis minimum
+	  for(std::vector<std::string>::iterator c=chargeList.begin();c!=chargeList.end();c++){
+		  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
+			  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
+				  //plot[*c][*t][*a]->SetMinimum(0.100001);
+				  plot[*c][*t][*a]->SetMinimum(0.001);
+			  }
+		  }
+	  }
+	  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++){
+		  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++){
+			  v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.pdf",v_canvaslog[*t][*a]->GetName()));
+			  v_canvaslog[*t][*a]->Print(Form("figs/fits/%s_log.C",v_canvaslog[*t][*a]->GetName()));
+		  }
+	  }
+  }
 }
+
 
 
 void Fitting::RunManyFits()

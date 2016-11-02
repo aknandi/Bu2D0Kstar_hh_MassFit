@@ -196,8 +196,9 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 
 	        	  //double N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
 	        	  double N_kpifromFit;
-	        	  if(*t == "LL") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*genscale;
-	        	  if(*t == "DD") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*genscale;
+	        	  N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*genscale;
+	        	  //if(*t == "LL") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()))*genscale;
+	        	  //if(*t == "DD") N_kpifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("pidEffSig_%s_%s",(*t).c_str(),(*m).c_str()))*input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()))*genscale;
 	        	  N_kpi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpifromFit,-10.,1000000.);
 
 	          }
@@ -303,7 +304,6 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					// If fit is not charge separated fit to the signal yields
 					if(!_genConfs->isChargeSeparated())
 					{
-
 						double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
 						n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
 
@@ -316,8 +316,9 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					// ncomb = 0.5 * kpi comb yield * efficiency of kst selection (account for split by charge)
 					double N_comb;
 					//if(*m == "d2pik" && *t == "DD")  N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*(input->getD(Form("effComb_%s_d2kpi_75_0.3_0.9_25",(*t).c_str()))/input->getD(Form("effComb_%s_d2kpi_75_0.3_0.7_25",(*t).c_str())))*genscale;
-					if(*m == "d2pik") N_comb = input->getD(Form("N_comb_d2pik_%s_%s",(*c).c_str(),(*t).c_str()));
-					else N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+					//if(*m == "d2pik") N_comb = input->getD(Form("N_comb_d2pik_%s_%s",(*c).c_str(),(*t).c_str()));
+					//else
+					N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 
 					/* // Used for optimisation of cuts
 			if(*t == "LL") {
@@ -351,10 +352,16 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					 */
 
 					if(_genConfs->get("partrecoShape") == "0") {
-						// Assume no asymmetry
-						n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",0.5*N_dstkst,-10.,100000.);
-						//Fit Yield
-						n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",0.5*N_dstkst);//,0.,100000.);
+						if(!_genConfs->isChargeSeparated()) {
+							n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",N_dstkst,-10.,100000.);
+							n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",N_dstkst);//,0.,100000.);
+						}
+						else {
+							// Assume no asymmetry
+							n_dstkst_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_gen_%s",identifier),"",0.5*N_dstkst,-10.,100000.);
+							n_dstkst[*m][*c][*t][*a] = new RooRealVar(Form("n_dstkst_%s",identifier),"",0.5*N_dstkst);//,0.,100000.);
+						}
+
 					}
 					else {
 						if(!_genConfs->isChargeSeparated()) {

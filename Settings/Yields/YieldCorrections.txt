@@ -130,8 +130,8 @@ effComb_kpitod2kk_LL 0.26
 effComb_kpitod2kk_DD 0.20
 effComb_kpitod2pipi_LL 0.23
 effComb_kpitod2pipi_DD 0.13
-effComb_kpitod2pik_LL 0.25
-effComb_kpitod2pik_DD 0.1
+effComb_kpitod2pik_LL 0.77
+effComb_kpitod2pik_DD 0.26
 * 
 * efficiencies of kst mass and ks helicity cuts and BDT cuts
 effSig_LL_100_0_-0.8 1

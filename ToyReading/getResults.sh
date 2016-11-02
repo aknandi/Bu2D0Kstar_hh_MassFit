@@ -1,9 +1,20 @@
 #!/bin/bash
 INPUTFILES=()
 
-INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
-#INPUTDIR="/data/lhcb/users/nandia/B2DKstar/Systematics/"
-SUBDIR="2016-09-28_charmless/"
+if [ "$2" == "toys" ]
+then
+    echo "Finding toy fits"
+    INPUTDIR="/data/lhcb/users/nandia/B2DKstar/ToyStudies/"
+elif [ "$2" == "data" ]
+then
+    echo "Finding data fits"
+    INPUTDIR="/data/lhcb/users/nandia/B2DKstar/Systematics/"
+else
+    echo "Need to choose either data or toys"
+    exit 0
+fi
+
+SUBDIR="2016-11-02_$1/"
 MIN=1
 MAX=1000 #2000
 GAP=20 #40
@@ -34,8 +45,8 @@ VARS=("A_d2kpi"
       "R_d2kk" 
       "R_d2pipi" 
       #"R_d2pik"
-      "Rminus_d2pik"
       "Rplus_d2pik"
+      "Rminus_d2pik"
       #"n_comb_d2pik_plus_DD_all"
       "bu_mean"
       "bu_width_run1"

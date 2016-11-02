@@ -18,9 +18,9 @@ A_prod_run2 -0.0045
 A_prod_run1_err 0.0054
 A_prod_run2_err 0.0108
 A_det_pi 0.0008
-A_det_kpi -0.011
+A_det_kpi -0.0106
 A_det_pi_err 0.0030
-A_det_kpi_err 0.0011
+A_det_kpi_err 0.0016
 A_pid_run1 -0.000956
 A_pid_run2 -0.000140
 A_pid_run1_err 0.000019
@@ -28,12 +28,12 @@ A_pid_run2_err 0.000005
 *
 * Varying physics parameters
 * A_d2kpi 0.0
-* A_d2kk 0.17090
-* R_d2kk 1.03340
-* A_d2pipi 0.17090
-* R_d2pipi 1.03340
-* Rplus_d2pik 0.02347
-* Rminus_d2pik 0.00171
+* A_d2kk 0.08859
+* R_d2kk 0.99024
+* A_d2pipi 0.08859
+* R_d2pipi 0.99024
+* Rplus_d2pik 0.01197
+* Rminus_d2pik 0.00210
 * 
 * Taken from single fit with BDT >-0.8
 N_bu_d2kpi_all_LL_4900 346.013
@@ -68,10 +68,12 @@ N_dstkst_d2kpi_run2_LL_5230 0.76
 N_dstkst_d2kpi_run2_DD_5230 0.77
 *
 * combinatoric yield in ads mode
-N_comb_d2pik_minus_LL 1.63
-N_comb_d2pik_plus_LL 4.20
-N_comb_d2pik_minus_DD 3.45
-N_comb_d2pik_plus_DD 3.25
+* N_comb_d2pik_minus_LL 1.63
+* N_comb_d2pik_plus_LL 4.20
+* N_comb_d2pik_both_LL 5.83
+* N_comb_d2pik_minus_DD 3.45
+* N_comb_d2pik_plus_DD 3.25
+* N_comb_d2pik_both_DD 6.70
 * 
 * Add and extra 700 pb-1 of run 2 data (1.7*Run2)
 * N_bu_d2kpi_run2_LL_5230 364.0

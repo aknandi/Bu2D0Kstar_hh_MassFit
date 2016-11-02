@@ -1,13 +1,18 @@
 bu_mean 5279
 bu_mean_LimL 5270
 bu_mean_LimU 5288
-* For Gaussian
-* bu_width_run1 13.6
+* For Johnson
+* bu_width_run1 13.7
 * bu_width_run1_LimL 0.0
 * bu_width_run1_LimU 30.0
-* bu_width_run2 15.0
+* bu_width_run2 15.5
 * bu_width_run2_LimL 0.0
 * bu_width_run2_LimU 30.0
+* bu_gamma 0.0
+* bu_delta_run1_LL 0.67
+* bu_delta_run1_DD 0.62
+* bu_delta_run2_LL 0.63
+* bu_delta_run2_DD 0.72
 *
 bu_width_all 12.0
 bu_width_all_LimL 0.0

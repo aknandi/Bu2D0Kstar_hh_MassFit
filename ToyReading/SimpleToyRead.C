@@ -3,6 +3,7 @@
 #include <fstream>
 #include <map>
 #include <math.h>
+#include <cmath>
 #include "SimpleToyRead.h"
 #include "TTree.h"
 #include "TH1F.h"
@@ -76,7 +77,7 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
   inputfile.close();
 }
 
-void SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueval){
+double SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueval, std::string method){
 
   std::cout << "In MakeSomePlots" << std::endl;
   std::string rootfile = "results/"+name_var+"_ntp.root";
@@ -115,6 +116,20 @@ void SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueva
     pull->Fill(valp);
   }
 
+  double systematicError;
+
+  if(method.compare("data")==0) {
+    systematicError = var->GetRMS();
+  }
+  else if(method.compare("toys")==0) {
+    systematicError = std::abs(var->GetMean() - trueval);
+  }
+  else {
+    systematicError = 0;
+  }
+
+  std::cout << "systematic " << name_var << " " << systematicError << std::endl;
+
   if(name_var.compare("adsSignificance")==0) {
     var->Fit("gaus","EM");
   }
@@ -139,5 +154,5 @@ void SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float trueva
 
   delete c1;
 
-
+  return systematicError;
 }
