@@ -4,6 +4,7 @@
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "DoubleCrystalBall.h"
+#include "DoubleJohnson.h"
 #include "PartRecoDstKst.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
@@ -27,6 +28,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
         	bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	//bu[*mode][*charge][*trackType][*run]  = new DoubleGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
+        	//bu[*mode][*charge][*trackType][*run]  = new DoubleJohnson(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
         	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
            }
@@ -112,6 +114,17 @@ void Pdf_Gen::setRelations()
   RooRealVar* bu_width_ratio_all_mix = new RooRealVar("bu_width_ratio_all_mix","",relConfs.getD("bu_width_ratio_all_mix"),
                                         relConfs.getD("bu_width_ratio_all_mix_LimL"),relConfs.getD("bu_width_ratio_all_mix_LimU") );
 
+  // For Johnson
+  RooRealVar* bu_delta_run1_LL = new RooRealVar("bu_delta_run1_LL","",relConfs.getD("bu_delta_run1_LL"));
+  RooRealVar* bu_delta_run2_LL = new RooRealVar("bu_delta_run2_LL","",relConfs.getD("bu_delta_run2_LL"));
+  RooRealVar* bu_delta_run1_DD = new RooRealVar("bu_delta_run1_DD","",relConfs.getD("bu_delta_run1_DD"));
+  RooRealVar* bu_delta_run2_DD = new RooRealVar("bu_delta_run2_DD","",relConfs.getD("bu_delta_run2_DD"));
+  RooRealVar* bu_gamma = new RooRealVar("bu_gamma","",relConfs.getD("bu_gamma"));
+
+  RooRealVar* bu_delta_all_LL = new RooRealVar("bu_delta_all_LL","",relConfs.getD("bu_delta_run1_LL"));
+  RooRealVar* bu_delta_all_DD = new RooRealVar("bu_delta_all_DD","",relConfs.getD("bu_delta_run1_DD"));
+  RooRealVar* bu_delta_mix = new RooRealVar("bu_delta_mix","",relConfs.getD("bu_delta_run1_DD"));
+
   // Combs- exponential
   RooRealVar *combs_slope_mix = new RooRealVar("exp_combs_slope","",relConfs.getD("exp_mix_combs_slope"),
                                                    relConfs.getD("exp_mix_combs_slope_LimL"), relConfs.getD("exp_mix_combs_slope_LimU") );
@@ -173,6 +186,7 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(bu_alpha_run1_DD);
   fixedParams->push_back(bu_alpha_run2_DD);
   fixedParams->push_back(bu_n_DD);
+
   fixedParams->push_back(bu_width_ratio_all_LL);
   fixedParams->push_back(bu_width_ratio_all_DD);
   fixedParams->push_back(bu_width_ratio_run1_LL);
@@ -185,7 +199,15 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(bu_frac_run1_DD);
   fixedParams->push_back(bu_frac_run2_LL);
   fixedParams->push_back(bu_frac_run2_DD);
-
+/*
+  fixedParams->push_back(bu_delta_all_LL);
+  fixedParams->push_back(bu_delta_run1_LL);
+  fixedParams->push_back(bu_delta_run2_LL);
+  fixedParams->push_back(bu_delta_all_DD);
+  fixedParams->push_back(bu_delta_run1_DD);
+  fixedParams->push_back(bu_delta_run2_DD);
+  fixedParams->push_back(bu_gamma);
+*/
   //fixedParams->push_back(bu_alpha_mix);
   //fixedParams->push_back(bu_n_mix);
   //fixedParams->push_back(combs_slope_LL);
@@ -217,6 +239,8 @@ void Pdf_Gen::setRelations()
 
           //Signal
           bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
+          //bu[*mode][*charge][*trackType][*run]->setGamma(bu_gamma);
+
           if(*run=="all") {
         	  bu[*mode][*charge][*trackType][*run]->setWidth(bu_width_all);
           }
@@ -231,16 +255,19 @@ void Pdf_Gen::setRelations()
 
         	  if(*run=="all") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_LL);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_LL);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_all_LL);
         	  }
         	  else if(*run=="run1") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_run1_LL);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_run1_LL);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_run1_LL);
         	  }
         	  else if(*run=="run2") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_run2_LL);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run2_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_run2_LL);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_run2_LL);
         	  }
@@ -255,16 +282,19 @@ void Pdf_Gen::setRelations()
 
         	  if(*run=="all") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_DD);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_DD);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_all_DD);
         	  }
         	  else if(*run=="run1") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_run1_DD);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_run1_DD);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_run1_DD);
         	  }
         	  else if(*run=="run2") {
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_run2_DD);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run2_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_run2_DD);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_run2_DD);
         	  }
@@ -278,6 +308,7 @@ void Pdf_Gen::setRelations()
 
         	  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_all_mix);
         	  bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
+        	  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_mix);
         	  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_all_mix);
         	  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_all_LL);
 

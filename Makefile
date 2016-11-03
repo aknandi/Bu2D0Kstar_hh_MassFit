@@ -15,10 +15,10 @@ OBJDIR        = ${PWD}/obj/
 #Main program classes
 OBJS	      = $(OBJDIR)Main.o $(OBJDIR)Base.o $(OBJDIR)CommonTools.o $(OBJDIR)Fitting.o $(OBJDIR)InternalStorage.o $(OBJDIR)Model.o $(OBJDIR)Pdf_Base.o $(OBJDIR)Pdf_Fit.o $(OBJDIR)Pdf_Gen.o $(OBJDIR)Settings.o $(OBJDIR)Yields.o
 #PDF wrappers
-OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o $(OBJDIR)DoubleGaussian.o $(OBJDIR)DoubleCrystalBall.o $(OBJDIR)PartRecoDstKst.o $(OBJDIR)PartRecoShapes.o
+OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o $(OBJDIR)DoubleGaussian.o $(OBJDIR)DoubleCrystalBall.o $(OBJDIR)DoubleJohnson.o $(OBJDIR)PartRecoDstKst.o $(OBJDIR)PartRecoShapes.o
 #Low-mass analytic PDF classes
 #DATAOBJSCINT  = RooHORNSdini.C RooHILLdini.C RooLITTLEHORNSdini.C 
-DATAOBJS      = $(SRCDIR)RooHORNSdini.C $(SRCDIR)RooHILLdini.C $(SRCDIR)RooLITTLEHORNSdini.C
+DATAOBJS      = $(SRCDIR)RooHORNSdini.C $(SRCDIR)RooHILLdini.C $(SRCDIR)RooLITTLEHORNSdini.C $(SRCDIR)RooJohnsonSU.C
 #-------------------------------------------------------------
 $(EXECUTABLE) :			$(OBJS)	$(OBJDIR)EventDict.o
 				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS) $(OBJDIR)EventDict.o
@@ -51,6 +51,9 @@ $(OBJDIR)DoubleGaussian.o :	$(SRCDIR)DoubleGaussian.C $(SRCDIR)DoubleGaussian.h
 $(OBJDIR)DoubleCrystalBall.o :	$(SRCDIR)DoubleCrystalBall.C $(SRCDIR)DoubleCrystalBall.h
 							${CC} $(CXXFLAGS) -c $(SRCDIR)DoubleCrystalBall.C -o $(OBJDIR)DoubleCrystalBall.o
 
+$(OBJDIR)DoubleJohnson.o :	$(SRCDIR)DoubleJohnson.C $(SRCDIR)DoubleJohnson.h
+							${CC} $(CXXFLAGS) -c $(SRCDIR)DoubleJohnson.C -o $(OBJDIR)DoubleJohnson.o
+							
 $(OBJDIR)CommonTools.o : 	$(SRCDIR)CommonTools.C $(SRCDIR)CommonTools.h
 							${CC} $(CXXFLAGS) -c $(SRCDIR)CommonTools.C -o $(OBJDIR)CommonTools.o
 
@@ -92,6 +95,9 @@ $(OBJDIR)RooHILLdini.o :        $(SRCDIR)RooHILLdini.C $(SRCDIR)RooHILLdini.h
 
 $(OBJDIR)RooLITTLEHORNSdini.o :       $(SRCDIR)RooLITTLEHORNSdini.C $(SRCDIR)RooLITTLEHORNSdini.h
 								${CC} $(CXXFLAGS) -c $(SRCDIR)RooLITTLEHORNSdini.C -o $(OBJDIR)RooLITTLEHORNSdini.o
+								
+$(OBJDIR)RooJohnsonSU.o :       $(SRCDIR)RooJohnsonSU.C $(SRCDIR)RooJohnsonSU.h
+								${CC} $(CXXFLAGS) -c $(SRCDIR)RooJohnsonSU.C -o $(OBJDIR)RooJohnsonSU.o							
 
 #-------------------------------------------------------
 clean:

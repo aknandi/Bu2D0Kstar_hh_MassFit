@@ -8,6 +8,7 @@
 #include "myGaussian.h"
 #include "DoubleGaussian.h"
 #include "DoubleCrystalBall.h"
+#include "DoubleJohnson.h"
 #include "Exponential.h"
 #include "PartRecoDstKst.h"
 
