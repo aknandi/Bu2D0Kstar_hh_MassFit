@@ -14,7 +14,7 @@ else
     exit 0
 fi
 
-SUBDIR="2016-11-02_$1/"
+SUBDIR= "2016-11-02_$1/"#"2016-09-13_rB1deltaB70"
 MIN=1
 MAX=1000 #2000
 GAP=20 #40

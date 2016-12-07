@@ -304,10 +304,24 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					// If fit is not charge separated fit to the signal yields
 					if(!_genConfs->isChargeSeparated())
 					{
-						double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
-						n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
 
-						n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,0.,100000.);
+						if(*m!="d2pik") {
+							double N_bu   = input->getD(Form("N_bu_%s_both_%s",(*m).c_str(),(*t).c_str()))*genscale;
+							n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
+							n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,0.,100000.);
+						}
+						else {
+							double efficiencyVeto = input->getD(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()));
+							double errEfficiencyVeto = sqrt(5)*input->getD(Form("effVeto_%s_%s_err",(*a).c_str(),(*t).c_str()));
+							double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
+							double errEfficiencyBdt = efficiencyBdt * sqrt(5)*sqrt(pow(input->getD(Form("effBdt_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effBdt_d2kpi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2));
+							RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()),"",efficiencyVeto + (_genConfs->get("vetoefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyVeto):0.));
+							RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyBdt):0.));
+
+							RooRealVar *Rads = new RooRealVar("Rads","",0,1);
+							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2",RooArgList(*Rads,*n_bu_gen["d2kpi"][*c][*t][*a],*effVeto,*effBdt));
+							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2",RooArgList(*Rads,*n_bu_fit["d2kpi"][*c][*t][*a],*effVeto,*effBdt));
+						}
 					}
 
 					// The rest of the pdf shapes are always fitted for yields

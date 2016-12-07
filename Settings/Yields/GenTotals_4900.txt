@@ -84,11 +84,11 @@ N_dstkst_d2kpi_run2_DD_5230 0.77
 * N_dstkst_d2kpi_run2_DD_5230 1.3
 * 
 * Other values from data fit
-N_bu_d2kpi_run1_LL 299.356
-N_bu_d2kpi_run1_DD 710.169
-N_bu_d2kpi_run2_LL 299.356
-N_bu_d2kpi_run2_DD 710.169
-N_bu_d2kpi_both_LL 295.913
+N_bu_d2kpi_run1_LL 222
+N_bu_d2kpi_run1_DD 481
+N_bu_d2kpi_run2_LL 219
+N_bu_d2kpi_run2_DD 478
+N_bu_d2kpi_both_LL 295
 N_bu_d2kpi_plus_LL 147.957
 N_bu_d2kpi_minus_LL 147.957
 N_comb_d2kpi_plus_LL 166.699

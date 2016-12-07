@@ -100,6 +100,7 @@ double SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float true
   //TH1F * errLow = new TH1F("errLow",(name_var+"_errLow").c_str(),30,0,2*eval);
   TH1F * pull = new TH1F("pull",(name_var+"_pull").c_str(),40,-5.0,5.0);
 
+  //int count =0;
 
   for(int i=0; i<mytree->GetEntries(); ++i){
 
@@ -114,6 +115,9 @@ double SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float true
     //errHigh->Fill(evalHigh);
     //errLow->Fill(evalLow);
     pull->Fill(valp);
+    //if(name_var.compare("adsSignificance")==0) {
+    //  if ( val < 1.3 ) count += 1;
+    //}
   }
 
   double systematicError;
@@ -129,6 +133,7 @@ double SimpleToyRead::MakeSomePlotsFromRootFile(std::string name_var, float true
   }
 
   std::cout << "systematic " << name_var << " " << systematicError << std::endl;
+  //std::cout << count << std::endl;
 
   if(name_var.compare("adsSignificance")==0) {
     var->Fit("gaus","EM");

@@ -5,7 +5,7 @@ CXXFLAGS      = -O -Wall -fPIC -g -W -Wextra -pedantic
 CXXFLAGS     += -isystem $(shell root-config --incdir)
 CXXFLAGS     += $(ROOTCFLAGS) 
 
-LIBS	      = $(ROOTLIBS) -lTreePlayer -lTMVA -lRooFitCore -lRooFit -lMinuit -lFoam -lXMLIO
+LIBS	      = $(ROOTLIBS) -lTreePlayer -lTMVA -lRooFitCore -lRooFit -lRooStats -lMinuit -lFoam -lXMLIO
 
 CC            = c++
 EXECUTABLE    = run

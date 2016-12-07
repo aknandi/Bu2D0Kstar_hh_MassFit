@@ -26,6 +26,7 @@
 #include "TLegend.h"
 #include "TMath.h"
 #include "TTree.h"
+#include "TGraphErrors.h"
 
 #include "RooHist.h"
 #include "RooRealVar.h"
@@ -46,6 +47,32 @@
 #include "TH2F.h"
 #include "TROOT.h"
 #include <boost/algorithm/string.hpp>
+
+#include "RooStats/ModelConfig.h"
+#include "RooStats/FeldmanCousins.h"
+#include "RooStats/ProfileLikelihoodCalculator.h"
+#include "RooStats/ToyMCSampler.h"
+#include "RooStats/PointSetInterval.h"
+#include "RooStats/ConfidenceBelt.h"
+#include "RooStats/LikelihoodIntervalPlot.h"
+#include "RooStats/FrequentistCalculator.h"
+#include "RooStats/AsymptoticCalculator.h"
+#include "RooStats/HypoTestInverter.h"
+#include "RooStats/ProfileLikelihoodTestStat.h"
+#include "RooStats/RatioOfProfiledLikelihoodsTestStat.h"
+#include "RooStats/HypoTestInverterPlot.h"
+#include "RooStats/SamplingDistPlot.h"
+/*
+#include "RooStats/ModelConfig.h"
+#include "RooStats/FeldmanCousins.h"
+#include "RooStats/ProfileLikelihoodCalculator.h"
+#include "RooStats/ToyMCSampler.h"
+#include "RooStats/FrequentistCalculator.h"
+#include "RooStats/AsymptoticCalculator.h"
+#include "RooStats/HypoTestInverter.h"
+#include "RooStats/ProfileLikelihoodTestStat.h"
+*/
+using namespace RooStats;
 
 // Trace memory issues
 #include "RooTrace.h"
@@ -518,6 +545,169 @@ void Fitting::RunFullFit(bool draw=true)
 
       std::cout << "End fitTo" << std::endl;
 
+      ////////////////
+      // CL setting //
+      ////////////////
+      bool cl = false;
+      if(cl) {
+      double mB_low = 5230; double mB_high = 5600;
+
+      RooWorkspace w("w");
+      ModelConfig mc("ModelConfig",&w);
+
+      mB.setRange("range_fc",mB_low,mB_high);
+      sim->setNormRange("range_fc");
+      mc.SetObservables(RooArgSet (mB,catNew));
+      w.import(*data);
+      mc.SetPdf(*sim);
+
+      RooArgList vars = result->floatParsFinal();
+      RooRealVar* variable = (RooRealVar*)vars.at(9); //9 for R- 10 for R+ 0 for Rads
+
+      mc.SetParametersOfInterest(RooArgSet(*variable));
+      w.defineSet("nuisParams","Rplus_d2pik,A_d2kk,A_d2kpi,A_d2pipi,N_d2kpi_DD_run1,N_d2kpi_DD_run2,N_d2kpi_LL_run1,N_d2kpi_LL_run2,R_d2kk,R_d2pipi,bu_mean,bu_width_run1,bu_width_run2,d2kpi_exp_DD_combs_slope,d2kpi_exp_LL_combs_slope,n_comb_d2kk_minus_DD_run1,n_comb_d2kk_minus_DD_run2,n_comb_d2kk_minus_LL_run1,n_comb_d2kk_minus_LL_run2,n_comb_d2kk_plus_DD_run1,n_comb_d2kk_plus_DD_run2,n_comb_d2kk_plus_LL_run1,n_comb_d2kk_plus_LL_run2,n_comb_d2pipi_minus_DD_run1,n_comb_d2pipi_minus_DD_run2,n_comb_d2pipi_minus_LL_run1,n_comb_d2pipi_minus_LL_run2,n_comb_d2pipi_plus_DD_run1,n_comb_d2pipi_plus_DD_run2,n_comb_d2pipi_plus_LL_run1,n_comb_d2pipi_plus_LL_run2,n_comb_d2pik_minus_DD_run1,n_comb_d2pik_minus_DD_run2,n_comb_d2pik_minus_LL_run1,n_comb_d2pik_minus_LL_run2,n_comb_d2pik_plus_DD_run1,n_comb_d2pik_plus_DD_run2,n_comb_d2pik_plus_LL_run1,n_comb_d2pik_plus_LL_run2,n_comb_d2kpi_minus_DD_run1,n_comb_d2kpi_minus_DD_run2,n_comb_d2kpi_minus_LL_run1,n_comb_d2kpi_minus_LL_run2,n_comb_d2kpi_plus_DD_run1,n_comb_d2kpi_plus_DD_run2,n_comb_d2kpi_plus_LL_run1,n_comb_d2kpi_plus_LL_run2");
+      //w.defineSet("nuisParams","bu_mean,bu_width_run1,bu_width_run2,d2kpi_exp_DD_combs_slope,d2kpi_exp_LL_combs_slope,n_bu_fit_d2kpi_both_DD_run1,n_bu_fit_d2kpi_both_DD_run2,n_bu_fit_d2kpi_both_LL_run1,n_bu_fit_d2kpi_both_LL_run2,n_bu_fit_d2kk_both_DD_run1,n_bu_fit_d2kk_both_DD_run2,n_bu_fit_d2kk_both_LL_run1,n_bu_fit_d2kk_both_LL_run2,n_bu_fit_d2pipi_both_DD_run1,n_bu_fit_d2pipi_both_DD_run2,n_bu_fit_d2pipi_both_LL_run1,n_bu_fit_d2pipi_both_LL_run2,n_comb_d2kpi_both_DD_run1,n_comb_d2kpi_both_DD_run2,n_comb_d2kpi_both_LL_run1,n_comb_d2kpi_both_LL_run2,n_comb_d2kk_both_DD_run1,n_comb_d2kk_both_DD_run2,n_comb_d2kk_both_LL_run1,n_comb_d2kk_both_LL_run2,n_comb_d2pipi_both_DD_run1,n_comb_d2pipi_both_DD_run2,n_comb_d2pipi_both_LL_run1,n_comb_d2pipi_both_LL_run2,n_comb_d2pik_both_DD_run1,n_comb_d2pik_both_DD_run2,n_comb_d2pik_both_LL_run1,n_comb_d2pik_both_LL_run2");
+
+      mc.SetNuisanceParameters(*w.set("nuisParams"));
+
+      // import model in the workspace
+      w.import(mc);
+
+      RooAbsData *wdata = 0;
+      wdata = w.data("data");
+
+      //Make a signal and background model which is an instance of the fit PDF taken from the modelConfig
+      ModelConfig *sbModel = (ModelConfig*)w.obj("ModelConfig");
+      //Parameter of interest
+      RooRealVar *poi = (RooRealVar*)sbModel->GetParametersOfInterest()->first();
+      sbModel->SetSnapshot(*poi);
+
+      //Background only model
+      ModelConfig *bModel = (ModelConfig*)sbModel->Clone();
+      //Set it's name to be different, with poi_0 i.e. signal is zero
+      bModel->SetName(TString(sbModel->GetName())+TString("_with_poi_0"));
+      //Set the signal yield to 0
+      poi->setVal(0);
+      bModel->SetSnapshot(*poi);
+
+      // asymptotic calculator
+      AsymptoticCalculator  ac(*wdata, *bModel, *sbModel);
+      ac.SetOneSided(false);  // for one-side tests (limits)
+      AsymptoticCalculator::SetPrintLevel(-1);
+
+      // create hypotest inverter
+      // passing the desired calculator
+      HypoTestInverter calc(ac);    // for asymptotic
+
+      // set confidence level (e.g. 95% upper limits)
+      calc.SetConfidenceLevel(0.95);
+
+      // for CLS
+      bool useCLs =true;
+      calc.UseCLs(useCLs);
+      calc.SetVerbose(false);
+
+      // profile likelihood test statistics
+      ProfileLikelihoodTestStat profll(*sbModel->GetPdf());
+      // for CLs (bounded intervals) use one-sided profile likelihood
+      if (useCLs) profll.SetOneSided(1);
+
+      // configure ToyMC Samler (needed only for frequentit calculator)
+      ToyMCSampler *toymcs = (ToyMCSampler*)calc.GetHypoTestCalculator()->GetTestStatSampler();
+      // set the test statistic to use
+      toymcs->SetTestStatistic(&profll);
+
+      // if the pdf is not extended (e.g. in the Poisson model)
+      // we need to set the number of events
+      //if (!sbModel->GetPdf()->canBeExtended())
+    //	  toymcs->SetNEventsPerToy(1);
+
+      int npoints = 100;  // number of points to scan
+      // min and max (better to choose smaller intervals)
+      double poimin = 0;
+      double poimax = 0.04;//poi->getMax();
+
+      std::cout << "Doing a fixed scan  in interval : " << poimin << " , " << poimax << std::endl;
+      calc.SetFixedScan(npoints,poimin,poimax);
+
+      HypoTestInverterResult * r = (HypoTestInverterResult*)calc.GetInterval();
+
+      double upperLimit = r->UpperLimit();
+
+      std::cout << "The computed upper limit is: " << upperLimit << std::endl;
+
+      // compute expected limit
+      std::cout << "Expected upper limits, using the B (alternate) model : " << std::endl;
+      std::cout << " expected limit (median) " << r->GetExpectedUpperLimit(0) << std::endl;
+      std::cout << " expected limit (-1 sig) " << r->GetExpectedUpperLimit(-1) << std::endl;
+      std::cout << " expected limit (+1 sig) " << r->GetExpectedUpperLimit(1) << std::endl;
+
+      gROOT->Reset();
+
+       HypoTestInverterPlot *plot = new HypoTestInverterPlot("HTI_Result_Plot","",r);
+
+       gStyle->SetPadTopMargin(0.1);
+ gStyle->SetPadBottomMargin(0.18);
+ gStyle->SetPadLeftMargin(0.13);
+ gStyle->SetPadRightMargin(0.13);
+ gStyle->SetNdivisions(505,"XYZ");
+ gStyle->SetStatFont(132);
+ gStyle->SetStatFontSize(0.08);
+ gStyle->SetTitleFont(132,"XYZ");
+ gStyle->SetLabelFont(132,"XYZ");
+ gStyle->SetTitleSize(0.077,"XYZ");
+ gStyle->SetLabelSize(0.06,"XYZ");
+ gStyle->SetTitleOffset(1.05,"X");
+ gStyle->SetTitleOffset(0.8,"Y");
+ gStyle->SetMarkerSize(1);
+ gStyle->SetPadTickX(1);
+ gStyle->SetPadTickY(1);
+
+
+       // plot in a new canvas with style
+       TCanvas * c1 = new TCanvas("HypoTestInverter Scan","",700,600);
+       c1->SetLogy(false);
+
+
+       TPad *pad = new TPad("pad","",0,0,1,1);
+       pad->cd();
+
+
+       plot->Draw("2CL");  // plot also CLb and CLs+b
+       //plot->Draw("OBS");  // plot only observed p-value
+        TPaveLabel* lhcblabel = new TPaveLabel(0.5,0.8,0.8,0.85,"#font[132]{LHCb preliminary}","BRNDC");
+         lhcblabel->SetBorderSize(0);
+         lhcblabel->SetFillStyle(0);
+         lhcblabel->SetTextSize(1);
+         lhcblabel->SetTextFont(62);
+         lhcblabel->SetTextAlign(31);
+   lhcblabel->Draw();
+
+       c1->cd();
+
+
+       pad->Draw();
+       //Edit the plot to remove legend and use correct axis titles
+       TList *list = pad->GetListOfPrimitives();
+       //list->ls(); //Use this to figure out the name of the things plotted on the canvas
+       TLegend *l = (TLegend*)list->FindObject("TPave");
+       l->Delete();
+
+               TGraphErrors *gr1 = (TGraphErrors*)list->FindObject("CLs_observed");
+               gr1->GetXaxis()->SetTitle("#font[12]{R}^{#font[12]{-}}");
+               gr1->GetYaxis()->SetTitle("#font[12]{p}-value");
+
+               TGraphErrors *gr2 = (TGraphErrors*)list->FindObject("CLs+b_observed");
+               gr2->GetXaxis()->SetTitle("#font[12]{R}^{#font[12]{-}}");
+               gr2->GetYaxis()->SetTitle("#font[12]{p}-value");
+
+               TGraphErrors *gr3 = (TGraphErrors*)list->FindObject("CLs_observed");
+               gr3->GetXaxis()->SetTitle("#font[12]{R}^{#font[12]{-}}");
+               gr3->GetYaxis()->SetTitle("#font[12]{p}-value");
+               c1->SaveAs(Form("output/CLS_Rminus.pdf"));
+
+      }
+
       if(!draw) {resultTemp = result;}
 
       // Get mean in order to calculate yields and purities in Bu region
@@ -646,7 +836,7 @@ void Fitting::RunFullFit(bool draw=true)
   ////////
 
   for(std::vector<std::string>::iterator m=modeList.begin();m!=modeList.end();m++) {
-	  TCanvas* canvas = new TCanvas(Form("canvas_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,250);
+	  TCanvas* canvas = new TCanvas(Form("canvas_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,300);
 	  if (drawpulls) canvas->Divide(chargeList.size()*2,1);
 	  else           canvas->Divide(chargeList.size(),1);
 
@@ -654,7 +844,7 @@ void Fitting::RunFullFit(bool draw=true)
 	  // Are they really needed if they can be chosen to be plotted on the fits canvas?
 	  TCanvas* canRes = 0;
 	  if(doFit=="true"){
-		  canRes = new TCanvas(Form("canres_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,250);
+		  canRes = new TCanvas(Form("canres_%s",(*m).c_str()),Form("%s",(*m).c_str()),30,30,chargeList.size()*500,300);
 		  canRes->Divide(chargeList.size(),1);
 	  }
 
@@ -746,7 +936,7 @@ void Fitting::RunFullFit(bool draw=true)
 			  else {
 				  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
 						  RooFit::Components(Form("%s",mergedSignal[*m][*c].c_str())),
-						  RooFit::LineStyle(kSolid),RooFit::LineColor(kRed), RooFit::LineWidth(2), RooFit::Name("sig") );
+						  RooFit::LineStyle(kSolid),RooFit::FillColor(kRed), RooFit::DrawOption("F"), RooFit::LineWidth(2), RooFit::Name("sig") );
 			  }
 
 			  if(_genConfs->get("MCsimfit")!="true") {
@@ -756,12 +946,12 @@ void Fitting::RunFullFit(bool draw=true)
 					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)),RooFit::ProjWData(RooArgSet(mode,charge),*data),
 							  RooFit::Range("uppersideband,lowersideband"),RooFit::Normalization(sidebands/total,RooAbsReal::Relative),//RooFit::Normalization(sidebands,RooAbsReal::NumEvent),
 							  RooFit::Components(Form("%s",mergedCombinatoic[*m][*c].c_str())),
-							  RooFit::LineStyle(kSolid), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
+							  RooFit::LineStyle(kDashed), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
 				  }
 				  else {
 					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
 							  RooFit::Components(Form("%s",mergedCombinatoic[*m][*c].c_str())),
-							  RooFit::LineStyle(kSolid), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
+							  RooFit::LineStyle(kDashed), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
 				  }
 
 
@@ -800,6 +990,13 @@ void Fitting::RunFullFit(bool draw=true)
 					  RooFit::LineColor(kBlack),RooFit::LineWidth(2) );
 		  }
 
+		  // Plot data again
+		  if(*m == "d2pik" && unblind=="false") {
+			  data->plotOn(plot[*c],RooFit::CutRange("uppersideband"),RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())),RooFit::MarkerStyle(20),RooFit::MarkerSize(0.7));
+		  }
+		  else {
+			  data->plotOn(plot[*c],RooFit::Cut(Form("mode==mode::%s && charge==charge::%s",(*m).c_str(),(*c).c_str())),RooFit::MarkerStyle(20),RooFit::MarkerSize(0.7));
+		  }
 
 
 
@@ -818,6 +1015,7 @@ void Fitting::RunFullFit(bool draw=true)
 		  {
 			  ipad = 1;
 			  canvas->cd(ipad);
+			  gPad->SetLeftMargin(0.1);
 		  }
 		  if(*c==plus)
 		  {
@@ -825,18 +1023,22 @@ void Fitting::RunFullFit(bool draw=true)
 			  ipad = 2;
 			  if(drawpulls) ipad = 3;
 			  canvas->cd(ipad);
+			  gPad->SetLeftMargin(0);
 		  }
 		  plot[*c]->SetMinimum(0.1);
 		  //if(*t=="LL") plot_combLLDD[*c][*a]->SetMinimum(0.1);
 		  plot[*c]->Draw();
 
 		  plot[*c]->SetTitle("");
-		  plot[*c]->SetXTitle("m(DK^{*}) [MeV/#it{c}^{2}]");
+		  plot[*c]->SetXTitle("m(DK*) [MeV/#it{c}^{2}]");
 		  //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
 		  plot[*c]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
 		  //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
 		  plot[*c]->GetXaxis()->SetTitleOffset(1.05);
 		  plot[*c]->GetYaxis()->SetTitleOffset(0.7);
+		  plot[*c]->SetLabelFont(132,"X");
+		  plot[*c]->SetLabelFont(132,"Y");
+		  gPad->SetRightMargin(0.04);
 
 		  //draw legend
 		  Double_t legtop = 0.75;
@@ -855,28 +1057,34 @@ void Fitting::RunFullFit(bool draw=true)
 
 		  //do not draw legend if a log plot or pulls are drawn
 		  //if(_genConfs->get("setLogScale")!="true" && !drawpulls) leg->Draw();
-		  if(_genConfs->get("setLogScale")!="true") leg->Draw();
+		  //if(_genConfs->get("setLogScale")!="true") leg->Draw();
 
 		  const char* decayMode;
 		  if(*m=="d2kpi") {
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{-} #pi^{+} ]_{D} K^{*-}";
-			  else decayMode = "B^{+} #rightarrow [ K^{+} #pi^{-} ]_{D} K^{*+}";
+			  plot[*c]->GetYaxis()->SetRangeUser(0,250);
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+}) K^{*-}";
+			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-}) K^{*+}";
 		  }
 		  if(*m=="d2kk") {
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{-} K^{+} ]_{D} K^{*-}";
-			  else decayMode = "B^{+} #rightarrow [ K^{+} K^{-} ]_{D} K^{*+}";
+			  plot[*c]->GetYaxis()->SetRangeUser(0,42);
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} K^{+}) K^{*-}";
+			  else decayMode = "B^{+} #rightarrow D(K^{+} K^{-}) K^{*+}";
 		  }
 		  if(*m=="d2pipi") {
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ #pi^{-} #pi^{+} ]_{D} K^{*-}";
-			  else decayMode = "B^{+} #rightarrow [ #pi^{+} #pi^{-} ]_{D} K^{*+}";
+			  plot[*c]->GetYaxis()->SetRangeUser(0,15);
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+}) K^{*-}";
+			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-}) K^{*+}";
 		  }
 		  if(*m=="d2pik") {
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow [ K^{+} #pi^{-} ]_{D} K^{*-}";
-			  else decayMode = "B^{+} #rightarrow [ K^{-} #pi^{+} ]_{D} K^{*+}";
+			  plot[*c]->GetYaxis()->SetRangeUser(0,9);
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{+} #pi^{-}) K^{*-}";
+			  else decayMode = "B^{+} #rightarrow D(K^{-} #pi^{+}) K^{*+}";
 		  }
 
-		  modeOnPlot = new TPaveText(0.4,0.6,0.65,0.8,"TR NDC");
+		  modeOnPlot = new TPaveText(0.4,0.55,0.60,0.70,"TR NDC");
 		  modeOnPlot->SetBorderSize(0); modeOnPlot->SetFillStyle(0);
+		  modeOnPlot->SetTextSize(0.1);
+		  modeOnPlot->SetTextFont(132);
 		  modeOnPlot->AddText(decayMode);
 		  modeOnPlot->Draw();
 
@@ -1364,6 +1572,7 @@ void Fitting::OrderToys(int n)
   if(1==n&&!DB){
     mcstudy->generate(n,nEvtsPerSample,true);
     data=(RooDataSet*)mcstudy->genData(n-1);
+
   }else{
     std::cout<<"Generating "<<n<<" toys of "<<nEvtsPerSample<<" events."<<std::endl;
     mcstudy->generateAndFit(n,nEvtsPerSample);

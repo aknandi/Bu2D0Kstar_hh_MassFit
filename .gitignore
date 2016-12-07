@@ -3,6 +3,7 @@ obj/*
 figs/*
 output/*
 TOYS/*
+logs/*
 output.txt
 outputToys.txt
 EventDict.C
