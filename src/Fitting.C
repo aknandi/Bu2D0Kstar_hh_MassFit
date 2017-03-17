@@ -139,16 +139,16 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   lhcbpreliminaryRun2 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
   lhcbpreliminaryRun2->SetBorderSize(0); lhcbpreliminaryRun2->SetFillStyle(0);
   lhcbpreliminaryRun2->SetTextFont(132); lhcbpreliminaryRun2->SetTextSize(0.075);
-  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 1.0 fb^{-1}");
+  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 1.8 fb^{-1}");
   //lhcbpreliminaryRun2->AddText("LHCb 2016");
   //lhcbpreliminaryRun2->AddText("LHCb preliminary");
 
-  lhcbpreliminary = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
+  lhcbpreliminary = new TPaveText(0.46,0.72,0.58,0.9,"TR NDC");
   lhcbpreliminary->SetBorderSize(0); lhcbpreliminary->SetFillStyle(0);
   lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.075);
   //lhcbpreliminary->AddText("LHCb 2016");
   lhcbpreliminary->AddText("LHCb preliminary");
-  lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.0 fb^{-1}");
+  lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.8 fb^{-1}");
 
   // Setup the file for fit projections output
   saveOutputForPlottingMacro = new TFile("output/saveOutputForPlottingMacro.root","RECREATE");
@@ -1061,27 +1061,27 @@ void Fitting::RunFullFit(bool draw=true)
 
 		  const char* decayMode;
 		  if(*m=="d2kpi") {
-			  plot[*c]->GetYaxis()->SetRangeUser(0,250);
+			  plot[*c]->GetYaxis()->SetRangeUser(0,350);//250);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-}) K^{*+}";
 		  }
 		  if(*m=="d2kk") {
-			  plot[*c]->GetYaxis()->SetRangeUser(0,42);
+			  plot[*c]->GetYaxis()->SetRangeUser(0,52);//42);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} K^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(K^{+} K^{-}) K^{*+}";
 		  }
 		  if(*m=="d2pipi") {
-			  plot[*c]->GetYaxis()->SetRangeUser(0,15);
+			  plot[*c]->GetYaxis()->SetRangeUser(0,20);//15);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-}) K^{*+}";
 		  }
 		  if(*m=="d2pik") {
-			  plot[*c]->GetYaxis()->SetRangeUser(0,9);
+			  plot[*c]->GetYaxis()->SetRangeUser(0,10);//9);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{+} #pi^{-}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(K^{-} #pi^{+}) K^{*+}";
 		  }
 
-		  modeOnPlot = new TPaveText(0.4,0.55,0.60,0.70,"TR NDC");
+		  modeOnPlot = new TPaveText(0.42,0.55,0.62,0.70,"TR NDC");
 		  modeOnPlot->SetBorderSize(0); modeOnPlot->SetFillStyle(0);
 		  modeOnPlot->SetTextSize(0.1);
 		  modeOnPlot->SetTextFont(132);
@@ -1130,6 +1130,8 @@ void Fitting::RunFullFit(bool draw=true)
 	  if(_genConfs->get("setLogScale")=="true")
 	  {
 		  canvas->Print(Form("figs/fits/%s_log.pdf",canvas->GetName()));
+		  canvas->Print(Form("figs/fits/%s_log.eps",canvas->GetName()));
+		  canvas->Print(Form("figs/fits/%s_log.png",canvas->GetName()));
 		  canvas->Print(Form("figs/fits/%s_log.C",canvas->GetName()));
 		  if(canRes) canRes->Print(Form("figs/residuals/%s_log.pdf",canRes->GetName()));
 		  if(canRes) canRes->Print(Form("figs/residuals/%s_log.C",canRes->GetName()));
@@ -1137,7 +1139,8 @@ void Fitting::RunFullFit(bool draw=true)
 	  else
 	  {
 		  canvas->Print(Form("figs/fits/%s.pdf",canvas->GetName()));
-		  //v_canvas[*t][*a]->Print(Form("figs/fits/%s.eps",v_canvas[*t][*a]->GetName()));
+		  canvas->Print(Form("figs/fits/%s.eps",canvas->GetName()));
+		  canvas->Print(Form("figs/fits/%s.png",canvas->GetName()));
 		  canvas->Print(Form("figs/fits/%s.C",canvas->GetName()));
 		  if(canRes) canRes->Print(Form("figs/residuals/%s.pdf",canRes->GetName()));
 		  if(canRes) canRes->Print(Form("figs/residuals/%s.C",canRes->GetName()));
