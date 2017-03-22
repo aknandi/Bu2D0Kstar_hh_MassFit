@@ -38,3 +38,23 @@ d2pik_exp_LL_combs_slope_LimU 1.0
 d2pik_exp_DD_combs_slope -0.003
 d2pik_exp_DD_combs_slope_LimL -1.0
 d2pik_exp_DD_combs_slope_LimU 1.0
+*
+d2kpipipi_exp_mix_combs_slope -0.0021
+d2kpipipi_exp_mix_combs_slope_LimL -0.1
+d2kpipipi_exp_mix_combs_slope_LimU 0.
+d2kpipipi_exp_LL_combs_slope -0.0024
+d2kpipipi_exp_LL_combs_slope_LimL -1.0
+d2kpipipi_exp_LL_combs_slope_LimU 1.0
+d2kpipipi_exp_DD_combs_slope -0.0014
+d2kpipipi_exp_DD_combs_slope_LimL -1.0
+d2kpipipi_exp_DD_combs_slope_LimU 1.0
+*
+d2pikpipi_exp_mix_combs_slope -0.0021
+d2pikpipi_exp_mix_combs_slope_LimL -0.1
+d2pikpipi_exp_mix_combs_slope_LimU 0.
+d2pikpipi_exp_LL_combs_slope -0.0024
+d2pikpipi_exp_LL_combs_slope_LimL -1.0
+d2pikpipi_exp_LL_combs_slope_LimU 1.0
+d2pikpipi_exp_DD_combs_slope -0.0014
+d2pikpipi_exp_DD_combs_slope_LimL -1.0
+d2pikpipi_exp_DD_combs_slope_LimU 1.0

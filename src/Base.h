@@ -17,6 +17,8 @@ class Base
   std::string d2kk;
   std::string d2pipi;
   std::string d2pik;
+  std::string d2kpipipi;
+  std::string d2pikpipi;
   std::string minus;
   std::string plus;
   std::string both;

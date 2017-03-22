@@ -51,6 +51,7 @@ class Yields : public Base
   std::map<std::string, RooRealVar*> A;
   std::map<std::string, RooRealVar*> R;
   std::map<std::string, std::map<std::string, RooRealVar*> > N_kpi;
+  std::map<std::string, std::map<std::string, RooRealVar*> > N_kpipipi;
   RooAbsArg* Rplus;
   RooAbsArg* Rminus;
 

@@ -62,26 +62,42 @@ effPid_d2pipi_all_DD 0.676
 effPid_err 0.002
 *
 BDT efficiency for CF and ADS
-effBdt_d2kpi_run1_LL 0.951
+effBdt_d2kpi_run1_LL 0.947
 effBdt_d2kpi_run1_LL_err 0.005
-effBdt_d2kpi_run1_DD 0.875
+effBdt_d2kpi_run1_DD 0.896
 effBdt_d2kpi_run1_DD_err 0.004
-effBdt_d2kpi_run2_LL 0.950
-effBdt_d2kpi_run2_LL_err 0.007
-effBdt_d2kpi_run2_DD 0.896
-effBdt_d2kpi_run2_DD_err 0.006
-effBdt_d2pik_run1_LL 0.951
+effBdt_d2kpi_run2_LL 0.949
+effBdt_d2kpi_run2_LL_err 0.003
+effBdt_d2kpi_run2_DD 0.907
+effBdt_d2kpi_run2_DD_err 0.002
+effBdt_d2pik_run1_LL 0.947
 effBdt_d2pik_run1_LL_err 0.005
-effBdt_d2pik_run1_DD 0.767
+effBdt_d2pik_run1_DD 0.802
 effBdt_d2pik_run1_DD_err 0.005
-effBdt_d2pik_run2_LL 0.950
-effBdt_d2pik_run2_LL_err 0.007
-effBdt_d2pik_run2_DD 0.809
-effBdt_d2pik_run2_DD_err 0.007
-effBdt_d2kpi_all_LL 0.951
-effBdt_d2kpi_all_DD 0.875
-effBdt_d2pik_all_LL 0.951
-effBdt_d2pik_all_DD 0.767
+effBdt_d2pik_run2_LL 0.949
+effBdt_d2pik_run2_LL_err 0.003
+effBdt_d2pik_run2_DD 0.826
+effBdt_d2pik_run2_DD_err 0.003
+effBdt_d2kpi_all_LL 0.948
+effBdt_d2kpi_all_DD 0.902
+effBdt_d2pik_all_LL 0.948
+effBdt_d2pik_all_DD 0.815
+effBdt_d2kpipipi_run1_LL 0.938
+effBdt_d2kpipipi_run1_LL_err 0.010
+effBdt_d2kpipipi_run1_DD 0.903
+effBdt_d2kpipipi_run1_DD_err 0.007
+effBdt_d2kpipipi_run2_LL 0.952
+effBdt_d2kpipipi_run2_LL_err 0.003
+effBdt_d2kpipipi_run2_DD 0.928
+effBdt_d2kpipipi_run2_DD_err 0.002
+effBdt_d2pikpipi_run1_LL 0.938
+effBdt_d2pikpipi_run1_LL_err 0.010
+effBdt_d2pikpipi_run1_DD 0.838
+effBdt_d2pikpipi_run1_DD_err 0.009
+effBdt_d2pikpipi_run2_LL 0.952
+effBdt_d2pikpipi_run2_LL_err 0.003
+effBdt_d2pikpipi_run2_DD 0.870
+effBdt_d2pikpipi_run2_DD_err 0.003
 *
 Double misID efficiency veto for ADS
 effVeto_run1_LL 0.929
@@ -122,6 +138,10 @@ kpitod2pipi_LL 0.0347
 kpitod2pipi_DD 0.0338
 kpitod2pik_LL 0.0036
 kpitod2pik_DD 0.0036
+kpipipitod2kpipipi_LL 1.0
+kpipipitod2kpipipi_DD 1.0
+kpipipitod2pikpipi_LL 0.0036
+kpipipitod2pikpipi_DD 0.0036
 * 
 * Yield fractions for combinatoric for other D modes (from data fit)
 effComb_kpitod2kpi_LL 1.0
@@ -132,6 +152,10 @@ effComb_kpitod2pipi_LL 0.23
 effComb_kpitod2pipi_DD 0.13
 effComb_kpitod2pik_LL 0.77
 effComb_kpitod2pik_DD 0.26
+effComb_kpipipitod2kpipipi_LL 1.0
+effComb_kpipipitod2kpipipi_DD 1.0
+effComb_kpipipitod2pikpipi_LL 0.77
+effComb_kpipipitod2pikpipi_DD 0.26
 * 
 * efficiencies of kst mass and ks helicity cuts and BDT cuts
 effSig_LL_100_0_-0.8 1

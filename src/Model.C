@@ -255,36 +255,49 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 	  double A, A_error;
 	  double R, R_error;
 	  double N_kpi, N_kpi_error;
+	  double N_kpipipi, N_kpipipi_error;
 
 	  for(std::vector<std::string>::iterator m=_modeList.begin(); m!=_modeList.end();m++){
 
 		  A = yields->A[*m]->getVal();
 		  A_error = yields->A[*m]->getError();
 
-		  if (*m != "d2kpi") {
-			  R = yields->R[*m]->getVal();
-			  R_error = yields->R[*m]->getError();
-		  }
-		  else {
+		  if(*m == "d2kpi"){
 			  for(std::vector<std::string>::iterator t=_trackList.begin(); t!=_trackList.end(); t++){
 				  for(std::vector<std::string>::iterator a=_runList.begin(); a!=_runList.end();a++){
 
 					  N_kpi = yields->N_kpi[*t][*a]->getVal();
 					  N_kpi_error = yields->N_kpi[*t][*a]->getError();
-			          GenTotals << "N_bu_" << *m << "_" << *a << "_" << *t << " " << N_kpi << std::endl;
+					  GenTotals << "N_bu_" << *m << "_" << *a << "_" << *t << " " << N_kpi << std::endl;
+
 				  }
 			  }
 		  }
+		  else if(*m == "d2kpipipi"){
+			  for(std::vector<std::string>::iterator t=_trackList.begin(); t!=_trackList.end(); t++){
+				  for(std::vector<std::string>::iterator a=_runList.begin(); a!=_runList.end();a++){
+
+					  N_kpipipi = yields->N_kpipipi[*t][*a]->getVal();
+					  N_kpipipi_error = yields->N_kpipipi[*t][*a]->getError();
+					  GenTotals << "N_bu_" << *m << "_" << *a << "_" << *t << " " << N_kpipipi << std::endl;
+
+				  }
+			  }
+		  }
+		  else {
+			  R = yields->R[*m]->getVal();
+			  R_error = yields->R[*m]->getError();
+		  }
 
           GenTotals << "A_" << *m << " " << A << std::endl;
-          if (*m != "d2kpi") {
+          if (*m != "d2kpi" && *m != "d2kpipipi") {
         	  GenTotals << "R_" << *m << " " << R << std::endl;
           }
 
 	  }
 
   }
-
+  std::cout << integ_limit_low << " " << integ_limit_high << std::endl;
   double adsSignal = 0, adsBackground = 0;
   double erradsSignalsq = 0, erradsBackgroundsq = 0;
   double erradsSignal = 0, erradsBackground = 0;
