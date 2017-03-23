@@ -39,14 +39,14 @@ A_pid_run2_err 0.000005
 * Rminus_d2pik 0.00210
 * 
 * Taken from single fit with BDT >-0.8
-N_bu_d2kpi_all_LL_4900 346.013
-N_comb_d2kpi_both_LL_4900 703.66
-N_dstkst010_d2kpi_LL_4900 278.919
-N_dstkst101_d2kpi_LL_4900 353.375
-N_bu_d2kpi_all_DD_4900 845.302
-N_comb_d2kpi_both_DD_4900 4256.37
-N_dstkst010_d2kpi_DD_4900 676.669
-N_dstkst101_d2kpi_DD_4900 825.078
+* N_bu_d2kpi_all_LL_4900 346.013
+* N_comb_d2kpi_both_LL_4900 703.66
+* N_dstkst010_d2kpi_LL_4900 278.919
+* N_dstkst101_d2kpi_LL_4900 353.375
+* N_bu_d2kpi_all_DD_4900 845.302
+* N_comb_d2kpi_both_DD_4900 4256.37
+* N_dstkst010_d2kpi_DD_4900 676.669
+* N_dstkst101_d2kpi_DD_4900 825.078
 N_bu_d2kpi_all_LL_5230 345.994
 N_comb_d2kpi_both_LL_5230 232.494
 N_dstkst010_d2kpi_LL_5230 0.405949
@@ -82,6 +82,44 @@ N_dstkst_d2kpipipi_run1_DD_5230 0.96
 N_dstkst_d2kpipipi_run2_LL_5230 0.76
 N_dstkst_d2kpipipi_run2_DD_5230 0.77
 *
+* For charge combined fit 
+N_bu_d2kpi_all_LL 608
+N_bu_d2kpi_all_DD 1406
+N_bu_d2kpi_run1_LL 220
+N_bu_d2kpi_run1_DD 505
+N_bu_d2kpi_run2_LL 388
+N_bu_d2kpi_run2_DD 901
+N_bu_d2kk_all_LL 76.1
+N_bu_d2kk_all_DD 179.8
+N_bu_d2kk_run1_LL 28.8
+N_bu_d2kk_run1_DD 67.5
+N_bu_d2kk_run2_LL 47.3
+N_bu_d2kk_run2_DD 112.3
+N_bu_d2pipi_all_LL 24.1
+N_bu_d2pipi_all_DD 53.5
+N_bu_d2pipi_run1_LL 8.8 
+N_bu_d2pipi_run1_DD 18.3
+N_bu_d2pipi_run2_LL 15.3
+N_bu_d2pipi_run2_DD 35.2
+N_bu_d2pik_all_LL 6.5
+N_bu_d2pik_all_DD 13.5
+N_bu_d2pik_run1_LL 2.4
+N_bu_d2pik_run1_DD 4.7
+N_bu_d2pik_run2_LL 4.1
+N_bu_d2pik_run2_DD 8.8
+N_bu_d2kpipipi_all_LL 289
+N_bu_d2kpipipi_all_DD 666
+N_bu_d2kpipipi_run1_LL 81
+N_bu_d2kpipipi_run1_DD 161
+N_bu_d2kpipipi_run2_LL 208
+N_bu_d2kpipipi_run2_DD 505
+N_bu_d2pikpipi_all_LL 4.3
+N_bu_d2pikpipi_all_DD 9.3
+N_bu_d2pikpipi_run1_LL 1.6 
+N_bu_d2pikpipi_run1_DD 3.3 
+N_bu_d2pikpipi_run2_LL 2.7 
+N_bu_d2pikpipi_run2_DD 6.0 
+*
 * combinatoric yield in ads mode
 * N_comb_d2pik_minus_LL 1.63
 * N_comb_d2pik_plus_LL 4.20
@@ -99,25 +137,18 @@ N_dstkst_d2kpipipi_run2_DD_5230 0.77
 * N_dstkst_d2kpi_run2_DD_5230 1.3
 * 
 * Other values from data fit
-N_bu_d2kpi_run1_LL 222
-N_bu_d2kpi_run1_DD 481
-N_bu_d2kpi_run2_LL 219
-N_bu_d2kpi_run2_DD 478
-N_bu_d2kpi_both_LL 295
 N_bu_d2kpi_plus_LL 147.957
 N_bu_d2kpi_minus_LL 147.957
 N_comb_d2kpi_plus_LL 166.699
 N_comb_d2kpi_minus_LL 166.699
 N_dstkst_d2kpi_plus_LL 298.845
 N_dstkst_d2kpi_minus_LL 298.845
-N_bu_d2kpi_both_DD 702.714
 N_bu_d2kpi_plus_DD 351.357
 N_bu_d2kpi_minus_DD 351.357
 N_comb_d2kpi_plus_DD 634.176
 N_comb_d2kpi_minus_DD 634.176
 N_dstkst_d2kpi_plus_DD 692.472
 N_dstkst_d2kpi_minus_DD 692.472
-N_bu_d2kk_both_LL 39.4174
 N_bu_d2kk_plus_LL 19.7087
 N_bu_d2kk_minus_LL 19.7087
 N_comb_d2kk_both_LL 112.918
@@ -126,7 +157,6 @@ N_comb_d2kk_minus_LL 56.4592
 N_dstkst_d2kk_both_LL 74.6646
 N_dstkst_d2kk_plus_LL 37.3323
 N_dstkst_d2kk_minus_LL 37.3323
-N_bu_d2kk_both_DD 96.1421
 N_bu_d2kk_plus_DD 48.071
 N_bu_d2kk_minus_DD 48.071
 N_comb_d2kk_both_DD 354.023
@@ -135,7 +165,6 @@ N_comb_d2kk_minus_DD 177.012
 N_dstkst_d2kk_both_DD 127.835
 N_dstkst_d2kk_plus_DD 63.9176
 N_dstkst_d2kk_minus_DD 63.9176
-N_bu_d2pipi_both_LL 23.3528
 N_bu_d2pipi_plus_LL 11.6764
 N_bu_d2pipi_minus_LL 11.6764
 N_comb_d2pipi_both_LL 113.66
@@ -144,7 +173,6 @@ N_comb_d2pipi_minus_LL 56.83
 N_dstkst_d2pipi_both_LL 32.9873
 N_dstkst_d2pipi_plus_LL 16.4936
 N_dstkst_d2pipi_minus_LL 16.4936
-N_bu_d2pipi_both_DD 45.6721
 N_bu_d2pipi_plus_DD 22.8361
 N_bu_d2pipi_minus_DD 22.8361
 N_comb_d2pipi_both_DD 161.825
@@ -153,7 +181,6 @@ N_comb_d2pipi_minus_DD 80.9123
 N_dstkst_d2pipi_both_DD 108.504
 N_dstkst_d2pipi_plus_DD 54.252
 N_dstkst_d2pipi_minus_DD 54.252
-N_bu_d2pik_both_LL 15.3528
 N_bu_d2pik_plus_LL 8.6764
 N_bu_d2pik_minus_LL 8.6764
 *N_comb_d2pik_both_LL 60.66
@@ -162,7 +189,6 @@ N_bu_d2pik_minus_LL 8.6764
 N_dstkst_d2pik_both_LL 35.9873
 N_dstkst_d2pik_plus_LL 20.4936
 N_dstkst_d2pik_minus_LL 20.4936
-N_bu_d2pik_both_DD 20.6721
 N_bu_d2pik_plus_DD 10.8361
 N_bu_d2pik_minus_DD 10.8361
 *N_comb_d2pik_both_DD 100.825

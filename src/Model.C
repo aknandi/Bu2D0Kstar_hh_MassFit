@@ -111,7 +111,6 @@ RooSimultaneous* Model::getFitPdf()
   // Create simultaneous PDF
   sim = new RooSimultaneous("model_fit","Simultaneous FITTING model",*_cat);    
 
-         
   std::cout << "creating model" << std::endl;
   
   //Add to master PDF
@@ -229,12 +228,10 @@ RooSimultaneous* Model::getFitPdf()
 
 void Model::printYieldsAndPurities(string b, double integ_limit_low, double integ_limit_high, RooFitResult* result)
 {
-
   mB->setRange("Bsigbox",integ_limit_low, integ_limit_high);
   mB->setRange("combtest",5400, integ_limit_high);
   // --- for manual integration of RooKeysPdf ---
   //RooDataSet *bu_dstkst_integEvents = fitPdf.roopdf_bu_dstkst[_modeList.at(0)][_chargeList.at(0)][_trackList.at(0)][_runList.at(0)]->generate(*mB, 100000, RooFit::Verbose(kFALSE));
-
 
   std::string integRange = Form("%s>%f && %s<%f",mB->GetName(), integ_limit_low, mB->GetName(), integ_limit_high);
   std::string fitRange = Form("%s>%f && %s<%f",mB->GetName(), _genConfs->getD("fit_limit_low"), mB->GetName(),_genConfs->getD("fit_limit_high"));
@@ -297,7 +294,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 	  }
 
   }
-  std::cout << integ_limit_low << " " << integ_limit_high << std::endl;
+
   double adsSignal = 0, adsBackground = 0;
   double erradsSignalsq = 0, erradsBackgroundsq = 0;
   double erradsSignal = 0, erradsBackground = 0;
