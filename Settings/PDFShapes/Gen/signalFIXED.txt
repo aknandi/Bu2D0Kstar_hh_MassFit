@@ -1,73 +1,61 @@
-bu_mean 5279
+bu_mean 5279.3
 bu_mean_LimL 5270
 bu_mean_LimU 5288
 * For Johnson
 * bu_width_run1 13.7
 * bu_width_run1_LimL 0.0
 * bu_width_run1_LimU 30.0
-* bu_width_run2 15.5
-* bu_width_run2_LimL 0.0
-* bu_width_run2_LimU 30.0
-bu_gamma 0.0
-bu_delta_run1_LL 0.67
-bu_delta_run1_DD 0.62
-bu_delta_run2_LL 0.63
-bu_delta_run2_DD 0.72
+* bu_width_kpipipi 15.5
+* bu_width_kpipipi_LimL 0.0
+* bu_width_kpipipi_LimU 30.0
+* bu_gamma 0.0
+* bu_delta_run1_LL 0.67
+* bu_delta_run1_DD 0.62
+* bu_delta_kpipipi_LL 0.63
+* bu_delta_kpipipi_DD 0.72
 *
-bu_width_all 12.0
-bu_width_all_LimL 0.0
-bu_width_all_LimU 30.0
-bu_width_run1 11.5
-bu_width_run1_LimL 0.0
-bu_width_run1_LimU 30.0
-bu_width_run2 12.5
-bu_width_run2_LimL 0.0
-bu_width_run2_LimU 30.0
-bu_width_ratio_all_LL 1.91
-bu_width_ratio_all_LL_LimL 1.91
-bu_width_ratio_all_LL_LimU 1.91
-bu_width_ratio_all_DD 1.90
-bu_width_ratio_all_DD_LimL 1.90
-bu_width_ratio_all_DD_LimU 1.90
-bu_width_ratio_all_mix 1.90
-bu_width_ratio_all_mix_LimL 1.90
-bu_width_ratio_all_mix_LimU 1.90
-bu_width_ratio_run1_LL 1.91
-bu_width_ratio_run1_LL_LimL 1.91
-bu_width_ratio_run1_LL_LimU 1.91
-bu_width_ratio_run1_DD 1.90
-bu_width_ratio_run1_DD_LimL 1.90
-bu_width_ratio_run1_DD_LimU 1.90
-bu_width_ratio_run1_mix 1.90
-bu_width_ratio_run1_mix_LimL 1.90
-bu_width_ratio_run1_mix_LimU 1.90
-bu_width_ratio_run2_LL 2.4
-bu_width_ratio_run2_LL_LimL 2.4
-bu_width_ratio_run2_LL_LimU 2.4
-bu_width_ratio_run2_DD 2.2
-bu_width_ratio_run2_DD_LimL 2.2
-bu_width_ratio_run2_DD_LimU 2.2
-bu_width_ratio_run2_mix 2.3
-bu_width_ratio_run2_mix_LimL 2.3
-bu_width_ratio_run2_mix_LimU 2.3
-bu_frac_all_LL 0.83
-bu_frac_all_LL_LimL 0.83
-bu_frac_all_LL_LimU 0.83
-bu_frac_all_DD 0.83
-bu_frac_all_DD_LimL 0.83
-bu_frac_all_DD_LimU 0.83
-bu_frac_run1_LL 0.83
-bu_frac_run1_LL_LimL 0.83
-bu_frac_run1_LL_LimU 0.83
-bu_frac_run1_DD 0.83
-bu_frac_run1_DD_LimL 0.83
-bu_frac_run1_DD_LimU 0.83
-bu_frac_run2_LL 0.83
-bu_frac_run2_LL_LimL 0.83
-bu_frac_run2_LL_LimU 0.83
-bu_frac_run2_DD 0.88
-bu_frac_run2_DD_LimL 0.88
-bu_frac_run2_DD_LimU 0.88
+bu_width_kpi 10.8
+bu_width_kpi_LimL 0.0
+bu_width_kpi_LimU 30.0
+bu_width_kpipipi 11.4
+bu_width_kpipipi_LimL 0.0
+bu_width_kpipipi_LimU 30.0
+bu_width_ratio_kpi_LL 2.04
+bu_width_ratio_kpi_LL_LimL 2.04
+bu_width_ratio_kpi_LL_LimU 2.04
+bu_width_ratio_kpi_DD 1.97
+bu_width_ratio_kpi_DD_LimL 1.97
+bu_width_ratio_kpi_DD_LimU 1.97
+bu_width_ratio_kpi_mix 2.00
+bu_width_ratio_kpi_mix_LimL 2.00
+bu_width_ratio_kpi_mix_LimU 2.00
+bu_width_ratio_kpipipi_LL 2.08
+bu_width_ratio_kpipipi_LL_LimL 2.08
+bu_width_ratio_kpipipi_LL_LimU 2.08
+bu_width_ratio_kpipipi_DD 2.10
+bu_width_ratio_kpipipi_DD_LimL 2.10
+bu_width_ratio_kpipipi_DD_LimU 2.10
+bu_width_ratio_kpipipi_mix 2.09
+bu_width_ratio_kpipipi_mix_LimL 2.09
+bu_width_ratio_kpipipi_mix_LimU 2.09
+bu_frac_kpi_LL 0.82
+bu_frac_kpi_LL_LimL 0.82
+bu_frac_kpi_LL_LimU 0.82
+bu_frac_kpi_DD 0.84
+bu_frac_kpi_DD_LimL 0.84
+bu_frac_kpi_DD_LimU 0.84
+bu_frac_kpi_mix 0.83
+bu_frac_kpi_mix_LimL 0.83
+bu_frac_kpi_mix_LimU 0.83
+bu_frac_kpipipi_LL 0.80
+bu_frac_kpipipi_LL_LimL 0.80
+bu_frac_kpipipi_LL_LimU 0.80
+bu_frac_kpipipi_DD 0.81
+bu_frac_kpipipi_DD_LimL 0.81
+bu_frac_kpipipi_DD_LimU 0.81
+bu_frac_kpipipi_mix 0.81
+bu_frac_kpipipi_mix_LimL 0.81
+bu_frac_kpipipi_mix_LimU 0.81
 bu_n_LL 1.0
 bu_n_LL_LimU 1.0
 bu_n_LL_LimL 1.0
@@ -77,31 +65,22 @@ bu_n_DD_LimL 1.0
 bu_n_mix 1.0
 bu_n_mix_LimU 1.0
 bu_n_mix_LimL 1.0
-bu_alpha_all_LL 2.54
-bu_alpha_all_LL_LimU 2.54
-bu_alpha_all_LL_LimL 2.54
-bu_alpha_all_DD 2.46
-bu_alpha_all_DD_LimU 2.46
-bu_alpha_all_DD_LimL 2.46
-bu_alpha_all_mix 2.5
-bu_alpha_all_mix_LimU 2.5
-bu_alpha_all_mix_LimL 2.5
-bu_alpha_run1_LL 2.54
-bu_alpha_run1_LL_LimU 2.54
-bu_alpha_run1_LL_LimL 2.54
-bu_alpha_run1_DD 2.46
-bu_alpha_run1_DD_LimU 2.46
-bu_alpha_run1_DD_LimL 2.46
-bu_alpha_run1_mix 2.5
-bu_alpha_run1_mix_LimU 2.5
-bu_alpha_run1_mix_LimL 2.5
-bu_alpha_run2_LL 4.9
-bu_alpha_run2_LL_LimU 4.9
-bu_alpha_run2_LL_LimL 4.9
-bu_alpha_run2_DD 2.35
-bu_alpha_run2_DD_LimU 2.35
-bu_alpha_run2_DD_LimL 2.35
-bu_alpha_run2_mix 2.5
-bu_alpha_run2_mix_LimU 2.5
-bu_alpha_run2_mix_LimL 2.5
+bu_alpha_kpi_LL 2.53
+bu_alpha_kpi_LL_LimU 2.53
+bu_alpha_kpi_LL_LimL 2.53
+bu_alpha_kpi_DD 2.46
+bu_alpha_kpi_DD_LimU 2.46
+bu_alpha_kpi_DD_LimL 2.46
+bu_alpha_kpi_mix 2.5
+bu_alpha_kpi_mix_LimU 2.5
+bu_alpha_kpi_mix_LimL 2.5
+bu_alpha_kpipipi_LL 2.60
+bu_alpha_kpipipi_LL_LimU 2.60
+bu_alpha_kpipipi_LL_LimL 2.60
+bu_alpha_kpipipi_DD 2.50
+bu_alpha_kpipipi_DD_LimU 2.50
+bu_alpha_kpipipi_DD_LimL 2.50
+bu_alpha_kpipipi_mix 2.55
+bu_alpha_kpipipi_mix_LimU 2.55
+bu_alpha_kpipipi_mix_LimL 2.55
 

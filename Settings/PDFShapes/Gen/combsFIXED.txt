@@ -1,13 +1,22 @@
 *
-exp_mix_combs_slope -0.0021
-exp_mix_combs_slope_LimL -0.1
-exp_mix_combs_slope_LimU 0.
-exp_LL_combs_slope -0.0024
-exp_LL_combs_slope_LimL -1.0
-exp_LL_combs_slope_LimU 1.0
-exp_DD_combs_slope -0.0014
-exp_DD_combs_slope_LimL -1.0
-exp_DD_combs_slope_LimU 1.0
+exp_kpi_mix_combs_slope -0.0030
+exp_kpi_mix_combs_slope_LimL -0.1
+exp_kpi_mix_combs_slope_LimU 0.
+exp_kpi_LL_combs_slope -0.0045
+exp_kpi_LL_combs_slope_LimL -1.0
+exp_kpi_LL_combs_slope_LimU 1.0
+exp_kpi_DD_combs_slope -0.0026
+exp_kpi_DD_combs_slope_LimL -1.0
+exp_kpi_DD_combs_slope_LimU 1.0
+exp_kpipipi_mix_combs_slope -0.0033
+exp_kpipipi_mix_combs_slope_LimL -0.1
+exp_kpipipi_mix_combs_slope_LimU 0.
+exp_kpipipi_LL_combs_slope -0.0047
+exp_kpipipi_LL_combs_slope_LimL -1.0
+exp_kpipipi_LL_combs_slope_LimU 1.0
+exp_kpipipi_DD_combs_slope -0.0022
+exp_kpipipi_DD_combs_slope_LimL -1.0
+exp_kpipipi_DD_combs_slope_LimU 1.0
 *
 * d2kpi_exp_mix_combs_slope -0.0021
 * d2kpi_exp_mix_combs_slope_LimU -0.0021

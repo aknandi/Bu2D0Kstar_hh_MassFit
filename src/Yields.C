@@ -328,17 +328,18 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							}
 						}
 						else if(*m == "d2pikpipi") {
+							/*
 							double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()));
 							double errEfficiencyBdt = efficiencyBdt * sqrt(5)*sqrt(pow(input->getD(Form("effBdt_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effBdt_d2kpipipi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())),2));
 							RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyBdt):0.));
-
+							*/
 							if(*c == "plus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2/(2*@3+1)",RooArgList(*n_bu_gen["d2kpipipi"]["plus"][*t][*a],*effBdt,*A[*m],*detAkpi));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2/(2*@3+1)",RooArgList(*n_bu_fit["d2kpipipi"]["plus"][*t][*a],*effBdt,*A[*m],*detAkpi));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1/(2*@2+1)",RooArgList(*n_bu_gen["d2kpipipi"]["plus"][*t][*a],*A[*m],*detAkpi));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1/(2*@2+1)",RooArgList(*n_bu_fit["d2kpipipi"]["plus"][*t][*a],*A[*m],*detAkpi));
 							}
 							else if (*c == "minus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2*(2*@3+1)",RooArgList(*n_bu_gen["d2kpipipi"]["minus"][*t][*a],*effBdt,*R[*m],*detAkpi));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*(2*@3+1)",RooArgList(*n_bu_fit["d2kpipipi"]["minus"][*t][*a],*effBdt,*R[*m],*detAkpi));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*(2*@2+1)",RooArgList(*n_bu_gen["d2kpipipi"]["minus"][*t][*a],*R[*m],*detAkpi));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*(2*@2+1)",RooArgList(*n_bu_fit["d2kpipipi"]["minus"][*t][*a],*R[*m],*detAkpi));
 							}
 						}
 					}
@@ -366,13 +367,14 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2*@3",RooArgList(*Rads,*n_bu_fit["d2kpi"][*c][*t][*a],*effVeto,*effBdt));
 						}
 						else if(*m=="d2pikpipi") {
+							/*
 							double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()));
 							double errEfficiencyBdt = efficiencyBdt * sqrt(5)*sqrt(pow(input->getD(Form("effBdt_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effBdt_d2kpipipi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())),2));
 							RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyBdt):0.));
-
+							 */
 							RooRealVar *Rads_k3pi = new RooRealVar("Rads_k3pi","",0,1);
-							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1*@2",RooArgList(*Rads_k3pi,*n_bu_gen["d2kpipipi"][*c][*t][*a],*effBdt));
-							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1*@2",RooArgList(*Rads_k3pi,*n_bu_fit["d2kpipipi"][*c][*t][*a],*effBdt));
+							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1",RooArgList(*Rads_k3pi,*n_bu_gen["d2kpipipi"][*c][*t][*a]));
+							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1",RooArgList(*Rads_k3pi,*n_bu_fit["d2kpipipi"][*c][*t][*a]));
 						}
 					}
 
