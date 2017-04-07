@@ -147,7 +147,7 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   lhcbpreliminary->SetBorderSize(0); lhcbpreliminary->SetFillStyle(0);
   lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.075);
   //lhcbpreliminary->AddText("LHCb 2016");
-  lhcbpreliminary->AddText("LHCb preliminary");
+  lhcbpreliminary->AddText("LHCb unofficial");
   lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.8 fb^{-1}");
 
   // Setup the file for fit projections output
@@ -447,7 +447,9 @@ RooDataSet* Fitting::FinalDataSet(const std::string s_mode, const std::string s_
   std::string kstmasscut = "abs(Kst_M - 891.66) < " + _genConfs->get("Kstmasscut");
   std::string kshelcut = "abs(Ks_cosHelicityAngleA) > " + _genConfs->get("Kshelcut");
   std::string bdtcut = "BDTG > " + _genConfs->get("Bdtcut");*/
-  exclusionString = masscut;// + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut + " && " + bdtcut;
+  std::string ksfd = "Ks_FDsignificance > 5";
+  std::string pidp = "Ksh1_PIDp < 0 && Ksh2_PIDp < 0";
+  exclusionString = masscut; // + " && " + charmlesscut + " && " + kstmasscut + " && " + kshelcut + " && " + bdtcut;
 
   std::cout << "Exclusion string: " << exclusionString << std::endl;
 
@@ -1093,7 +1095,7 @@ void Fitting::RunFullFit(bool draw=true)
 			  else decayMode = "B^{+} #rightarrow D(K^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*+}";
 		  }
 
-		  modeOnPlot = new TPaveText(0.42,0.55,0.62,0.70,"TR NDC");
+		  modeOnPlot = new TPaveText(0.5,0.55,0.7,0.70,"TR NDC");
 		  modeOnPlot->SetBorderSize(0); modeOnPlot->SetFillStyle(0);
 		  modeOnPlot->SetTextSize(0.1);
 		  modeOnPlot->SetTextFont(132);

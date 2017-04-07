@@ -9,10 +9,14 @@ R_d2kk 0.98549
 A_d2pipi 0.17804
 R_d2pipi 0.98549
 Rplus_d2pik 0.02518
-Rminus_d2pik 0.00563
+Rminus_d2pik 0.00563 
 A_d2kpipipi 0.0
 Rplus_d2pikpipi 0.01643
 Rminus_d2pikpipi 0.00955
+R_d2kpi 1.0
+R_d2pik 0.01553
+R_d2kpipipi 1.0
+R_d2pikpipi 0.01301
 * 
 * Asymmetry corrections
 A_prod_all -0.0045
@@ -37,16 +41,48 @@ A_pid_run2_err 0.000005
 * R_d2pipi 0.99024
 * Rplus_d2pik 0.01197
 * Rminus_d2pik 0.00210
+*
+* From single fit with full selection
+N_bu_d2kpi_run1_LL_5230 220
+N_bu_d2kpi_run1_DD_5230 505
+N_bu_d2kpi_run2_LL_5230 388
+N_bu_d2kpi_run2_DD_5230 901
+N_comb_d2kpi_both_run1_LL_5230 30
+N_comb_d2kpi_both_run1_DD_5230 142
+N_comb_d2kpi_both_run2_LL_5230 44
+N_comb_d2kpi_both_run2_DD_5230 349
+N_dstkst_d2kpi_run1_LL_5230 0.55
+N_dstkst_d2kpi_run1_DD_5230 1.03
+N_dstkst_d2kpi_run2_LL_5230 1.18
+N_dstkst_d2kpi_run2_DD_5230 1.35
+* N_bu_d2kpipipi_run1_LL_5230 81.0
+* N_bu_d2kpipipi_run1_DD_5230 161.0
+* N_bu_d2kpipipi_run2_LL_5230 208.0
+* N_bu_d2kpipipi_run2_DD_5230 505.0
+* N_comb_d2kpipipi_both_run1_LL_5230 26.0
+* N_comb_d2kpipipi_both_run1_DD_5230 125.0
+* N_comb_d2kpipipi_both_run2_LL_5230 27.0
+* N_comb_d2kpipipi_both_run2_DD_5230 165.0
+* N_dstkst_d2kpipipi_run1_LL_5230 0.49
+* N_dstkst_d2kpipipi_run1_DD_5230 0.96
+* N_dstkst_d2kpipipi_run2_LL_5230 0.76
+* N_dstkst_d2kpipipi_run2_DD_5230 0.77
 * 
-* Taken from single fit with BDT >-0.8
-* N_bu_d2kpi_all_LL_4900 346.013
-* N_comb_d2kpi_both_LL_4900 703.66
-* N_dstkst010_d2kpi_LL_4900 278.919
-* N_dstkst101_d2kpi_LL_4900 353.375
-* N_bu_d2kpi_all_DD_4900 845.302
-* N_comb_d2kpi_both_DD_4900 4256.37
-* N_dstkst010_d2kpi_DD_4900 676.669
-* N_dstkst101_d2kpi_DD_4900 825.078
+* Taken from single fit with BDT > 0 (for toys)
+N_bu_d2kpipipi_run1_LL_5230 92
+N_bu_d2kpipipi_run1_DD_5230 215
+N_bu_d2kpipipi_run2_LL_5230 216
+N_bu_d2kpipipi_run2_DD_5230 532
+N_comb_d2kpipipi_both_run1_LL_5230 12.0
+N_comb_d2kpipipi_both_run1_DD_5230 145
+N_comb_d2kpipipi_both_run2_LL_5230 58
+N_comb_d2kpipipi_both_run2_DD_5230 506
+N_dstkst_d2kpipipi_run1_LL_5230 0.40
+N_dstkst_d2kpipipi_run1_DD_5230 0.43
+N_dstkst_d2kpipipi_run2_LL_5230 0.51
+N_dstkst_d2kpipipi_run2_DD_5230 1.32
+*
+* From single fit with full selection
 N_bu_d2kpi_all_LL_5230 345.994
 N_comb_d2kpi_both_LL_5230 232.494
 N_dstkst010_d2kpi_LL_5230 0.405949
@@ -55,32 +91,6 @@ N_bu_d2kpi_all_DD_5230 845.239
 N_comb_d2kpi_both_DD_5230 1723.2
 N_dstkst010_d2kpi_DD_5230 1.02476
 N_dstkst101_d2kpi_DD_5230 1.24951
-*
-* From single fit with full selection
-N_bu_d2kpi_run1_LL_5230 220.0
-N_bu_d2kpi_run1_DD_5230 505.0
-N_comb_d2kpi_both_run1_LL_5230 26.0
-N_comb_d2kpi_both_run1_DD_5230 125.0
-N_dstkst_d2kpi_run1_LL_5230 0.49
-N_dstkst_d2kpi_run1_DD_5230 0.96
-N_bu_d2kpi_run2_LL_5230 388.0
-N_bu_d2kpi_run2_DD_5230 901.0
-N_comb_d2kpi_both_run2_LL_5230 27.0
-N_comb_d2kpi_both_run2_DD_5230 165.0
-N_dstkst_d2kpi_run2_LL_5230 0.76
-N_dstkst_d2kpi_run2_DD_5230 0.77
-N_bu_d2kpipipi_run1_LL_5230 81.0
-N_bu_d2kpipipi_run1_DD_5230 161.0
-N_bu_d2kpipipi_run2_LL_5230 208.0
-N_bu_d2kpipipi_run2_DD_5230 505.0
-N_comb_d2kpipipi_both_run1_LL_5230 26.0
-N_comb_d2kpipipi_both_run1_DD_5230 125.0
-N_comb_d2kpipipi_both_run2_LL_5230 27.0
-N_comb_d2kpipipi_both_run2_DD_5230 165.0
-N_dstkst_d2kpipipi_run1_LL_5230 0.49
-N_dstkst_d2kpipipi_run1_DD_5230 0.96
-N_dstkst_d2kpipipi_run2_LL_5230 0.76
-N_dstkst_d2kpipipi_run2_DD_5230 0.77
 *
 * For charge combined fit 
 N_bu_d2kpi_all_LL 608
@@ -120,22 +130,6 @@ N_bu_d2pikpipi_run1_DD 3.3
 N_bu_d2pikpipi_run2_LL 2.7 
 N_bu_d2pikpipi_run2_DD 6.0 
 *
-* combinatoric yield in ads mode
-* N_comb_d2pik_minus_LL 1.63
-* N_comb_d2pik_plus_LL 4.20
-* N_comb_d2pik_both_LL 5.83
-* N_comb_d2pik_minus_DD 3.45
-* N_comb_d2pik_plus_DD 3.25
-* N_comb_d2pik_both_DD 6.70
-* 
-* Add and extra 700 pb-1 of run 2 data (1.7*Run2)
-* N_bu_d2kpi_run2_LL_5230 364.0
-* N_bu_d2kpi_run2_DD_5230 794.0
-* N_comb_d2kpi_both_run2_LL_5230 46.0
-* N_comb_d2kpi_both_run2_DD_5230 280.5
-* N_dstkst_d2kpi_run2_LL_5230 1.3
-* N_dstkst_d2kpi_run2_DD_5230 1.3
-* 
 * Other values from data fit
 N_bu_d2kpi_plus_LL 147.957
 N_bu_d2kpi_minus_LL 147.957

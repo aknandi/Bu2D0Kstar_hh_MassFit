@@ -107,6 +107,7 @@ void Pdf_Gen::setRelations()
                                           relConfs.getD("bu_frac_kpipipi_mix_LimL"),relConfs.getD("bu_frac_kpipipi_mix_LimU") );
 
   // For Johnson
+  /*
   RooRealVar* bu_delta_run1_LL = new RooRealVar("bu_delta_run1_LL","",relConfs.getD("bu_delta_run1_LL"));
   RooRealVar* bu_delta_run2_LL = new RooRealVar("bu_delta_run2_LL","",relConfs.getD("bu_delta_run2_LL"));
   RooRealVar* bu_delta_run1_DD = new RooRealVar("bu_delta_run1_DD","",relConfs.getD("bu_delta_run1_DD"));
@@ -116,6 +117,7 @@ void Pdf_Gen::setRelations()
   RooRealVar* bu_delta_all_LL = new RooRealVar("bu_delta_all_LL","",relConfs.getD("bu_delta_run1_LL"));
   RooRealVar* bu_delta_all_DD = new RooRealVar("bu_delta_all_DD","",relConfs.getD("bu_delta_run1_DD"));
   RooRealVar* bu_delta_mix = new RooRealVar("bu_delta_mix","",relConfs.getD("bu_delta_run1_DD"));
+  */
 
   // Combs- exponential
   RooRealVar *combs_slope_kpi_mix = new RooRealVar("exp_kpi_mix_combs_slope","",relConfs.getD("exp_kpi_mix_combs_slope"),
