@@ -14,7 +14,7 @@ else
     exit 0
 fi
 
-SUBDIR="2017-04-07_$1/"
+SUBDIR="2017-04-14_$1/"
 #"2016-09-13_rB1deltaB70"
 MIN=1
 MAX=1000 #2000
@@ -49,6 +49,8 @@ VARS=("A_d2kpi"
       "Rplus_d2pik"
       "Rminus_d2pik"
       "A_d2kpipipi" 
+      "A_d2pipipipi" 
+      "R_d2pipipipi" 
       "Rplus_d2pikpipi"
       "Rminus_d2pikpipi"
       #"n_comb_d2pik_plus_DD_all"

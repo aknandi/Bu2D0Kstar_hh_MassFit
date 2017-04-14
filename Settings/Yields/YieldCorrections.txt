@@ -7,6 +7,10 @@ BR_d2pipi 0.001421
 BR_d2pipi_err 0.000025
 BR_d2pik 0.0001399
 BR_d2pik_err 0.0000027
+BR_d2kpipipi 0.0806
+BR_d2kpipipi_err 0.0023
+BR_d2pipipipi 0.00745
+BR_d2pipipipi_err 0.00022
 *
 Selection efficiencies
 effSel_d2kpi_run1_LL 0.0939
@@ -33,6 +37,22 @@ effSel_d2pipi_run2_LL 0.1292
 effSel_d2pipi_run2_LL_err 0.0011
 effSel_d2pipi_run2_DD 0.3309
 effSel_d2pipi_run2_DD_err 0.0017
+effSel_d2kpipipi_run1_LL 0.0939
+effSel_d2kpipipi_run1_LL_err 0.0011
+effSel_d2kpipipi_run1_DD 0.2519
+effSel_d2kpipipi_run1_DD_err 0.0018
+effSel_d2kpipipi_run2_LL 0.1266
+effSel_d2kpipipi_run2_LL_err 0.0011
+effSel_d2kpipipi_run2_DD 0.3155
+effSel_d2kpipipi_run2_DD_err 0.0017
+effSel_d2pipipipi_run1_LL 0.1015
+effSel_d2pipipipi_run1_LL_err 0.0012
+effSel_d2pipipipi_run1_DD 0.2584
+effSel_d2pipipipi_run1_DD_err 0.0018
+effSel_d2pipipipi_run2_LL 0.1292
+effSel_d2pipipipi_run2_LL_err 0.0011
+effSel_d2pipipipi_run2_DD 0.3309
+effSel_d2pipipipi_run2_DD_err 0.0017
 effSel_d2kpi_all_LL 0.110
 effSel_d2kpi_all_DD 0.278
 effSel_d2kk_all_LL 0.100
@@ -53,6 +73,14 @@ effPid_d2pipi_run1_LL 0.670
 effPid_d2pipi_run1_DD 0.676
 effPid_d2pipi_run2_LL 0.779
 effPid_d2pipi_run2_DD 0.790
+effPid_d2kpipipi_run1_LL 0.734
+effPid_d2kpipipi_run1_DD 0.747
+effPid_d2kpipipi_run2_LL 0.811
+effPid_d2kpipipi_run2_DD 0.821
+effPid_d2pipipipi_run1_LL 0.670
+effPid_d2pipipipi_run1_DD 0.676
+effPid_d2pipipipi_run2_LL 0.779
+effPid_d2pipipipi_run2_DD 0.790
 effPid_d2kpi_all_LL 0.734
 effPid_d2kpi_all_DD 0.746
 effPid_d2kk_all_LL 0.812
@@ -140,6 +168,8 @@ kpitod2pik_LL 0.0036
 kpitod2pik_DD 0.0036
 kpipipitod2kpipipi_LL 1.0
 kpipipitod2kpipipi_DD 1.0
+kpipipitod2pipipipi_LL 1.0
+kpipipitod2pipipipi_DD 0.0337
 kpipipitod2pikpipi_LL 0.0036
 kpipipitod2pikpipi_DD 0.0036
 * 
@@ -154,6 +184,8 @@ effComb_kpitod2pik_LL 0.6
 effComb_kpitod2pik_DD 0.125
 effComb_kpipipitod2kpipipi_LL 1.0
 effComb_kpipipitod2kpipipi_DD 1.0
+effComb_kpipipitod2pipipipi_LL 0.25
+effComb_kpipipitod2pipipipi_DD 0.13
 effComb_kpipipitod2pikpipi_LL 1.0
 effComb_kpipipitod2pikpipi_DD 0.35
 * 

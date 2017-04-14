@@ -13,6 +13,7 @@ Base::Base()
   , d2pipi("d2pipi")
   , d2pik("d2pik")
   , d2kpipipi("d2kpipipi")
+  , d2pipipipi("d2pipipipi")
   , d2pikpipi("d2pikpipi")
   , minus("minus")
   , plus("plus")
@@ -38,6 +39,7 @@ Base::Base()
   allmodeList.push_back(d2pipi);
   allmodeList.push_back(d2pik);
   allmodeList.push_back(d2kpipipi);
+  allmodeList.push_back(d2pipipipi);
   allmodeList.push_back(d2pikpipi);
         
 }

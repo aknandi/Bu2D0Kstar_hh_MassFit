@@ -221,6 +221,7 @@ void Fitting::DefineRooCategories()
   modeList.push_back(d2pipi);
   modeList.push_back(d2pik);
   modeList.push_back(d2kpipipi);
+  modeList.push_back(d2pipipipi);
   modeList.push_back(d2pikpipi);
   for (std::vector<std::string>::iterator m = modeList.begin(); m != modeList.end(); m++)
     {
@@ -1088,6 +1089,11 @@ void Fitting::RunFullFit(bool draw=true)
 			  //plot[*c]->GetYaxis()->SetRangeUser(0,170);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
+		  }
+		  if(*m=="d2kpipipi") {
+			  //plot[*c]->GetYaxis()->SetRangeUser(0,170);
+			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
+			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
 		  }
 		  if(*m=="d2pikpipi") {
 			  //plot[*c]->GetYaxis()->SetRangeUser(0,9);

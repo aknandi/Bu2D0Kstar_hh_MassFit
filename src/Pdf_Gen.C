@@ -241,7 +241,7 @@ void Pdf_Gen::setRelations()
 
           if(*trackType=="LL")  {
 
-              if(*mode=="d2kpipipi" || *mode=="d2pikpipi") {
+              if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_LL); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_LL);
         		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_LL);
@@ -263,7 +263,7 @@ void Pdf_Gen::setRelations()
           }
           else if(*trackType=="DD") {
 
-              if(*mode=="d2kpipipi" || *mode=="d2pikpipi") {
+              if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_DD); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_DD);
         		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_DD);
@@ -284,7 +284,7 @@ void Pdf_Gen::setRelations()
           }
           else if(*trackType=="mix") {
 
-              if(*mode=="d2kpipipi" || *mode=="d2pikpipi") {
+              if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_mix); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_mix);
         		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_mix);
