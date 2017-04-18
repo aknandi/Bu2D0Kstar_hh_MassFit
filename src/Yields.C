@@ -366,8 +366,12 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 
 
 					// If fit is not charge separated fit to the signal yields
-					if(!_genConfs->isChargeSeparated())
-					{
+					if(!_genConfs->isChargeSeparated()) {
+
+						//double N_bu   = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
+						//n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
+						//n_bu_fit[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_fit_%s",identifier),"",N_bu,0.,100000.);
+
 						if(*m!="d2pik" && *m!="d2pikpipi") {
 							double N_bu   = input->getD(Form("N_bu_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*genscale;
 							n_bu_gen[*m][*c][*t][*a] = new RooRealVar(Form("n_bu_gen_%s",identifier),"",N_bu,0.,100000.);
@@ -395,6 +399,7 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"@0*@1",RooArgList(*Rads_k3pi,*n_bu_gen["d2kpipipi"][*c][*t][*a]));
 							n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"@0*@1",RooArgList(*Rads_k3pi,*n_bu_fit["d2kpipipi"][*c][*t][*a]));
 						}
+
 					}
 
 					// The rest of the pdf shapes are always fitted for yields
@@ -419,8 +424,13 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					// Total D*K* NOT split by charge- below need to add asymmetry as systematic
 					double N_dstkst;
 					if( *m=="d2kpipipi" || *m=="d2pikpipi" || *m=="d2pipipipi") {
-						if(*t == "LL") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutLL.c_str(),(*a).c_str()))*input->getD(Form("R_%s",(*m).c_str()))*genscale;
-						if(*t == "DD") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutDD.c_str(),(*a).c_str()))*input->getD(Form("R_%s",(*m).c_str()))*genscale;
+						double efficiencyCorrection;
+						if(*m == "d2kpipipi") efficiencyCorrection = 1.0;
+						else if (*m == "d2pipipipi") efficiencyCorrection = (input->getD("BR_d2kpipipi") * input->getD(Form("effSel_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()))) / (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())));
+						else if (*m == "d2pikpipi") efficiencyCorrection = input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()))/(input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*input->getD(Form("effVeto_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())));
+
+						if(*t == "LL") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutLL.c_str(),(*a).c_str()))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
+						if(*t == "DD") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutDD.c_str(),(*a).c_str()))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
 					}
 					else {
 						double efficiencyCorrection;

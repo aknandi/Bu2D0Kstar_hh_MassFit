@@ -62,8 +62,10 @@ void Pdf_Fit::setRelations()
   // Need to have separate sets of related parameters for different modes (d2kspipi) or track types (LL/DD)
 
   //Signal -- Double Crystal Ball
-  RooRealVar* bu_mean = new RooRealVar("bu_mean","",relConfs.getD("bu_mean"),
-                                       relConfs.getD("bu_mean_LimL"),relConfs.getD("bu_mean_LimU") );
+  RooRealVar* bu_mean_kpi = new RooRealVar("bu_mean_kpi","",relConfs.getD("bu_mean_kpi"),
+                                         relConfs.getD("bu_mean_kpi_LimL"),relConfs.getD("bu_mean_kpi_LimU") );
+  RooRealVar* bu_mean_kpipipi = new RooRealVar("bu_mean_kpipipi","",relConfs.getD("bu_mean_kpipipi"),
+                                         relConfs.getD("bu_mean_kpipipi_LimL"),relConfs.getD("bu_mean_kpipipi_LimU") );
   RooRealVar* bu_n_LL = new RooRealVar("bu_n_LL","",relConfs.getD("bu_n_LL"),
                                         relConfs.getD("bu_n_LL_LimL"),relConfs.getD("bu_n_LL_LimU") );
   RooRealVar* bu_n_DD = new RooRealVar("bu_n_DD","",relConfs.getD("bu_n_DD"),
@@ -231,13 +233,13 @@ void Pdf_Fit::setRelations()
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
 
-        	bu[*mode][*charge][*trackType][*run]->setMean(bu_mean);
-
         	//Signal
-        	if(*mode=="d2kpipipi" || *mode=="d2pikpipi") {
+        	if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
+        		bu[*mode][*charge][*trackType][*run]->setMean(bu_mean_kpipipi);
         		bu[*mode][*charge][*trackType][*run]->setWidth(bu_width_kpipipi);
         	}
         	else {
+        		bu[*mode][*charge][*trackType][*run]->setMean(bu_mean_kpi);
         		bu[*mode][*charge][*trackType][*run]->setWidth(bu_width_kpi);
         	}
 

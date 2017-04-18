@@ -1,6 +1,9 @@
-bu_mean 5279.3
-bu_mean_LimL 5270
-bu_mean_LimU 5288
+bu_mean_kpi 5279.3
+bu_mean_kpi_LimL 5270
+bu_mean_kpi_LimU 5288
+bu_mean_kpipipi 5279.3
+bu_mean_kpipipi_LimL 5270
+bu_mean_kpipipi_LimU 5288
 bu_width_kpi 10.8
 bu_width_kpi_LimL 0.0
 bu_width_kpi_LimU 30.0

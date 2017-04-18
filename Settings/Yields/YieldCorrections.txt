@@ -11,6 +11,8 @@ BR_d2kpipipi 0.0806
 BR_d2kpipipi_err 0.0023
 BR_d2pipipipi 0.00745
 BR_d2pipipipi_err 0.00022
+BR_d2pikpipi 0.000262
+BR_d2pikpipi_err 0.000011
 *
 Selection efficiencies
 effSel_d2kpi_run1_LL 0.0939
@@ -110,6 +112,7 @@ effBdt_d2kpi_all_LL 0.948
 effBdt_d2kpi_all_DD 0.902
 effBdt_d2pik_all_LL 0.948
 effBdt_d2pik_all_DD 0.815
+* Same BDT cut in suppressed and favoured - might change
 effBdt_d2kpipipi_run1_LL 0.938
 effBdt_d2kpipipi_run1_LL_err 0.010
 effBdt_d2kpipipi_run1_DD 0.903
@@ -120,11 +123,11 @@ effBdt_d2kpipipi_run2_DD 0.928
 effBdt_d2kpipipi_run2_DD_err 0.002
 effBdt_d2pikpipi_run1_LL 0.938
 effBdt_d2pikpipi_run1_LL_err 0.010
-effBdt_d2pikpipi_run1_DD 0.838
+effBdt_d2pikpipi_run1_DD 0.903
 effBdt_d2pikpipi_run1_DD_err 0.009
 effBdt_d2pikpipi_run2_LL 0.952
 effBdt_d2pikpipi_run2_LL_err 0.003
-effBdt_d2pikpipi_run2_DD 0.870
+effBdt_d2pikpipi_run2_DD 0.928
 effBdt_d2pikpipi_run2_DD_err 0.003
 *
 Double misID efficiency veto for ADS
@@ -138,6 +141,16 @@ effVeto_run2_DD 0.927
 effVeto_run2_DD_err 0.003
 effVeto_all_LL 0.929
 effVeto_all_DD 0.928
+effVeto_d2kpipipi_run1_LL 1.0
+effVeto_d2kpipipi_run1_LL_err 0.00
+effVeto_d2kpipipi_run1_DD 1.0
+effVeto_d2kpipipi_run1_DD_err 0.00
+effVeto_d2kpipipi_run2_LL 1.0
+effVeto_d2kpipipi_run2_LL_err 0.0
+effVeto_d2kpipipi_run2_DD 1.0
+effVeto_d2kpipipi_run2_DD_err 0.0
+effVeto_d2kpipipi_all_LL 1.0
+effVeto_d2kpipipi_all_DD 1.0
 * 
 * Charmless yields
 charmless_d2kk_LL_run1 0.0

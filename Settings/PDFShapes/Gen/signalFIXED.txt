@@ -1,6 +1,9 @@
-bu_mean 5279.3
-bu_mean_LimL 5270
-bu_mean_LimU 5288
+bu_mean_kpi 5279.3
+bu_mean_kpi_LimL 5270
+bu_mean_kpi_LimU 5288
+bu_mean_kpipipi 5279.3
+bu_mean_kpipipi_LimL 5270
+bu_mean_kpipipi_LimU 5288
 * For Johnson
 * bu_width_run1 13.7
 * bu_width_run1_LimL 0.0
