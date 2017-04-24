@@ -1095,7 +1095,7 @@ void Fitting::RunFullFit(bool draw=true)
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
 		  }
-		  if(*m=="d2kpipipi") {
+		  if(*m=="d2pipipipi") {
 			  //plot[*c]->GetYaxis()->SetRangeUser(0,170);
 			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
 			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
