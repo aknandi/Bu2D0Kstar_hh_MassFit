@@ -219,9 +219,11 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 	    		for(std::vector<std::string>::iterator a=runList.begin(); a!=runList.end();a++){
 
 	    			double N_kpipipifromFit;
-	    			//N_kpipipifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*genscale;
+	    			N_kpipipifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*genscale;
+	    			/*
 	    			if(*t == "LL") N_kpipipifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_%s_%s_%s_%s",(*m).c_str(),(*t).c_str(),bdtcutLL.c_str(),(*a).c_str()))*genscale;
 	    			if(*t == "DD") N_kpipipifromFit = input->getD(Form("N_bu_%s_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_%s_%s_%s_%s",(*m).c_str(),(*t).c_str(),bdtcutDD.c_str(),(*a).c_str()))*genscale;
+	    			*/
 	    			N_kpipipi[*t][*a] = new RooRealVar(Form("N_%s_%s_%s",(*m).c_str(),(*t).c_str(),(*a).c_str()),"",N_kpipipifromFit,-10.,1000000.);
 
 	    		}
@@ -247,7 +249,6 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 
 		double productionAsymmetry = input->getD(Form("A_prod_%s",(*a).c_str()));
 		double Apid = input->getD(Form("A_pid_%s",(*a).c_str()));
-		// If switch in on in GeneralSettings, run the systematic
 		prodAsymmetry = new RooRealVar(Form("prodAsymmetry_%s",(*a).c_str()),"",productionAsymmetry + (_genConfs->get("productionAsymmetry")=="1"?gRandom->Gaus(0,input->getD(Form("A_prod_%s_err",(*a).c_str()))):0.));
 		pidAsymmetry = new RooRealVar(Form("pidAsymmetry_%s",(*a).c_str()),"",Apid + (_genConfs->get("pidAsymmetry")=="1"?gRandom->Gaus(0,input->getD(Form("A_pid_%s_err",(*a).c_str()))):0.));
 
@@ -298,14 +299,7 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							// Account for the efficiencies of the double misID veto and different BDT cut in ADS mode
 							double efficiencyVeto = input->getD(Form("effVeto_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()));
 							double errEfficiencyVeto = input->getD(Form("effVeto_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()));
-
-							double efficiencyBdt;
-							efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
-							/*
-							if (*t == "LL") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsLL.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutLL.c_str()));
-							if (*t == "DD") efficiencyBdt = input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtadsDD.c_str()))/input->getD(Form("effSig_%s_%s_%s_%s_25",(*t).c_str(),kstmasscut.c_str(),kshelcut.c_str(),bdtcutDD.c_str()));
-							*/
-
+							double efficiencyBdt = input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str()));
 							double errEfficiencyBdt = efficiencyBdt * sqrt(pow(input->getD(Form("effBdt_%s_%s_%s_err",(*m).c_str(),(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())),2) + pow(input->getD(Form("effBdt_d2kpi_%s_%s_err",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpi_%s_%s",(*a).c_str(),(*t).c_str())),2));
 							RooRealVar* effVeto = new RooRealVar(Form("effVeto_%s_%s",(*a).c_str(),(*t).c_str()),"",efficiencyVeto + (_genConfs->get("vetoefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyVeto):0.));
 							RooRealVar* effBdt = new RooRealVar(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyBdt + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errEfficiencyBdt):0.));
@@ -413,11 +407,11 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					double N_comb;
 					// Used for optimisation of cuts
 					if(*t == "LL") {
-						if( *m=="d2kpipipi" || *m=="d2pikpipi" || *m=="d2pipipipi") N_comb = 0.5*input->getD(Form("N_comb_d2kpipipi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpipipi_%s_%s",(*t).c_str(),bdtcutLL.c_str(),(*a).c_str()))*input->getD(Form("effComb_kpipipito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+						if( *m=="d2kpipipi" || *m=="d2pikpipi" || *m=="d2pipipipi") N_comb = 0.5*input->getD(Form("N_comb_d2kpipipi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpipipito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 						else N_comb = N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 					}
 					if(*t == "DD") {
-						if( *m=="d2kpipipi" || *m=="d2pikpipi" || *m=="d2pipipipi") N_comb = 0.5*input->getD(Form("N_comb_d2kpipipi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_%s_d2kpipipi_%s_%s",(*t).c_str(),bdtcutDD.c_str(),(*a).c_str()))*input->getD(Form("effComb_kpipipito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
+						if( *m=="d2kpipipi" || *m=="d2pikpipi" || *m=="d2pipipipi") N_comb = 0.5*input->getD(Form("N_comb_d2kpipipi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpipipito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 						else N_comb = N_comb = 0.5*input->getD(Form("N_comb_d2kpi_both_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effComb_kpito%s_%s",(*m).c_str(),(*t).c_str()))*genscale;
 					}
 
@@ -433,8 +427,8 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 						else if (*m == "d2pipipipi") efficiencyCorrection = (input->getD("BR_d2kpipipi") * input->getD(Form("effSel_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()))) / (input->getD(Form("BR_%s",(*m).c_str())) * input->getD(Form("effSel_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())) * input->getD(Form("effPid_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())));
 						else if (*m == "d2pikpipi") efficiencyCorrection = input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str()))/(input->getD(Form("effBdt_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()))*input->getD(Form("effVeto_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str())));
 
-						if(*t == "LL") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutLL.c_str(),(*a).c_str()))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
-						if(*t == "DD") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*input->getD(Form("effSig_d2kpipipi_%s_%s_%s",(*t).c_str(),bdtcutDD.c_str(),(*a).c_str()))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
+						if(*m == "d2pik" && *t == "DD") N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*(input->getD(Form("effBdt_d2pikpipi_%s_%s",(*a).c_str(),(*t).c_str()))/input->getD(Form("effBdt_d2kpipipi_%s_%s",(*a).c_str(),(*t).c_str())))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
+						else N_dstkst = input->getD(Form("N_dstkst_d2kpipipi_%s_%s_%s",(*a).c_str(),(*t).c_str(),limitlow.c_str()))*(input->getD(Form("R_%s",(*m).c_str()))/efficiencyCorrection)*genscale;
 					}
 					else {
 						double efficiencyCorrection;

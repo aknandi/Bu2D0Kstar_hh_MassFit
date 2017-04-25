@@ -29,7 +29,7 @@ A_prod_run2_err 0.0108
 A_det_pi 0.0008
 A_det_kpi -0.0106
 A_det_pi_err 0.0030
-A_det_kpi_err 0.0016
+A_det_kpi_err 0.0016	
 A_pid_run1 -0.000956
 A_pid_run2 -0.000140
 A_pid_run1_err 0.000019
@@ -57,32 +57,32 @@ N_dstkst_d2kpi_run1_LL_5230 0.55
 N_dstkst_d2kpi_run1_DD_5230 1.03
 N_dstkst_d2kpi_run2_LL_5230 1.18
 N_dstkst_d2kpi_run2_DD_5230 1.35
-* N_bu_d2kpipipi_run1_LL_5230 81.0
-* N_bu_d2kpipipi_run1_DD_5230 161.0
-* N_bu_d2kpipipi_run2_LL_5230 208.0
-* N_bu_d2kpipipi_run2_DD_5230 505.0
-* N_comb_d2kpipipi_both_run1_LL_5230 26.0
-* N_comb_d2kpipipi_both_run1_DD_5230 125.0
-* N_comb_d2kpipipi_both_run2_LL_5230 27.0
-* N_comb_d2kpipipi_both_run2_DD_5230 165.0
-* N_dstkst_d2kpipipi_run1_LL_5230 0.49
-* N_dstkst_d2kpipipi_run1_DD_5230 0.96
-* N_dstkst_d2kpipipi_run2_LL_5230 0.76
-* N_dstkst_d2kpipipi_run2_DD_5230 0.77
+N_bu_d2kpipipi_run1_LL_5230 102.0
+N_bu_d2kpipipi_run1_DD_5230 226.0
+N_bu_d2kpipipi_run2_LL_5230 244.0
+N_bu_d2kpipipi_run2_DD_5230 578.0
+N_comb_d2kpipipi_both_run1_LL_5230 50.0
+N_comb_d2kpipipi_both_run1_DD_5230 252.0
+N_comb_d2kpipipi_both_run2_LL_5230 168.0
+N_comb_d2kpipipi_both_run2_DD_5230 707.0
+N_dstkst_d2kpipipi_run1_LL_5230 0.34
+N_dstkst_d2kpipipi_run1_DD_5230 0.52
+N_dstkst_d2kpipipi_run2_LL_5230 0.55
+N_dstkst_d2kpipipi_run2_DD_5230 1.31
 * 
 * Taken from single fit with BDT > 0 (for toys)
-N_bu_d2kpipipi_run1_LL_5230 92
-N_bu_d2kpipipi_run1_DD_5230 215
-N_bu_d2kpipipi_run2_LL_5230 216
-N_bu_d2kpipipi_run2_DD_5230 532
-N_comb_d2kpipipi_both_run1_LL_5230 12.0
-N_comb_d2kpipipi_both_run1_DD_5230 145
-N_comb_d2kpipipi_both_run2_LL_5230 58
-N_comb_d2kpipipi_both_run2_DD_5230 506
-N_dstkst_d2kpipipi_run1_LL_5230 0.40
-N_dstkst_d2kpipipi_run1_DD_5230 0.43
-N_dstkst_d2kpipipi_run2_LL_5230 0.51
-N_dstkst_d2kpipipi_run2_DD_5230 1.32
+* N_bu_d2kpipipi_run1_LL_5230 92
+* N_bu_d2kpipipi_run1_DD_5230 215
+* N_bu_d2kpipipi_run2_LL_5230 216
+* N_bu_d2kpipipi_run2_DD_5230 532
+* N_comb_d2kpipipi_both_run1_LL_5230 12.0
+* N_comb_d2kpipipi_both_run1_DD_5230 145
+* N_comb_d2kpipipi_both_run2_LL_5230 58
+* N_comb_d2kpipipi_both_run2_DD_5230 506
+* N_dstkst_d2kpipipi_run1_LL_5230 0.40
+* N_dstkst_d2kpipipi_run1_DD_5230 0.43
+* N_dstkst_d2kpipipi_run2_LL_5230 0.51
+* N_dstkst_d2kpipipi_run2_DD_5230 1.32
 *
 * From single fit with full selection
 N_bu_d2kpi_all_LL_5230 345.994
