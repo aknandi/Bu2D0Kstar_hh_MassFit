@@ -45,6 +45,7 @@ partrecoShape 0
 signalShape 0
 combinatoricShape 0
 charmless 0
+lckst 0
 * Systematics from data
 productionAsymmetry 0
 detectionAsymmetry 0

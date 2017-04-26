@@ -76,6 +76,11 @@ RooSimultaneous* Model::getGenPdf()
             // DstKst
             pdflist.add(*(genPdf.roopdf_dstkst[*m][*c][*t][*a]));
             nevents.add(*(yields->n_dstkst_gen[*m][*c][*t][*a]));
+            // LcKst
+            if(_genConfs->get("lckst")!="0" && *m=="d2kk") {
+                pdflist.add(*(genPdf.roopdf_lckst[*m][*c][*t][*a]));
+                nevents.add(*(yields->n_lckst_gen[*m][*c][*t][*a]));
+            }
           }
 
 

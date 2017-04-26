@@ -47,6 +47,7 @@ class Yields : public Base
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_comb;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooRealVar*> > > > n_dstkst_gen;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooAbsReal*> > > > n_lckst_gen;
 
   std::map<std::string, RooRealVar*> A;
   std::map<std::string, RooRealVar*> R;

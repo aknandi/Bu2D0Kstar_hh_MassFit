@@ -1,6 +1,5 @@
 #include "Pdf_Gen.h"
-//#include "KeysPdf.h"
-//#include "PartRecoDstKst.h"
+#include "RooKeysPdf.h"
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "DoubleCrystalBall.h"
@@ -11,6 +10,7 @@
 #include "TMatrixD.h"
 #include "TVectorD.h"
 #include "TRandom.h"
+#include "RooWorkspace.h"
 
 Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> modeList, std::vector<std::string> chargeList, std::vector<std::string> trackTypeList, std::vector<std::string> runList)
 {
@@ -20,6 +20,10 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
   _trackTypeList=trackTypeList;
   _runList=runList;
 
+  TFile LambdaFile("Settings/PDFShapes/Gen/lckst.root");
+  RooWorkspace* workspace = (RooWorkspace*)LambdaFile.Get("workspace");
+  RooKeysPdf* lckst_all = (RooKeysPdf*)workspace->pdf("lckst");
+  LambdaFile.Close();
 
   // Initialise the PDFs
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
@@ -31,6 +35,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         	//bu[*mode][*charge][*trackType][*run]  = new DoubleJohnson(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
         	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
+        	//if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new RooKeysPdf(*lckst_all,Form("lckst_%s_%s_%s",(*charge).c_str(),(*trackType).c_str(),(*run).c_str()));
            }
       }
     }
@@ -323,6 +328,7 @@ void Pdf_Gen::setRelations()
           roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_comb[*mode][*charge][*trackType][*run]      = comb[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_dstkst[*mode][*charge][*trackType][*run]  = dstkst[*mode][*charge][*trackType][*run]->getPdf();
+          if(relConfs.get("lckst")=="0" && *mode=="d2kk") roopdf_lckst[*mode][*charge][*trackType][*run] = lckst[*mode][*charge][*trackType][*run];
         }
       }
     }

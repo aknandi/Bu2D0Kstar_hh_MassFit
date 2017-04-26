@@ -173,6 +173,10 @@ err_charmless_d2pipi_LL_run2 1.2
 charmless_d2pipi_DD_run2 2.3
 err_charmless_d2pipi_DD_run2 2.2
 *
+* Possible LcKst yield
+frac_lckst 0.0119
+err_frac_lckst 0.0003
+*
 * Yield fractions for signal for other D modes (BRs, MC efficiencies, pid efficiencies) - for DstKst at the moment
 kpitod2kpi_LL 1.0
 kpitod2kpi_DD 1.0
