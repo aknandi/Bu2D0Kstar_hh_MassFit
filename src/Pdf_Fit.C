@@ -246,14 +246,14 @@ void Pdf_Fit::setRelations()
         	if(*trackType=="LL")  {
 
         		if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_LL); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_LL);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_LL);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_LL);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_LL);
         			bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_LL);
         		}
         		else {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_LL); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_LL);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_LL);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_LL);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_LL);
@@ -268,14 +268,14 @@ void Pdf_Fit::setRelations()
         	else if(*trackType=="DD") {
 
         		if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_DD); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_DD);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_DD);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_DD);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_DD);
         			bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_DD);
         		}
         		else {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_DD); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_DD);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_DD);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_DD);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_DD);
@@ -289,14 +289,14 @@ void Pdf_Fit::setRelations()
         	else if(*trackType=="mix") {
 
         		if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_mix); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_mix);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_mix);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_mix);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_mix);
         			bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_mix);
         		}
         		else {
-        			if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_mix); }
+        			comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_mix);
         			bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_mix);
         			//bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_mix);
         			bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_mix);

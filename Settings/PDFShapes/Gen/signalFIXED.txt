@@ -5,17 +5,21 @@ bu_mean_kpipipi 5279.3
 bu_mean_kpipipi_LimL 5270
 bu_mean_kpipipi_LimU 5288
 * For Johnson
-* bu_width_run1 13.7
-* bu_width_run1_LimL 0.0
-* bu_width_run1_LimU 30.0
-* bu_width_kpipipi 15.5
+* bu_width_kpi 14.3
+* bu_width_kpi_LimL 0.0
+* bu_width_kpi_LimU 30.0
+* bu_width_kpipipi 15.7
 * bu_width_kpipipi_LimL 0.0
 * bu_width_kpipipi_LimU 30.0
-* bu_gamma 0.0
-* bu_delta_run1_LL 0.67
-* bu_delta_run1_DD 0.62
-* bu_delta_kpipipi_LL 0.63
-* bu_delta_kpipipi_DD 0.72
+bu_gamma 0.0
+* bu_frac_kpi_LL 0.26
+* bu_frac_kpi_DD 0.26
+* bu_frac_kpipipi_LL 0.26
+* bu_frac_kpipipi_DD 0.26
+bu_delta_kpi_LL 0.67
+bu_delta_kpi_DD 0.66
+bu_delta_kpipipi_LL 0.68
+bu_delta_kpipipi_DD 0.68
 *
 bu_width_kpi 10.8
 bu_width_kpi_LimL 0.0

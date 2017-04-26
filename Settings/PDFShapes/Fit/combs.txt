@@ -18,72 +18,26 @@ exp_kpipipi_DD_combs_slope -0.0022
 exp_kpipipi_DD_combs_slope_LimL -1.0
 exp_kpipipi_DD_combs_slope_LimU 1.0
 *
-d2kpi_exp_mix_combs_slope -0.0021
-d2kpi_exp_mix_combs_slope_LimL -0.1
-d2kpi_exp_mix_combs_slope_LimU 0.
-d2kpi_exp_LL_combs_slope -0.0024
-d2kpi_exp_LL_combs_slope_LimL -1.0
-d2kpi_exp_LL_combs_slope_LimU 1.0
-d2kpi_exp_DD_combs_slope -0.0014
-d2kpi_exp_DD_combs_slope_LimL -1.0
-d2kpi_exp_DD_combs_slope_LimU 1.0
-*
-d2kk_exp_mix_combs_slope -0.003
-d2kk_exp_mix_combs_slope_LimL -1.0
-d2kk_exp_mix_combs_slope_LimU 1.0
-d2kk_exp_LL_combs_slope -0.003
-d2kk_exp_LL_combs_slope_LimL -1.0
-d2kk_exp_LL_combs_slope_LimU 1.0
-d2kk_exp_DD_combs_slope -0.003
-d2kk_exp_DD_combs_slope_LimL -1.0
-d2kk_exp_DD_combs_slope_LimU 1.0
-*
-d2pipi_exp_mix_combs_slope -0.003
-d2pipi_exp_mix_combs_slope_LimL -1.0
-d2pipi_exp_mix_combs_slope_LimU 1.0
-d2pipi_exp_LL_combs_slope -0.003
-d2pipi_exp_LL_combs_slope_LimL -1.0
-d2pipi_exp_LL_combs_slope_LimU 1.0
-d2pipi_exp_DD_combs_slope -0.003
-d2pipi_exp_DD_combs_slope_LimL -1.0
-d2pipi_exp_DD_combs_slope_LimU 1.0
-*
-d2pik_exp_mix_combs_slope -0.003
-d2pik_exp_mix_combs_slope_LimL -1.0
-d2pik_exp_mix_combs_slope_LimU 1.0
-d2pik_exp_LL_combs_slope -0.003
-d2pik_exp_LL_combs_slope_LimL -1.0
-d2pik_exp_LL_combs_slope_LimU 1.0
-d2pik_exp_DD_combs_slope -0.003
-d2pik_exp_DD_combs_slope_LimL -1.0
-d2pik_exp_DD_combs_slope_LimU 1.0
-*
-d2kpipipi_exp_mix_combs_slope -0.0021
-d2kpipipi_exp_mix_combs_slope_LimL -0.1
-d2kpipipi_exp_mix_combs_slope_LimU 0.
-d2kpipipi_exp_LL_combs_slope -0.0024
-d2kpipipi_exp_LL_combs_slope_LimL -1.0
-d2kpipipi_exp_LL_combs_slope_LimU 1.0
-d2kpipipi_exp_DD_combs_slope -0.0014
-d2kpipipi_exp_DD_combs_slope_LimL -1.0
-d2kpipipi_exp_DD_combs_slope_LimU 1.0
-*
-d2pipipipi_exp_mix_combs_slope -0.0021
-d2pipipipi_exp_mix_combs_slope_LimL -0.1
-d2pipipipi_exp_mix_combs_slope_LimU 0.
-d2pipipipi_exp_LL_combs_slope -0.0024
-d2pipipipi_exp_LL_combs_slope_LimL -1.0
-d2pipipipi_exp_LL_combs_slope_LimU 1.0
-d2pipipipi_exp_DD_combs_slope -0.0014
-d2pipipipi_exp_DD_combs_slope_LimL -1.0
-d2pipipipi_exp_DD_combs_slope_LimU 1.0
-*
-d2pikpipi_exp_mix_combs_slope -0.0021
-d2pikpipi_exp_mix_combs_slope_LimL -0.1
-d2pikpipi_exp_mix_combs_slope_LimU 0.
-d2pikpipi_exp_LL_combs_slope -0.0024
-d2pikpipi_exp_LL_combs_slope_LimL -1.0
-d2pikpipi_exp_LL_combs_slope_LimU 1.0
-d2pikpipi_exp_DD_combs_slope -0.0014
-d2pikpipi_exp_DD_combs_slope_LimL -1.0
-d2pikpipi_exp_DD_combs_slope_LimU 1.0
+* Fixed values of combinatoric when running systematic
+d2kpi_exp_LL_combs_slope -0.000897
+d2kpi_exp_DD_combs_slope -0.000279
+d2kk_exp_LL_combs_slope -0.000739
+d2kk_exp_DD_combs_slope -0.000327
+d2pipi_exp_LL_combs_slope -0.000721
+d2pipi_exp_DD_combs_slope -0.000517
+d2pik_exp_LL_combs_slope -0.000688
+d2pik_exp_DD_combs_slope -0.000351
+d2kpipipi_exp_LL_combs_slope -0.000844
+d2kpipipi_exp_DD_combs_slope -0.000312
+d2pipipipi_exp_LL_combs_slope -0.000722
+d2pipipipi_exp_DD_combs_slope -0.000415
+d2pikpipi_exp_LL_combs_slope -0.000710
+d2pikpipi_exp_DD_combs_slope -0.000380
+* 
+d2kpi_exp_mix_combs_slope -0.0005
+d2kk_exp_mix_combs_slope -0.0005
+d2pipi_exp_mix_combs_slope -0.0003
+d2pik_exp_mix_combs_slope -0.0005
+d2kpipipi_exp_mix_combs_slope -0.0006
+d2pipipipi_exp_mix_combs_slope -0.0005
+d2pikpipi_exp_mix_combs_slope -0.0005

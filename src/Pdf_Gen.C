@@ -114,17 +114,15 @@ void Pdf_Gen::setRelations()
                                           relConfs.getD("bu_frac_kpipipi_mix_LimL"),relConfs.getD("bu_frac_kpipipi_mix_LimU") );
 
   // For Johnson
-  /*
-  RooRealVar* bu_delta_run1_LL = new RooRealVar("bu_delta_run1_LL","",relConfs.getD("bu_delta_run1_LL"));
-  RooRealVar* bu_delta_run2_LL = new RooRealVar("bu_delta_run2_LL","",relConfs.getD("bu_delta_run2_LL"));
-  RooRealVar* bu_delta_run1_DD = new RooRealVar("bu_delta_run1_DD","",relConfs.getD("bu_delta_run1_DD"));
-  RooRealVar* bu_delta_run2_DD = new RooRealVar("bu_delta_run2_DD","",relConfs.getD("bu_delta_run2_DD"));
+  RooRealVar* bu_delta_kpi_LL = new RooRealVar("bu_delta_kpi_LL","",relConfs.getD("bu_delta_kpi_LL"));
+  RooRealVar* bu_delta_kpipipi_LL = new RooRealVar("bu_delta_kpipipi_LL","",relConfs.getD("bu_delta_kpipipi_LL"));
+  RooRealVar* bu_delta_kpi_DD = new RooRealVar("bu_delta_kpi_DD","",relConfs.getD("bu_delta_kpi_DD"));
+  RooRealVar* bu_delta_kpipipi_DD = new RooRealVar("bu_delta_kpipipi_DD","",relConfs.getD("bu_delta_kpipipi_DD"));
   RooRealVar* bu_gamma = new RooRealVar("bu_gamma","",relConfs.getD("bu_gamma"));
 
-  RooRealVar* bu_delta_all_LL = new RooRealVar("bu_delta_all_LL","",relConfs.getD("bu_delta_run1_LL"));
-  RooRealVar* bu_delta_all_DD = new RooRealVar("bu_delta_all_DD","",relConfs.getD("bu_delta_run1_DD"));
-  RooRealVar* bu_delta_mix = new RooRealVar("bu_delta_mix","",relConfs.getD("bu_delta_run1_DD"));
-  */
+  RooRealVar* bu_delta_kpi_mix = new RooRealVar("bu_delta_mix","",relConfs.getD("bu_delta_kpi_DD"));
+  RooRealVar* bu_delta_kpipipi_mix = new RooRealVar("bu_delta_mix","",relConfs.getD("bu_delta_kpipipi_DD"));
+
 
   // Combs- exponential
   RooRealVar *combs_slope_kpi_mix = new RooRealVar("exp_kpi_mix_combs_slope","",relConfs.getD("exp_kpi_mix_combs_slope"),
@@ -198,15 +196,13 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(bu_frac_kpi_DD);
   fixedParams->push_back(bu_frac_kpipipi_LL);
   fixedParams->push_back(bu_frac_kpipipi_DD);
-/*
-  fixedParams->push_back(bu_delta_all_LL);
-  fixedParams->push_back(bu_delta_run1_LL);
-  fixedParams->push_back(bu_delta_run2_LL);
-  fixedParams->push_back(bu_delta_all_DD);
-  fixedParams->push_back(bu_delta_run1_DD);
-  fixedParams->push_back(bu_delta_run2_DD);
-  fixedParams->push_back(bu_gamma);
-*/
+  if(relConfs.get("signalShape")=="1") {
+	  fixedParams->push_back(bu_delta_kpi_LL);
+	  fixedParams->push_back(bu_delta_kpipipi_LL);
+	  fixedParams->push_back(bu_delta_kpi_DD);
+	  fixedParams->push_back(bu_delta_kpipipi_DD);
+	  fixedParams->push_back(bu_gamma);
+  }
   //fixedParams->push_back(bu_alpha_mix);
   //fixedParams->push_back(bu_n_mix);
   //fixedParams->push_back(combs_slope_LL);
@@ -252,14 +248,14 @@ void Pdf_Gen::setRelations()
               if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_LL); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_LL);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_LL);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpipipi_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_LL);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_LL);
         	  }
         	  else {
         		  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_LL); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_LL);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_LL);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpi_LL);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_LL);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpi_LL);
         	  }
@@ -274,14 +270,14 @@ void Pdf_Gen::setRelations()
               if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_DD); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_DD);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_DD);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpipipi_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_DD);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_DD);
         	  }
         	  else {
         		  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_DD); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_DD);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_DD);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpi_DD);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_DD);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpi_DD);
         	  }
@@ -295,14 +291,14 @@ void Pdf_Gen::setRelations()
               if(*mode=="d2kpipipi" || *mode=="d2pikpipi" || *mode=="d2pipipipi") {
             	  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpipipi_mix); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpipipi_mix);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_all_mix);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpipipi_mix);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpipipi_mix);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpipipi_mix);
         	  }
         	  else {
         		  if(relConfs.get("combinatoricShape")=="0") { comb[*mode][*charge][*trackType][*run]->setSlope(combs_slope_kpi_mix); }
         		  bu[*mode][*charge][*trackType][*run]->setAlpha(bu_alpha_kpi_mix);
-        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_run1_mix);
+        		  //bu[*mode][*charge][*trackType][*run]->setDelta(bu_delta_kpi_mix);
         		  bu[*mode][*charge][*trackType][*run]->setWidthRatio(bu_width_ratio_kpi_mix);
         		  bu[*mode][*charge][*trackType][*run]->setFrac(bu_frac_kpi_mix);
         	  }
