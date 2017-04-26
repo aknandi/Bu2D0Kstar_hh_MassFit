@@ -332,12 +332,12 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 							effCorrection = new RooRealVar(Form("effCorrection_%s_%s_%s",(*m).c_str(),(*a).c_str(),(*t).c_str()),"",efficiencyCorrection + (_genConfs->get("mcefficiencies")=="1"?gRandom->Gaus(0,errmcEfficiencyCorrection):0.) + (_genConfs->get("pidefficiencies")=="1"?gRandom->Gaus(0,errpidEfficiencyCorrection):0.) + (_genConfs->get("branchingRatios")=="1"?gRandom->Gaus(0,errBranchingRatio):0.));
 
 							if(*c == "plus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpipipi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1-(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpipipi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
 							}
 							else if (*c == "minus") {
-								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
-								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_gen_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpipipi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
+								n_bu_fit[*m][*c][*t][*a] = new RooFormulaVar(Form("n_bu_fit_%s",identifier),"0.5*@0*(1+(@1+@2+@3+@4))*(@5/@6)",RooArgList(*N_kpipipi[*t][*a],*A[*m],*prodAsymmetry,*detApi,*pidAsymmetry,*R[*m],*effCorrection));
 							}
 						}
 						else if(*m == "d2pikpipi") {
