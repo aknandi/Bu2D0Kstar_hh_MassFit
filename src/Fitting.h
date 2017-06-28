@@ -41,7 +41,6 @@ class Fitting : public Base
   RooDataSet *FinalDataSet(const std::string, const std::string, const std::string, const std::string, RooDataSet* DS);
   void PrintDataSet(bool=false);
   void Fit();
-  //void ReInitialize(RooAbsPdf*, RooAbsPdf*);	
 
  private:
   TFile *saveOutputForPlottingMacro;
@@ -57,12 +56,6 @@ class Fitting : public Base
   RooRealVar bid;
   RooRealVar bach_dll;
   RooRealVar assignedCharge;
-//  RooRealVar dalitzm2_plus;
-//  RooRealVar dalitzm2_minus;
-//  RooRealVar DalitzBinNumber_equal;
-//  RooRealVar DalitzBinNumber_optimal;
-//  RooRealVar DalitzBinNumber_modopt;
-//  RooRealVar DalitzBinNumber;
   RooRealVar BDTGresponse;
 
   RooSuperCategory* cat;	

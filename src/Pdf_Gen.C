@@ -1,12 +1,10 @@
 #include "Pdf_Gen.h"
-#include "RooKeysPdf.h"
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "DoubleCrystalBall.h"
 #include "DoubleJohnson.h"
 #include "PartRecoDstKst.h"
 #include "myCruijff.h"
-//#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
 #include "TVectorD.h"
@@ -20,12 +18,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
   _chargeList=chargeList;
   _trackTypeList=trackTypeList;
   _runList=runList;
-/*
-  TFile LambdaFile("Settings/PDFShapes/Gen/lckst.root");
-  RooWorkspace* workspace = (RooWorkspace*)LambdaFile.Get("workspace");
-  RooKeysPdf* lckst_all = (RooKeysPdf*)workspace->pdf("lckst");
-  LambdaFile.Close();
-*/
+
   // Initialise the PDFs
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
     for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
@@ -36,13 +29,11 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         	//bu[*mode][*charge][*trackType][*run]  = new DoubleJohnson(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
         	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
-        	//if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new RooKeysPdf(*lckst_all,Form("lckst_%s_%s_%s",(*charge).c_str(),(*trackType).c_str(),(*run).c_str()));
         	if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new myCruijff(pmB,*mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
            }
       }
     }
   }
-  
   // Now set relations, which prepares the PDFs to be returned
   setRelations();
 }

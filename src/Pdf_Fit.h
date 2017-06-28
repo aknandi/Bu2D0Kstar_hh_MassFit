@@ -20,22 +20,9 @@ class Pdf_Fit
   void setRelations();
   // PDFs to return
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bu;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_comb;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_drho;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bd_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dstkst;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs_dstkst_001;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs_dstkst_010;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dkpipi;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dpipipi;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_lambda;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_lckst;
-//  std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > gaus_frac010_bs;
-//  std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > gaus_frac010_bd;
-  //RooAbsPdf* gaus_frac010_bs;
-  //RooAbsPdf* gaus_frac010_bd;
-  //RooRealVar* bs_frac010;
 
   std::vector <RooRealVar*> *GetFixedParameters() {return fixedParams;}
 
@@ -46,16 +33,8 @@ class Pdf_Fit
   std::string _toys;
   // PDFs
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,DoubleCrystalBall*> > > > bu;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Exponential*> > > > comb;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,PartRecoDstKst*> > > > dstkst;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst_001;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst_010;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,PartRecoDstKst*> > > > bd_dstkst;
-/*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > dkpipi;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > dpipipi;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > lambda;*/
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myCruijff*> > > > lckst;
 
   std::vector<std::string> _modeList;

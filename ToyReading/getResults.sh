@@ -14,7 +14,7 @@ else
     exit 0
 fi
 
-SUBDIR="2017-06-27_$1/"
+SUBDIR="2017-06-28_$1/"
 MIN=1
 MAX=1000
 GAP=20

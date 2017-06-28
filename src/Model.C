@@ -151,78 +151,6 @@ RooSimultaneous* Model::getFitPdf()
           // --- No Gaussian Constraints --- 
           RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
 
-          // --- The Gaussian Constraints --- 
-          //RooAddPdf* addpdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
-          //RooArgSet constpdfset(*addpdf);
-
-          if(_genConfs->get("genToys")=="true")
-          {
-            //int seed = _genConfs->getD("startSeed");
-            //TRandom3* rand = new TRandom3();
-            //rand->SetSeed(seed*2);
-
-/*            // Set up sampling Gaussians to fit toys
-            double f010_mean(0.), f010_err(0.);
-            double r_dstkst_mean(0.), r_dstkst_err(0.);
-            double r_drho_mean(0.), r_drho_err(0.);
-
-            if(_genConfs->getI("fit_limit_low")==5200) 
-            {
-              f010_mean = 0.75;
-              f010_err = 0.13;
-              r_dstkst_mean = 0.42;
-              r_dstkst_err = 0.14;
-              r_drho_mean = 0.035;
-              r_drho_err = 0.010;
-            }
-            if(_genConfs->getI("fit_limit_low")==5160) 
-            {
-              f010_mean = 0.77;
-              f010_err = 0.11;
-              r_dstkst_mean = 0.76;
-              r_dstkst_err = 0.29;
-              r_drho_mean = 0.035;
-              r_drho_err = 0.010;
-            }*/
-
-            /*// frac010
-            double f010_mean_fit = rand->Gaus(f010_mean,f010_err);
-            gaus_f010 = new RooGaussian("gaus_f010","",*(fitPdf.bs_frac010),RooFit::RooConst(f010_mean_fit), RooFit::RooConst(f010_err));
-            constpdfset.add(*gaus_f010);
-            // r(D*K*)
-            double r_dstkst_mean_fit = rand->Gaus(r_dstkst_mean,r_dstkst_err);
-            gaus_r_dstkst = new RooGaussian("gaus_r_dstkst","",*(yields->ratio_bs_dstkst[*c][*t][*a]), RooFit::RooConst(r_dstkst_mean_fit), RooFit::RooConst(r_dstkst_err));
-            constpdfset.add(*gaus_r_dstkst);
-            // r(Drho) -- don't fluctuate?
-            //double r_drho_mean_fit = rand->Gaus(r_drho_mean,r_drho_err);
-            //RooGaussian* gaus_r_drho = new RooGaussian("gaus_r_drho","",*(yields->ratio_bs_drho[*c][*t][*a]), RooFit::RooConst(r_drho_mean_fit), RooFit::RooConst(r_drho_err));
-            //if(_genConfs->get("bd_drho")=="true") constpdfset.add(*gaus_r_drho);
-            constpdfset.add(*(yields->gausratio_bs_drho[*c][*t][*a]));
-*/
-          }
-          else
-          {
-/*            // Add gaussian constraint for yields
-            if(_genConfs->get("bd_drho")=="true"){
-              constpdfset.add(*(yields->gausratio_bs_drho[*c][*t][*a]));
-            }
-            if(_genConfs->get("bs_dstkst")=="true"){
-              constpdfset.add(*(yields->gausratio_bs_dstkst[*c][*t][*a]));
-              constpdfset.add(*(fitPdf.gaus_frac010_bs[*c][*t][*a]));
-//            // Split helamp yields
-//            //constpdfset.add(*(yields->gausratio_bs_dstkst_010[*c][*t][*a]));
-//            //constpdfset.add(*(yields->gausratio_bs_dstkst_001[*c][*t][*a]));
-            }
-            if(_genConfs->get("bd_dstkst")=="true") constpdfset.add(*(yields->gausratio_bd_dstkst[*c][*t][*a]));
-            if(_genConfs->get("bd_dstkst")=="true") constpdfset.add(*(fitPdf.gaus_frac010_bd[*c][*t][*a]));
-            if(_genConfs->get("lb_dppi")=="true") constpdfset.add(*(yields->gausratio_bs_lambda[*c][*t][*a]));
-            if(_genConfs->get("bu_dkpipi")=="true") constpdfset.add(*(yields->gausratio_bs_dkpipi[*c][*t][*a]));
-            if(_genConfs->get("bu_dpipipi")=="true") constpdfset.add(*(yields->gausratio_bs_dpipipi[*c][*t][*a]));*/
-          }
-
-          //constpdfset.Print("v");
-          //RooAbsPdf* pdf = new RooProdPdf(Form("CONSTFITpdf_%s",tag.c_str()),"",constpdfset);
-
           // --- Add to simultaneous pdf ---
           sim->addPdf(*pdf,Form("%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str()));
 
@@ -356,15 +284,6 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
         	  integyield_lckst = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getVal();
         	  integyield_lckst_err = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getPropagatedError(*result);
           }
-          // --- If Bs->D*K* yields split by helamp ---
-          //double integral_bs_dstkst_010    = bs_dstkst_010_integEvents->sumEntries(integRange.c_str())/bs_dstkst_010_integEvents->sumEntries(fitRange.c_str());
-          //double integral_bs_dstkst_001    = bs_dstkst_001_integEvents->sumEntries(integRange.c_str())/bs_dstkst_001_integEvents->sumEntries(fitRange.c_str());
-          //double integyield_bs_dstkst_010   = integral_bs_dstkst_010 * yields->n_bs_fit[*m][*c][*t][*a]->getVal() * yields->ratio_bs_dstkst_010[*c][*t][*a]->getVal();
-          //double integyield_bs_dstkst_001   = integral_bs_dstkst_001 * yields->n_bs_fit[*m][*c][*t][*a]->getVal() * yields->ratio_bs_dstkst_001[*c][*t][*a]->getVal();
-          //double integyield_bs_dstkst_010_err   = integyield_bs_dstkst_010 * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bs_dstkst_010[*c][*t][*a]->getError()/yields->ratio_bs_dstkst_010[*c][*t][*a]->getVal(),2) ); 
-          //double integyield_bs_dstkst_001_err   = integyield_bs_dstkst_001 * sqrt( pow(yields->n_bs_fit[*m][*c][*t][*a]->getError()/yields->n_bs_fit[*m][*c][*t][*a]->getVal(),2) + pow(yields->ratio_bs_dstkst_001[*c][*t][*a]->getError()/yields->ratio_bs_dstkst_001[*c][*t][*a]->getVal(),2) ); 
-          //integyield_bs_dstkst = integyield_bs_dstkst_010 + integyield_bs_dstkst_001;
-          //integyield_bs_dstkst_err = sqrt( pow(integyield_bs_dstkst_010_err,2) + pow(integyield_bs_dstkst_001_err,2));
 
          //////////////////////////////////////////////////////////////////////
           // Print out yields in mass window
@@ -437,27 +356,6 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           GenTotals << "N_dstkst_" << *m << "_both_" << *t << " " << integyield_dstkst << std::endl;
           GenTotals << "N_dstkst_" << *m << "_plus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
           GenTotals << "N_dstkst_" << *m << "_minus_" << *t << " " << integyield_dstkst/2.0 << std::endl;
-
-          /*
-          if(!_genConfs->isChargeSeparated() && *m=="d2kpi") {
-        	  for(int i=0; i<6; i++) {
-        		  double new_integ_limit_low = 5200 + 10*i;
-        		  mB->setRange(Form("narrowRange%i",i),new_integ_limit_low,integ_limit_high);
-        		  double integral_bu_newRange  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
-        		  double integral_comb_newRange   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
-        		  double integral_dstkst_newRange   = fitPdf.roopdf_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range(Form("narrowRange%i",i)))->getVal();
-        		  RooRealVar* n_bu_fit_asRooRealVar = static_cast<RooRealVar*>(yields->n_bu_fit[*m][*c][*t][*a]);
-        		  double integyield_bu_newRange = integral_bu_newRange * n_bu_fit_asRooRealVar->getVal();
-        		  double integyield_bu_err_newRange = integral_bu_newRange * n_bu_fit_asRooRealVar->getError();
-        		  double integyield_comb_newRange   = integral_comb_newRange * yields->n_comb[*m][*c][*t][*a]->getVal();
-        		  double integyield_dstkst_newRange  = integral_dstkst_newRange * yields->n_dstkst[*m][*c][*t][*a]->getVal();
-        		  double integyield_comb_err_newRange   = integral_comb_newRange * yields->n_comb[*m][*c][*t][*a]->getError();
-        		  double integyield_dstkst_err_newRange = integral_dstkst_newRange * yields->n_dstkst[*m][*c][*t][*a]->getError();
-
-        		  cout << new_integ_limit_low << "\t" << integyield_bu_newRange << "\t" << integyield_bu_err_newRange << "\t" << integyield_comb_newRange << "\t" << integyield_comb_err_newRange << "\t" << integyield_dstkst_newRange << "\t" << integyield_dstkst_err_newRange << endl;
-        	  }
-          }
-          */
 
         }
       }

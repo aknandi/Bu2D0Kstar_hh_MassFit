@@ -22,10 +22,7 @@ class Pdf_Gen
   void setRelations();
   // PDFs to return
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bu;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_comb;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_drho;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_bd_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_lckst;
 
@@ -36,10 +33,7 @@ class Pdf_Gen
   std::string _MCsimfit;
   // PDFs
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,DoubleCrystalBall*> > > > bu;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Exponential*> > > > comb;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
-//  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,PartRecoDstKst*> > > > dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myCruijff*> > > > lckst;
 

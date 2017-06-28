@@ -1,14 +1,10 @@
 #include "Pdf_Fit.h"
-//#include "KeysPdf.h"
-//#include "PartRecoDstKst.h"
 #include "Exponential.h"
 #include "RooFormulaVar.h"
 #include "DoubleCrystalBall.h"
 #include "myGaussian.h"
 #include "PartRecoDstKst.h"
-//#include "RooKeysPdf.h"
 #include "myCruijff.h"
-//#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
 #include "TVectorD.h"
@@ -26,14 +22,7 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
   _chargeList=chargeList;
   _trackTypeList=trackTypeList;
   _runList=runList;
-  //_shiftFactor = systematicFactor;
 
-  /*
-  TFile LambdaFile("Settings/PDFShapes/Gen/lckst.root");
-  RooWorkspace* workspace = (RooWorkspace*)LambdaFile.Get("workspace");
-  RooKeysPdf* lckst_all = (RooKeysPdf*)workspace->pdf("lckst");
-  LambdaFile.Close();
-*/
   // Initialise the PDFs
   // Note that if you uncomment that KeysPdfs but don't use them they use up unnecessary memory!
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
@@ -41,10 +30,8 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
       for(std::vector<std::string>::iterator trackType=_trackTypeList.begin();trackType!=_trackTypeList.end();trackType++){
         for(std::vector<std::string>::iterator run=_runList.begin();run!=_runList.end();run++){
           bu[*mode][*charge][*trackType][*run]  = new DoubleCrystalBall(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
-          //bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
           dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"),false);
-          //if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new RooKeysPdf(*lckst_all,Form("lckst_%s_%s_%s",(*charge).c_str(),(*trackType).c_str(),(*run).c_str()));
           if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new myCruijff(pmB,*mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
         }
       }
