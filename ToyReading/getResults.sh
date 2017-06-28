@@ -14,38 +14,21 @@ else
     exit 0
 fi
 
-SUBDIR="2017-04-25_$1/"
-#"2016-09-13_rB1deltaB70"
+SUBDIR="2017-06-27_$1/"
 MIN=1
-MAX=1000 #2000
-GAP=20 #40
+MAX=1000
+GAP=20
 
 for (( i=$MIN; i <= $MAX; i+=$GAP ))
 do
   INPUTFILES+=("${INPUTDIR}${SUBDIR}toySeed_$i/toy_$i.txt")
 done
 
-#INPUTDIR="/data/lhcb/users/cheungs/B02DKstar_Kshh_toys/"
-#SUBDIR="2015-05-07_MassFit_noDstKst/"
-#MIN=500
-#MAX=990
-#GAP=10
-#
-#for (( i=$MIN; i <= $MAX; i+=10 ))
-#do
-#  INPUTFILES+=("${INPUTDIR}${SUBDIR}toySeed_$i/toy_$i.txt")
-#done
-#
-#INPUTFILES=("../TOYS/test2/toy_31.txt"
-#            )
-
 VARS=("A_d2kpi" 
       "A_d2kk" 
       "A_d2pipi" 
-      #"A_d2pik" 
       "R_d2kk" 
       "R_d2pipi" 
-      #"R_d2pik"
       "Rplus_d2pik"
       "Rminus_d2pik"
       "A_d2kpipipi" 
@@ -53,8 +36,8 @@ VARS=("A_d2kpi"
       "R_d2pipipipi" 
       "Rplus_d2pikpipi"
       "Rminus_d2pikpipi"
-      #"n_comb_d2pik_plus_DD_all"
-      "bu_mean"
+      "bu_mean_kpi"
+      "bu_mean_kpipipi"
       "bu_width_kpi"
       "bu_width_kpipipi"
       "exp_kpi_LL_combs_slope"

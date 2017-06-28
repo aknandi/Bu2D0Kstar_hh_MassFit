@@ -47,14 +47,14 @@ effSel_d2kpipipi_run2_LL 0.0484
 effSel_d2kpipipi_run2_LL_err 0.0004
 effSel_d2kpipipi_run2_DD 0.1229
 effSel_d2kpipipi_run2_DD_err 0.0007
-effSel_d2pipipipi_run1_LL 0.0311
-effSel_d2pipipipi_run1_LL_err 0.0006
-effSel_d2pipipipi_run1_DD 0.0837
-effSel_d2pipipipi_run1_DD_err 0.0020
-effSel_d2pipipipi_run2_LL 0.0494
-effSel_d2pipipipi_run2_LL_err 0.0004
-effSel_d2pipipipi_run2_DD 0.1289
-effSel_d2pipipipi_run2_DD_err 0.0007
+effSel_d2pipipipi_run1_LL 0.0272
+effSel_d2pipipipi_run1_LL_err 0.0013
+effSel_d2pipipipi_run1_DD 0.0825
+effSel_d2pipipipi_run1_DD_err 0.0022
+effSel_d2pipipipi_run2_LL 0.0436
+effSel_d2pipipipi_run2_LL_err 0.0011
+effSel_d2pipipipi_run2_DD 0.1185
+effSel_d2pipipipi_run2_DD_err 0.0017
 effSel_d2kpi_all_LL 0.110
 effSel_d2kpi_all_DD 0.278
 effSel_d2kk_all_LL 0.100
@@ -79,10 +79,10 @@ effPid_d2kpipipi_run1_LL 0.630
 effPid_d2kpipipi_run1_DD 0.636
 effPid_d2kpipipi_run2_LL 0.784
 effPid_d2kpipipi_run2_DD 0.798
-effPid_d2pipipipi_run1_LL 0.575
-effPid_d2pipipipi_run1_DD 0.576
-effPid_d2pipipipi_run2_LL 0.753
-effPid_d2pipipipi_run2_DD 0.768
+effPid_d2pipipipi_run1_LL 0.675
+effPid_d2pipipipi_run1_DD 0.687
+effPid_d2pipipipi_run2_LL 0.822
+effPid_d2pipipipi_run2_DD 0.835
 effPid_d2kpi_all_LL 0.734
 effPid_d2kpi_all_DD 0.746
 effPid_d2kk_all_LL 0.812
@@ -174,8 +174,9 @@ charmless_d2pipi_DD_run2 2.3
 err_charmless_d2pipi_DD_run2 2.2
 *
 * Possible LcKst yield
-frac_lckst 0.0119
-err_frac_lckst 0.0003
+n_lckst 1.0
+frac_lckst 0.024
+err_frac_lckst 0.12
 *
 * Yield fractions for signal for other D modes (BRs, MC efficiencies, pid efficiencies) - for DstKst at the moment
 kpitod2kpi_LL 1.0

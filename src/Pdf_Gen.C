@@ -5,6 +5,7 @@
 #include "DoubleCrystalBall.h"
 #include "DoubleJohnson.h"
 #include "PartRecoDstKst.h"
+#include "myCruijff.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
@@ -19,12 +20,12 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
   _chargeList=chargeList;
   _trackTypeList=trackTypeList;
   _runList=runList;
-
+/*
   TFile LambdaFile("Settings/PDFShapes/Gen/lckst.root");
   RooWorkspace* workspace = (RooWorkspace*)LambdaFile.Get("workspace");
   RooKeysPdf* lckst_all = (RooKeysPdf*)workspace->pdf("lckst");
   LambdaFile.Close();
-
+*/
   // Initialise the PDFs
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
     for(std::vector<std::string>::iterator charge=_chargeList.begin();charge!=_chargeList.end();charge++){
@@ -36,6 +37,7 @@ Pdf_Gen::Pdf_Gen(Settings* fileList, RooRealVar* pmB, std::vector<std::string> m
         	comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("gen_combs"));
         	dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("gen_partreco"),true);
         	//if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new RooKeysPdf(*lckst_all,Form("lckst_%s_%s_%s",(*charge).c_str(),(*trackType).c_str(),(*run).c_str()));
+        	if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new myCruijff(pmB,*mode,"bu",*charge,*trackType,*run,_fileList->get("gen_signal"));
            }
       }
     }
@@ -138,6 +140,12 @@ void Pdf_Gen::setRelations()
   RooRealVar *combs_slope_kpipipi_DD = new RooRealVar("exp_kpipipi_DD_combs_slope","",relConfs.getD("exp_kpipipi_DD_combs_slope"),
   		  	  	  	  	  	  	  	  	  relConfs.getD("exp_kpipipi_DD_combs_slope_LimL"), relConfs.getD("exp_kpipipi_DD_combs_slope_LimU") );
 
+  //Lb->LcK*
+  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5269);
+  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",221);
+  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",96);
+  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.19);
+  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.04);
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");
@@ -213,6 +221,11 @@ void Pdf_Gen::setRelations()
   fixedParams->push_back(coef010_DD);
   fixedParams->push_back(coef101_LL);
   fixedParams->push_back(coef101_DD);
+  fixedParams->push_back(lambda_mean);
+  fixedParams->push_back(lambda_sigmaL);
+  fixedParams->push_back(lambda_sigmaR);
+  fixedParams->push_back(lambda_alphaL);
+  fixedParams->push_back(lambda_alphaR);
 
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
     {
@@ -304,12 +317,16 @@ void Pdf_Gen::setRelations()
         	  }
 
               bu[*mode][*charge][*trackType][*run]->setN(bu_n_mix);
-        	  dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
-        	  dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
+              dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
+              dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
           }
-
-
-
+          if(*mode=="d2kk") {
+        	  lckst[*mode][*charge][*trackType][*run]->setMean(lambda_mean);
+        	  lckst[*mode][*charge][*trackType][*run]->setSigmaL(lambda_sigmaL);
+        	  lckst[*mode][*charge][*trackType][*run]->setSigmaR(lambda_sigmaR);
+        	  lckst[*mode][*charge][*trackType][*run]->setAlphaL(lambda_alphaL);
+        	  lckst[*mode][*charge][*trackType][*run]->setAlphaR(lambda_alphaR);
+          }
         }
       }
     }
@@ -324,7 +341,7 @@ void Pdf_Gen::setRelations()
           roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_comb[*mode][*charge][*trackType][*run]      = comb[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_dstkst[*mode][*charge][*trackType][*run]  = dstkst[*mode][*charge][*trackType][*run]->getPdf();
-          if(relConfs.get("lckst")=="0" && *mode=="d2kk") roopdf_lckst[*mode][*charge][*trackType][*run] = lckst[*mode][*charge][*trackType][*run];
+          if(*mode=="d2kk") roopdf_lckst[*mode][*charge][*trackType][*run] = lckst[*mode][*charge][*trackType][*run]->getPdf();
         }
       }
     }

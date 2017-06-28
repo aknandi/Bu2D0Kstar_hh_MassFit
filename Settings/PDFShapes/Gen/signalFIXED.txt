@@ -13,9 +13,23 @@ bu_mean_kpipipi_LimU 5288
 * bu_width_kpipipi_LimU 30.0
 bu_gamma 0.0
 * bu_frac_kpi_LL 0.26
+* bu_frac_kpi_LL_LimL 0.26
+* bu_frac_kpi_LL_LimU 0.26
 * bu_frac_kpi_DD 0.26
+* bu_frac_kpi_DD_LimL 0.26
+* bu_frac_kpi_DD_LimU 0.26
+* bu_frac_kpi_mix 0.26
+* bu_frac_kpi_mix_LimL 0.26
+* bu_frac_kpi_mix_LimU 0.26
 * bu_frac_kpipipi_LL 0.26
+* bu_frac_kpipipi_LL_LimL 0.26
+* bu_frac_kpipipi_LL_LimU 0.26
 * bu_frac_kpipipi_DD 0.26
+* bu_frac_kpipipi_DD_LimL 0.26
+* bu_frac_kpipipi_DD_LimU 0.26
+* bu_frac_kpipipi_mix 0.26
+* bu_frac_kpipipi_mix_LimL 0.26
+* bu_frac_kpipipi_mix_LimU 0.26
 bu_delta_kpi_LL 0.67
 bu_delta_kpi_DD 0.66
 bu_delta_kpipipi_LL 0.68

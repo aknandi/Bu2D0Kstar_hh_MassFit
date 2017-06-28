@@ -77,7 +77,7 @@ RooSimultaneous* Model::getGenPdf()
             pdflist.add(*(genPdf.roopdf_dstkst[*m][*c][*t][*a]));
             nevents.add(*(yields->n_dstkst_gen[*m][*c][*t][*a]));
             // LcKst
-            if(_genConfs->get("lckst")!="0" && *m=="d2kk") {
+            if(*m=="d2kk") {
                 pdflist.add(*(genPdf.roopdf_lckst[*m][*c][*t][*a]));
                 nevents.add(*(yields->n_lckst_gen[*m][*c][*t][*a]));
             }
@@ -134,14 +134,19 @@ RooSimultaneous* Model::getFitPdf()
 
 
           if(_genConfs->get("MCsimfit")!="true")
-            {
-              // Combinatorics
-              pdflist.add(*(fitPdf.roopdf_comb[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
-              // DstKst
-              pdflist.add(*(fitPdf.roopdf_dstkst[*m][*c][*t][*a]));
-              nevents.add(*(yields->n_dstkst[*m][*c][*t][*a]));
-            }
+          {
+        	  // Combinatorics
+        	  pdflist.add(*(fitPdf.roopdf_comb[*m][*c][*t][*a]));
+        	  nevents.add(*(yields->n_comb[*m][*c][*t][*a]));
+        	  // DstKst
+        	  pdflist.add(*(fitPdf.roopdf_dstkst[*m][*c][*t][*a]));
+        	  nevents.add(*(yields->n_dstkst[*m][*c][*t][*a]));
+        	  if(*m=="d2kk") {
+        		  pdflist.add(*(fitPdf.roopdf_lckst[*m][*c][*t][*a]));
+        		  nevents.add(*(yields->n_lckst[*m][*c][*t][*a]));
+        	  }
+          }
+
           
           // --- No Gaussian Constraints --- 
           RooAddPdf* pdf = new RooAddPdf(Form("FITpdf_%s",tag.c_str()) ,"",pdflist,nevents);
@@ -314,6 +319,8 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double integral_bu  = fitPdf.roopdf_bu[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_comb   = fitPdf.roopdf_comb[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           double integral_dstkst   = fitPdf.roopdf_dstkst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
+          double integral_lckst;
+          if(*m=="d2kk") integral_lckst  = fitPdf.roopdf_lckst[*m][*c][*t][*a]->createIntegral(*mB,RooFit::NormSet(*mB),RooFit::Range("Bsigbox"))->getVal();
           // integration of RooKeysPdf needs to be done by hand 
           //double integral_bd_dstkst    = bu_dstkst_integEvents->sumEntries(integRange.c_str())/bd_dstkst_integEvents->sumEntries(fitRange.c_str());
           //////////////////////////////////////////////////////////////////////
@@ -344,6 +351,11 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           double integyield_comb_err   = integral_comb * yields->n_comb[*m][*c][*t][*a]->getError();
           double integyield_dstkst_err = integral_dstkst * yields->n_dstkst[*m][*c][*t][*a]->getError();
 
+          double integyield_lckst, integyield_lckst_err;
+          if(*m=="d2kk") {
+        	  integyield_lckst = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getVal();
+        	  integyield_lckst_err = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getPropagatedError(*result);
+          }
           // --- If Bs->D*K* yields split by helamp ---
           //double integral_bs_dstkst_010    = bs_dstkst_010_integEvents->sumEntries(integRange.c_str())/bs_dstkst_010_integEvents->sumEntries(fitRange.c_str());
           //double integral_bs_dstkst_001    = bs_dstkst_001_integEvents->sumEntries(integRange.c_str())/bs_dstkst_001_integEvents->sumEntries(fitRange.c_str());
@@ -360,18 +372,18 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
           cout.setf(ios::fixed);
           cout.precision(2);
 
-
           cout << "//////////////////////////////////////////////////////////////////////\n// Integrated yields in " << b << " window (" << integ_limit_low << " - " << integ_limit_high << ")\n/////////////////////////////////////////////////////////" << endl;
           cout<<"In bin : "<<*m<<", "<<*c<<", "<<*t<<", "<<*a<<endl;
           cout << "Bu signal: " << integyield_bu << " +/- " << integyield_bu_err << std::endl;
           cout << "Combs:     " << integyield_comb << " +/- " << integyield_comb_err << std::endl;
           cout << "Bu D*K*:   " << integyield_dstkst << " +/- " << integyield_dstkst_err << std::endl;
+          if(*m=="d2kk") cout << "LcKst:     " << integyield_lckst  << " +/- " << integyield_lckst_err  << std::endl;
           cout << "/////////////////////////////////////////////////////////////////" << endl;
-          double total = integyield_bu + integyield_comb + integyield_dstkst;
+          double total = integyield_bu + integyield_comb + integyield_dstkst + ((*m=="d2kk")?integyield_lckst:0);
           double nS = integyield_bu;
           double nSerr = integyield_bu_err;
           double nB = total - nS;
-          double nBerr =sqrt( pow(integyield_comb,2) + pow(integyield_dstkst,2) );
+          double nBerr =sqrt( pow(integyield_comb_err,2) + pow(integyield_dstkst_err,2) + ((*m=="d2kk")?pow(integyield_lckst_err,2):0) );
           double purity = nS/total;
           double purity_err = sqrt( (nS*nS*nBerr*nBerr + nB*nB*nSerr*nSerr)/pow(nS+nB,4));
           double significance = nS/sqrt(total);
@@ -389,7 +401,7 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
                   adsSignal += nS;
         	  	  erradsSignalsq += pow(integyield_bu_err,2);
                   adsBackground += nB;
-                  erradsBackgroundsq += pow(integyield_comb,2) + pow(integyield_dstkst,2);
+                  erradsBackgroundsq += pow(integyield_comb_err,2) + pow(integyield_dstkst_err,2) + ((*m=="d2kk")?pow(integyield_lckst_err,2):0);
 
         	  }
           }

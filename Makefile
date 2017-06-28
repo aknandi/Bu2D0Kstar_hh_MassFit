@@ -15,10 +15,10 @@ OBJDIR        = ${PWD}/obj/
 #Main program classes
 OBJS	      = $(OBJDIR)Main.o $(OBJDIR)Base.o $(OBJDIR)CommonTools.o $(OBJDIR)Fitting.o $(OBJDIR)InternalStorage.o $(OBJDIR)Model.o $(OBJDIR)Pdf_Base.o $(OBJDIR)Pdf_Fit.o $(OBJDIR)Pdf_Gen.o $(OBJDIR)Settings.o $(OBJDIR)Yields.o
 #PDF wrappers
-OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o $(OBJDIR)DoubleGaussian.o $(OBJDIR)DoubleCrystalBall.o $(OBJDIR)DoubleJohnson.o $(OBJDIR)PartRecoDstKst.o $(OBJDIR)PartRecoShapes.o
+OBJS         += $(OBJDIR)Exponential.o $(OBJDIR)myGaussian.o $(OBJDIR)DoubleGaussian.o $(OBJDIR)DoubleCrystalBall.o $(OBJDIR)DoubleJohnson.o $(OBJDIR)PartRecoDstKst.o $(OBJDIR)PartRecoShapes.o $(OBJDIR)myCruijff.o
 #Low-mass analytic PDF classes
 #DATAOBJSCINT  = RooHORNSdini.C RooHILLdini.C RooLITTLEHORNSdini.C 
-DATAOBJS      = $(SRCDIR)RooHORNSdini.C $(SRCDIR)RooHILLdini.C $(SRCDIR)RooLITTLEHORNSdini.C $(SRCDIR)RooJohnsonSU.C
+DATAOBJS      = $(SRCDIR)RooHORNSdini.C $(SRCDIR)RooHILLdini.C $(SRCDIR)RooLITTLEHORNSdini.C $(SRCDIR)RooJohnsonSU.C $(SRCDIR)RooCruijff.C 
 #-------------------------------------------------------------
 $(EXECUTABLE) :			$(OBJS)	$(OBJDIR)EventDict.o
 				${CC} $(LIBS) -o $(BINDIR)$(EXECUTABLE) $(OBJS) $(OBJDIR)EventDict.o
@@ -97,8 +97,13 @@ $(OBJDIR)RooLITTLEHORNSdini.o :       $(SRCDIR)RooLITTLEHORNSdini.C $(SRCDIR)Roo
 								${CC} $(CXXFLAGS) -c $(SRCDIR)RooLITTLEHORNSdini.C -o $(OBJDIR)RooLITTLEHORNSdini.o
 								
 $(OBJDIR)RooJohnsonSU.o :       $(SRCDIR)RooJohnsonSU.C $(SRCDIR)RooJohnsonSU.h
-								${CC} $(CXXFLAGS) -c $(SRCDIR)RooJohnsonSU.C -o $(OBJDIR)RooJohnsonSU.o							
+								${CC} $(CXXFLAGS) -c $(SRCDIR)RooJohnsonSU.C -o $(OBJDIR)RooJohnsonSU.o	
+								
+$(OBJDIR)RooCruijff.o :     $(SRCDIR)RooCruijff.C $(SRCDIR)RooCruijff.h
+								${CC} $(CXXFLAGS) -c $(SRCDIR)RooCruijff.C -o $(OBJDIR)RooCruijff.o						
 
+$(OBJDIR)myCruijff.o :     $(SRCDIR)myCruijff.C $(SRCDIR)myCruijff.h
+								${CC} $(CXXFLAGS) -c $(SRCDIR)myCruijff.C -o $(OBJDIR)myCruijff.o	
 #-------------------------------------------------------
 clean:
 		@rm -f $(BINDIR)run $(SRCDIR)/*~ core* $(OBJDIR)/*.o ./*~ ${SRCDIR}EventDict.C ${SRCDIR}EventDict.h

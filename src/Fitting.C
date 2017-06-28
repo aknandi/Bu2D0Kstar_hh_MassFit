@@ -134,21 +134,21 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   lhcbpreliminaryRun1->SetTextFont(132); lhcbpreliminaryRun1->SetTextSize(0.075);
   //lhcbpreliminaryRun1->AddText("LHCb 2016");
   //lhcbpreliminaryRun1->AddText("LHCb preliminary");
-  lhcbpreliminaryRun1->AddText("#scale[0.5]{#int }L d#it{t} = 3.0 fb^{-1}");
+  lhcbpreliminaryRun1->AddText("#scale[0.5]{#int }L d#it{t} = 3.0 fb^{#font[122]{-}1}");
 
   lhcbpreliminaryRun2 = new TPaveText(0.7,0.72,0.83,0.9,"TR NDC");
   lhcbpreliminaryRun2->SetBorderSize(0); lhcbpreliminaryRun2->SetFillStyle(0);
   lhcbpreliminaryRun2->SetTextFont(132); lhcbpreliminaryRun2->SetTextSize(0.075);
-  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 1.8 fb^{-1}");
+  lhcbpreliminaryRun2->AddText("#scale[0.5]{#int }L d#it{t} = 1.8 fb^{#font[122]{-}1}");
   //lhcbpreliminaryRun2->AddText("LHCb 2016");
   //lhcbpreliminaryRun2->AddText("LHCb preliminary");
 
   lhcbpreliminary = new TPaveText(0.46,0.72,0.58,0.9,"TR NDC");
   lhcbpreliminary->SetBorderSize(0); lhcbpreliminary->SetFillStyle(0);
-  lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.075);
+  lhcbpreliminary->SetTextFont(132); lhcbpreliminary->SetTextSize(0.1);
   //lhcbpreliminary->AddText("LHCb 2016");
-  lhcbpreliminary->AddText("LHCb unofficial");
-  lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.8 fb^{-1}");
+  lhcbpreliminary->AddText("LHCb");
+  //lhcbpreliminary->AddText("#scale[0.5]{#int }L d#it{t} = 4.8 fb^{#font[122]{-}1}");
 
   // Setup the file for fit projections output
   saveOutputForPlottingMacro = new TFile("output/saveOutputForPlottingMacro.root","RECREATE");
@@ -161,7 +161,7 @@ Fitting::Fitting(TApplication* app, Settings* genConfs)
   cat = new RooSuperCategory("cat","mode/charge/track/run",RooArgSet(mode,charge,track,run));
   //model = new Model(_genConfs,&mB,cat,modeList,chargeList,trackList,runList);
   model = new Model(_genConfs,&mB,catNew,modeList,chargeList,trackList,runList);
-
+cout << "Created Model" << endl;
   if(readToys=="true")
     {
       DisplayToys();
@@ -901,21 +901,19 @@ void Fitting::RunFullFit(bool draw=true)
 		  std::map<std::string,std::map<std::string,string>> mergedSignal;
 		  std::map<std::string,std::map<std::string,string>> mergedCombinatoic;
 		  std::map<std::string,std::map<std::string,string>> mergedPartreco;
+		  std::map<std::string,std::map<std::string,string>> mergedLckst;
 		  for(std::vector<std::string>::iterator t=trackList.begin();t!=trackList.end();t++) {
 			  for(std::vector<std::string>::iterator a=runList.begin();a!=runList.end();a++) {
 				  mergedSignal[*m][*c] += Form("DoubleCrystalBall_%s_bu_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
 				  mergedCombinatoic[*m][*c] += Form("Exponential_%s_exp_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
 				  mergedPartreco[*m][*c] += Form("PartRecoDstKst_%s_%s_%s_%s,",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str());
-				  /*
-					  mergedSignal[*m][*c].add(*model->getFitPdf()->getPdf(Form("DoubleCrystalBall_%s_bu_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
-					  mergedCombinatoic[*m][*c].add(*model->getFitPdf()->getPdf(Form("Exponential_%s_exp_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
-					  mergedPartreco[*m][*c].add(*model->getFitPdf()->getPdf(Form("PartRecoDstKst_%s_%s_%s_%s",(*m).c_str(),(*c).c_str(),(*t).c_str(),(*a).c_str())));
-				   */
+				  if(*m=="d2kk") mergedLckst[*m][*c] += Form("myCruijff_d2kk_bu_%s_%s_%s,",(*c).c_str(),(*t).c_str(),(*a).c_str());
 			  }
 		  }
 		  mergedSignal[*m][*c] = mergedSignal[*m][*c].substr(0, mergedSignal[*m][*c].size()-1);
 		  mergedCombinatoic[*m][*c] = mergedCombinatoic[*m][*c].substr(0, mergedCombinatoic[*m][*c].size()-1);
 		  mergedPartreco[*m][*c] = mergedPartreco[*m][*c].substr(0, mergedPartreco[*m][*c].size()-1);
+		  if(*m=="d2kk") mergedLckst[*m][*c] = mergedLckst[*m][*c].substr(0, mergedLckst[*m][*c].size()-1);
 
 		  if(drawProjections=="true"){
 
@@ -963,6 +961,14 @@ void Fitting::RunFullFit(bool draw=true)
 							  RooFit::Components(Form("%s",mergedCombinatoic[*m][*c].c_str())),
 							  RooFit::LineStyle(kDashed), RooFit::LineColor(kBlue), RooFit::LineWidth(2), RooFit::Name("comb"));
 				  }
+				  // lckst
+				  if(*m=="d2kk") {
+					  std::cout <<" plotting lckst "<<std::endl;
+					  sim->plotOn( plot[*c],RooFit::Slice(RooArgSet(mode,charge)), RooFit::ProjWData(RooArgSet(mode,charge),*data),
+							  RooFit::Components(Form("%s",mergedLckst[*m][*c].c_str())),
+							  RooFit::LineStyle(kDashed), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("lckst"));
+				  }
+
 
 
 				  //Bu -> D*K* - regexp to pick up also version split by helamp
@@ -1025,7 +1031,7 @@ void Fitting::RunFullFit(bool draw=true)
 		  {
 			  ipad = 1;
 			  canvas->cd(ipad);
-			  gPad->SetLeftMargin(0.1);
+			  gPad->SetLeftMargin(0.11);
 		  }
 		  if(*c==plus)
 		  {
@@ -1040,15 +1046,20 @@ void Fitting::RunFullFit(bool draw=true)
 		  plot[*c]->Draw();
 
 		  plot[*c]->SetTitle("");
-		  plot[*c]->SetXTitle("m(DK*) [MeV/#it{c}^{2}]");
+		  plot[*c]->SetXTitle("#it{m}(#it{DK}*) [MeV/#it{c}^{2}]");
 		  //double binwidth = (_genConfs->getD("fit_limit_high") - _genConfs->getD("fit_limit_low")) / numbins;
 		  plot[*c]->SetYTitle(Form("Candidates / (%.1f MeV/#it{c}^{2})",binwidth));
 		  //if(*t=="LL") plot_combLLDD[*c][*a]->SetTitle("");
-		  plot[*c]->GetXaxis()->SetTitleOffset(1.05);
-		  plot[*c]->GetYaxis()->SetTitleOffset(0.7);
+		  plot[*c]->GetXaxis()->SetTitleOffset(0.85);
+		  plot[*c]->GetYaxis()->SetTitleOffset(0.6);
+		  plot[*c]->GetXaxis()->SetTitleSize(0.1);
+		  plot[*c]->GetYaxis()->SetTitleSize(0.09);
+		  plot[*c]->GetXaxis()->SetLabelSize(0.09);
+		  plot[*c]->GetYaxis()->SetLabelSize(0.09);
 		  plot[*c]->SetLabelFont(132,"X");
 		  plot[*c]->SetLabelFont(132,"Y");
 		  gPad->SetRightMargin(0.04);
+		  gPad->SetBottomMargin(0.18);
 
 		  //draw legend
 		  Double_t legtop = 0.75;
@@ -1063,6 +1074,7 @@ void Fitting::RunFullFit(bool draw=true)
 			  leg->AddEntry(plot[*c]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
 			  //leg->AddEntry((TObject*)0,"","");
 			  leg->AddEntry(plot[*c]->findObject("comb"),"Combinatorial","l");
+			  if(*m=="d2kk") leg->AddEntry(plot[*c]->findObject("lckst"),"#Lambda_{b} #rightarrow #Lambda_{c}K^{*}","l");
 		  }
 
 		  //do not draw legend if a log plot or pulls are drawn
@@ -1072,41 +1084,41 @@ void Fitting::RunFullFit(bool draw=true)
 		  const char* decayMode;
 		  if(*m=="d2kpi") {
 			  plot[*c]->GetYaxis()->SetRangeUser(0,350);//250);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#it{K}^{#font[122]{-}}#pi^{+}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#it{K}^{+}#pi^{#font[122]{-}}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2kk") {
 			  plot[*c]->GetYaxis()->SetRangeUser(0,52);//42);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} K^{+}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(K^{+} K^{-}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#it{K}^{+}#it{K}^{#font[122]{-}}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#it{K}^{+}#it{K}^{#font[122]{-}}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2pipi") {
 			  plot[*c]->GetYaxis()->SetRangeUser(0,20);//15);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2pik") {
 			  plot[*c]->GetYaxis()->SetRangeUser(0,13);//9);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{+} #pi^{-}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(K^{-} #pi^{+}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#it{K}^{+}#pi^{#font[122]{-}}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#it{K}^{#font[122]{-}}#pi^{+}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2kpipipi") {
 			  //plot[*c]->GetYaxis()->SetRangeUser(0,170);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(K^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#it{K}^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}#pi^{+}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#it{K}^{+}#pi^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2pipipipi") {
 			  //plot[*c]->GetYaxis()->SetRangeUser(0,170);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(#pi^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(#pi^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*+}";
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#pi^{+}#pi^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#pi^{+}#pi^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*+}";
 		  }
 		  if(*m=="d2pikpipi") {
-			  //plot[*c]->GetYaxis()->SetRangeUser(0,9);
-			  if(*c=="minus") decayMode = "B^{-} #rightarrow D(K^{+} #pi^{-} #pi^{+} #pi^{-}) K^{*-}";
-			  else decayMode = "B^{+} #rightarrow D(K^{-} #pi^{+} #pi^{-} #pi^{+}) K^{*+}";
+			  plot[*c]->GetYaxis()->SetRangeUser(0,10);
+			  if(*c=="minus") decayMode = "#it{B}^{#font[122]{-}}#rightarrow #it{D}(#it{K}^{+}#pi^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}) #it{K}^{*#font[122]{-}}";
+			  else decayMode = "#it{B}^{+}#rightarrow #it{D}(#it{K}^{#font[122]{-}}#pi^{+}#pi^{#font[122]{-}}#pi^{+}) #it{K}^{*+}";
 		  }
 
-		  modeOnPlot = new TPaveText(0.5,0.55,0.7,0.70,"TR NDC");
+		  modeOnPlot = new TPaveText(0.5,0.6,0.7,0.75,"TR NDC");
 		  modeOnPlot->SetBorderSize(0); modeOnPlot->SetFillStyle(0);
 		  modeOnPlot->SetTextSize(0.1);
 		  modeOnPlot->SetTextFont(132);
@@ -1300,6 +1312,14 @@ void Fitting::RunFullFit(bool draw=true)
 									  RooFit::LineStyle(kDotted), RooFit::LineColor(kMagenta), RooFit::LineWidth(3), RooFit::Name("comb"));
 						  }
 
+						  // lckst
+						  if(*m=="d2kk") {
+							  std::cout <<" plotting lckst "<<std::endl;
+							  sim->plotOn( plot[*c][*t][*a],RooFit::Slice(RooArgSet(*catNew)), RooFit::ProjWData(RooArgSet(*catNew),*data),
+									  RooFit::Components(Form("myCruijff_d2kk_bu_%s_%s_%s",(*c).c_str(),(*t).c_str(),(*a).c_str())),
+									  RooFit::LineStyle(kDashed), RooFit::LineColor(kGreen+2), RooFit::LineWidth(3), RooFit::Name("lckst"));
+						  }
+
 
 						  //Bu -> D*K* - regexp to pick up also version split by helamp
 						  std::cout<<" plotting Bu -> D*K*  "<<std::endl;
@@ -1411,6 +1431,10 @@ void Fitting::RunFullFit(bool draw=true)
 					  leg->AddEntry(plot[*c][*t][*a]->findObject("partreco"),"B #rightarrow D^{*}K^{*}","l");
 					  leg->AddEntry((TObject*)0,"","");
 					  leg->AddEntry(plot[*c][*t][*a]->findObject("comb"),"Combinatorial","l");
+					  if(*m=="d2kk") {
+						  leg->AddEntry((TObject*)0,"","");
+						  leg->AddEntry(plot[*c][*t][*a]->findObject("lckst"),"#Lambda_{b} #rightarrow #Lambda_{c}K^{*}","l");
+					  }
 				  }
 
 				  //do not draw legend if a log plot or pulls are drawn

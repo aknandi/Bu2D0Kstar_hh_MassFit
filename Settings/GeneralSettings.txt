@@ -45,7 +45,6 @@ partrecoShape 0
 signalShape 0
 combinatoricShape 0
 charmless 0
-lckst 0
 * Systematics from data
 productionAsymmetry 0
 detectionAsymmetry 0
@@ -55,6 +54,7 @@ pidefficiencies 0
 vetoefficiencies 0
 branchingRatios 0
 signalShapeData 0
+lckst 0
 inputTwoStageFitErrors 0
 makeCorrelationMatrix false
 * Float ratio of DK DPi yields separately for LL and DD (need for MC - should

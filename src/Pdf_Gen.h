@@ -12,6 +12,7 @@
 #include "Exponential.h"
 #include "PartRecoDstKst.h"
 #include "RooKeysPdf.h"
+#include "myCruijff.h"
 
 class Pdf_Gen
 {
@@ -40,7 +41,7 @@ class Pdf_Gen
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > drho;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > bs_dstkst;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,PartRecoDstKst*> > > > dstkst;
-  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooKeysPdf*> > > > lckst;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myCruijff*> > > > lckst;
 
   std::vector<std::string> _modeList;
   std::vector<std::string> _chargeList;

@@ -6,6 +6,8 @@
 #include "DoubleCrystalBall.h"
 #include "myGaussian.h"
 #include "PartRecoDstKst.h"
+//#include "RooKeysPdf.h"
+#include "myCruijff.h"
 //#include "CorrGauss.h"
 #include "TFile.h"
 #include "TMatrixD.h"
@@ -13,6 +15,7 @@
 #include "TRandom.h"
 #include "RooGaussian.h"
 #include "RooConstVar.h"
+#include "RooWorkspace.h"
 
 Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::vector<std::string> modeList, std::vector<std::string> chargeList, std::vector<std::string> trackTypeList, std::vector<std::string> runList, int systematicFactor, std::string MCsimfit)
 {
@@ -25,6 +28,12 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
   _runList=runList;
   //_shiftFactor = systematicFactor;
 
+  /*
+  TFile LambdaFile("Settings/PDFShapes/Gen/lckst.root");
+  RooWorkspace* workspace = (RooWorkspace*)LambdaFile.Get("workspace");
+  RooKeysPdf* lckst_all = (RooKeysPdf*)workspace->pdf("lckst");
+  LambdaFile.Close();
+*/
   // Initialise the PDFs
   // Note that if you uncomment that KeysPdfs but don't use them they use up unnecessary memory!
   for(std::vector<std::string>::iterator mode=_modeList.begin();mode!=_modeList.end();mode++){
@@ -35,12 +44,13 @@ Pdf_Fit::Pdf_Fit(Settings* fileList, Settings* genConfs, RooRealVar* pmB, std::v
           //bu[*mode][*charge][*trackType][*run]  = new myGaussian(pmB, *mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
           comb[*mode][*charge][*trackType][*run]   = new Exponential(pmB, *mode,"exp",*charge,*trackType,*run,_fileList->get("fit_combs"));
           dstkst[*mode][*charge][*trackType][*run]    = new PartRecoDstKst(pmB, *mode,*charge,*trackType,*run,_fileList->get("fit_partreco"),false);
+          //if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new RooKeysPdf(*lckst_all,Form("lckst_%s_%s_%s",(*charge).c_str(),(*trackType).c_str(),(*run).c_str()));
+          if(*mode=="d2kk") lckst[*mode][*charge][*trackType][*run] = new myCruijff(pmB,*mode,"bu",*charge,*trackType,*run,_fileList->get("fit_signal"));
         }
       }
     }
   }
   
-	
   // Now set relations, which prepares the PDFs to be returned
   setRelations();
 }
@@ -121,6 +131,12 @@ void Pdf_Fit::setRelations()
   RooRealVar *combs_slope_kpipipi_DD = new RooRealVar("exp_kpipipi_DD_combs_slope","",relConfs.getD("exp_kpipipi_DD_combs_slope"),
 		  	  	  	  	  	  	  	  	  relConfs.getD("exp_kpipipi_DD_combs_slope_LimL"), relConfs.getD("exp_kpipipi_DD_combs_slope_LimU") );
 
+  //Lb->LcK*
+  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5269  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,18)):0.));
+  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",221  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,26)):0.));
+  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",96  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,16)):0.));
+  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.19  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.19)):0.));
+  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.04  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.06)):0.));
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");
@@ -153,40 +169,8 @@ void Pdf_Fit::setRelations()
   //PartReco
   string limitlow = relConfs.get("fit_limit_low");
 
-  // Ensure that when running toys we generate and fit the same frac010 parameter
-/*  double frac010_val=0.;
-  if(_genConfs->get("genToys")=="true") {
-    frac010_val = pdfGenConfs.getD(Form("frac010_bs_%s",limitlow.c_str()));
-  }
-  else {
-    frac010_val = relConfs.getD(Form("frac010_bs_%s",limitlow.c_str()));
-  }
-  bs_frac010 = new RooRealVar(Form("frac010_bs_%s",limitlow.c_str()),"",frac010_val, 0.0, 1.0);
-
-  RooRealVar *bd_frac010 = new RooRealVar(Form("frac010_bd_%s",limitlow.c_str()),"",relConfs.getD(Form("frac010_bd_%s",limitlow.c_str())), 0.0, 1.0);
-  //RooRealVar *bs_010_frac010 = new RooRealVar(Form("frac010_bs_010_%s",limitlow.c_str()),"",1.0);
-  //RooRealVar *bs_001_frac010 = new RooRealVar(Form("frac010_bs_001_%s",limitlow.c_str()),"",0.0);
-
-
-  // Initialise the PDFs for RooGaussian
-  for(std::vector<std::string>::iterator c=_chargeList.begin();c!=_chargeList.end();c++){
-    for(std::vector<std::string>::iterator t=_trackTypeList.begin();t!=_trackTypeList.end();t++){
-      for(std::vector<std::string>::iterator a=_runList.begin();a!=_runList.end();a++){
-
-        gaus_frac010_bs[*c][*t][*a] = new RooGaussian(Form("gaus_frac010_bs_%s_%s_%s",(*c).c_str(),(*t).c_str(),(*a).c_str()),"",*bs_frac010,
-                                                      RooFit::RooConst(frac010_val),
-                                                      RooFit::RooConst(relConfs.getD(Form("frac010_bs_%s_err",limitlow.c_str()))));
-        gaus_frac010_bd[*c][*t][*a] = new RooGaussian(Form("gaus_frac010_bd_%s_%s_%s",(*c).c_str(),(*t).c_str(),(*a).c_str()),"",*bd_frac010,
-                                                      RooFit::RooConst(relConfs.getD(Form("frac010_bd_%s",limitlow.c_str()))),
-                                                      RooFit::RooConst(relConfs.getD(Form("frac010_bd_%s_err",limitlow.c_str()))));
-      }
-    }
-  }*/
-
-
   //set certain parameters constant
   //this list has to be maintained manually
-  
   std::cout << std::endl << "PdfFit: Setting parameters constant" << std::endl;
   fixedParams = new std::vector <RooRealVar*>;
 
@@ -212,10 +196,14 @@ void Pdf_Fit::setRelations()
   fixedParams->push_back(coef010_DD);
   fixedParams->push_back(coef101_LL);
   fixedParams->push_back(coef101_DD);
+  fixedParams->push_back(lambda_mean);
+  fixedParams->push_back(lambda_sigmaL);
+  fixedParams->push_back(lambda_sigmaR);
+  fixedParams->push_back(lambda_alphaL);
+  fixedParams->push_back(lambda_alphaR);
 
   // todo set parameters in low mass shape constant
 
- 
   for (Int_t n_p = 0; n_p < (Int_t)fixedParams->size(); ++n_p)
     {
       RooRealVar *par = fixedParams->at(n_p);
@@ -307,6 +295,13 @@ void Pdf_Fit::setRelations()
         		dstkst[*mode][*charge][*trackType][*run]->setCoef010(coef010_DD);
         		dstkst[*mode][*charge][*trackType][*run]->setCoef101(coef101_DD);
         	}
+        	if(*mode=="d2kk") {
+        		lckst[*mode][*charge][*trackType][*run]->setMean(lambda_mean);
+        		lckst[*mode][*charge][*trackType][*run]->setSigmaL(lambda_sigmaL);
+        		lckst[*mode][*charge][*trackType][*run]->setSigmaR(lambda_sigmaR);
+        		lckst[*mode][*charge][*trackType][*run]->setAlphaL(lambda_alphaL);
+        		lckst[*mode][*charge][*trackType][*run]->setAlphaR(lambda_alphaR);
+        	}
 
         }
       }
@@ -322,6 +317,7 @@ void Pdf_Fit::setRelations()
           roopdf_bu[*mode][*charge][*trackType][*run]     = bu[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_comb[*mode][*charge][*trackType][*run]   = comb[*mode][*charge][*trackType][*run]->getPdf();
           roopdf_dstkst[*mode][*charge][*trackType][*run] = dstkst[*mode][*charge][*trackType][*run]->getPdf();
+          if(*mode=="d2kk") roopdf_lckst[*mode][*charge][*trackType][*run] = lckst[*mode][*charge][*trackType][*run]->getPdf();
         }
       }
     }

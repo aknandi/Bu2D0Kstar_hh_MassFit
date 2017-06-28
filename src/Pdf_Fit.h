@@ -9,6 +9,8 @@
 #include "DoubleCrystalBall.h"
 #include "Exponential.h"
 #include "PartRecoDstKst.h"
+#include "RooKeysPdf.h"
+#include "myCruijff.h"
 
 class Pdf_Fit
 {
@@ -28,6 +30,7 @@ class Pdf_Fit
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dkpipi;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_dpipipi;
 //  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_lambda;
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > > roopdf_lckst;
 //  std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > gaus_frac010_bs;
 //  std::map<std::string, std::map<std::string, std::map<std::string,RooAbsPdf*> > > gaus_frac010_bd;
   //RooAbsPdf* gaus_frac010_bs;
@@ -53,6 +56,7 @@ class Pdf_Fit
 /*  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > dkpipi;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > dpipipi;
   std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,Pdf_Base*> > > > lambda;*/
+  std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string,myCruijff*> > > > lckst;
 
   std::vector<std::string> _modeList;
   std::vector<std::string> _chargeList;

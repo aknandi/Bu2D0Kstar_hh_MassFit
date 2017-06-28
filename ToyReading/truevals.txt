@@ -6,11 +6,12 @@ R_d2pipi 0.98549
 Rplus_d2pik 0.02518
 Rminus_d2pik 0.00563 
 A_d2kpipipi 0.0
-A_d2pipipipi 0.17804
-R_d2pipipipi 0.98549
+A_d2pipipipi 0.08330
+R_d2pipipipi 0.99838
 Rplus_d2pikpipi 0.01643
 Rminus_d2pikpipi 0.00955
-bu_mean 5279.3
+bu_mean_kpi 5279.3
+bu_mean_kpipipi 5279.3
 bu_width_kpi 10.8 
 bu_width_kpipipi 11.4 
 exp_kpi_LL_combs_slope -0.0045

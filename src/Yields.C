@@ -472,9 +472,11 @@ void Yields::SetYieldsGenandFit(std::string kstmasscut,std::string kshelcut,std:
 					// --- Fit yields ---
 					n_comb[*m][*c][*t][*a] = new RooRealVar(Form("n_comb_%s",identifier),"",N_comb,0.,100000.);
 
-					if(_genConfs->get("lckst")!="0") {
-						RooRealVar* frac_lckst = new RooRealVar("frac_lckst","",input->getD("frac_lckst") + gRandom->Gaus(0,input->getD("err_frac_lckst")));
-						if(*m=="d2kk") n_lckst_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_lckst_%s",identifier),"@0*@1",RooArgList(*frac_lckst,*n_bu_gen["d2kpi"][*c][*t][*a]));
+
+					RooRealVar* frac_lckst = new RooRealVar("frac_lckst","",input->getD("frac_lckst"), 0.,1.);
+					if(*m=="d2kk") {
+						n_lckst_gen[*m][*c][*t][*a] = new RooFormulaVar(Form("n_lckst_gen_%s",identifier),"@0*@1",RooArgList(*frac_lckst,*n_bu_gen["d2kpi"][*c][*t][*a]));
+						n_lckst[*m][*c][*t][*a] = new RooFormulaVar(Form("n_lckst_%s",identifier),"@0*@1",RooArgList(*frac_lckst,*n_bu_fit["d2kpi"][*c][*t][*a]));
 					}
 				}
 			}
