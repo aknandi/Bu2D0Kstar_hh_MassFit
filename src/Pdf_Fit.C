@@ -119,11 +119,11 @@ void Pdf_Fit::setRelations()
 		  	  	  	  	  	  	  	  	  relConfs.getD("exp_kpipipi_DD_combs_slope_LimL"), relConfs.getD("exp_kpipipi_DD_combs_slope_LimU") );
 
   //Lb->LcK*
-  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5269  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,18)):0.));
-  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",221  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,26)):0.));
-  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",96  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,16)):0.));
-  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.19  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.19)):0.));
-  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.04  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.06)):0.));
+  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5280  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,18)):0.));
+  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",221  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,26)):0.));
+  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",96  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,16)):0.));
+  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.19  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.19)):0.));
+  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.04  + (_genConfs->get("lckst")=="1"?(gRandom->Gaus(0,0.06)):0.));
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");

@@ -132,11 +132,11 @@ void Pdf_Gen::setRelations()
   		  	  	  	  	  	  	  	  	  relConfs.getD("exp_kpipipi_DD_combs_slope_LimL"), relConfs.getD("exp_kpipipi_DD_combs_slope_LimU") );
 
   //Lb->LcK*
-  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5269);
-  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",221);
-  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",96);
-  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.19);
-  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.04);
+  RooRealVar *lambda_mean = new RooRealVar("lambda_mean","",5280);
+  RooRealVar *lambda_sigmaL = new RooRealVar("lambda_sigmaL","",221);
+  RooRealVar *lambda_sigmaR = new RooRealVar("lambda_sigmaR","",96);
+  RooRealVar *lambda_alphaL = new RooRealVar("lambda_alphaL","",-0.19);
+  RooRealVar *lambda_alphaR = new RooRealVar("lambda_alphaR","",-0.04);
 
   //Get Ks helicity angle selection from general settings
   std::string kshelcut = relConfs.get("Kshelcut");

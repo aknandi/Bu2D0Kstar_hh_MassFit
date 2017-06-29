@@ -27,7 +27,7 @@ myCruijff::myCruijff(RooRealVar* pmB, std::string m,std::string p, std::string c
     lambdasystematic = false;
   }
 
-  _mean	  = 5269  + (lambdasystematic?(gRandom->Gaus(0,18)):0.);
+  _mean	  = 5280  + (lambdasystematic?(gRandom->Gaus(0,18)):0.);
   _sigmaL = 221   + (lambdasystematic?(gRandom->Gaus(0,26)):0.);
   _sigmaR = 96    + (lambdasystematic?(gRandom->Gaus(0,16)):0.);
   _alphaL = -0.19 + (lambdasystematic?(gRandom->Gaus(0,0.19)):0.);

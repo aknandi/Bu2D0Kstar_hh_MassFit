@@ -56,6 +56,7 @@ class Yields : public Base
   std::map<std::string, std::map<std::string, RooRealVar*> > N_kpipipi;
   RooAbsArg* Rplus;
   RooAbsArg* Rminus;
+  RooRealVar* frac_lckst;
 
   //std::map<std::string, std::map<std::string, std::map<std::string,  RooRealVar*> > >n_totsigs; //no pid & no bins
   //std::map<std::string, std::map<std::string, std::map<std::string, std::map<std::string, RooFormulaVar*> > > > stdBinFracs; //no pid part

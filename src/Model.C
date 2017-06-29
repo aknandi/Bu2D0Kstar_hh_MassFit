@@ -281,8 +281,8 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
 
           double integyield_lckst, integyield_lckst_err;
           if(*m=="d2kk") {
-        	  integyield_lckst = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getVal();
-        	  integyield_lckst_err = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst_gen[*m][*c][*t][*a])->getPropagatedError(*result);
+        	  integyield_lckst = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst[*m][*c][*t][*a])->getVal();
+        	  integyield_lckst_err = integral_lckst * static_cast<RooFormulaVar*>(yields->n_lckst[*m][*c][*t][*a])->getPropagatedError(*result);
           }
 
          //////////////////////////////////////////////////////////////////////
@@ -321,7 +321,6 @@ void Model::printYieldsAndPurities(string b, double integ_limit_low, double inte
         	  	  erradsSignalsq += pow(integyield_bu_err,2);
                   adsBackground += nB;
                   erradsBackgroundsq += pow(integyield_comb_err,2) + pow(integyield_dstkst_err,2) + ((*m=="d2kk")?pow(integyield_lckst_err,2):0);
-
         	  }
           }
 
