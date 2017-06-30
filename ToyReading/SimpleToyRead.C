@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string>
+#include <sstream>
 
 SimpleToyRead::SimpleToyRead(){
 
@@ -31,7 +32,7 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
   //  return;
  // }
 
-  std::string tempvar;
+  std::string tempvar, tempevarMinus, tempevarPlus;
   float  var, evar, ivar, seed, run, pull, cov, junk, evarPlus, evarMinus;
   //Int_t ncols=0;
   Int_t nlines = 0;
@@ -49,10 +50,12 @@ void SimpleToyRead::MakeNtupleFromTextFile(std::string name_var, float trueval){
 
   //while (inputfile) {
   while (inputfile) {
-    inputfile >> tempvar >> evar >> evarMinus >> evarPlus >> cov >> seed >> run >> ivar;
-    if(tempvar!="nan") {
+    inputfile >> tempvar >> evar >> tempevarMinus >> tempevarPlus >> cov >> seed >> run >> ivar;
+    if(tempvar!="nan" && tempevarMinus!="-inf" && tempevarPlus!="inf") {
       var = atof(tempvar.c_str());
-    if (nlines < 3) std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
+      evarMinus = atof(tempevarMinus.c_str());
+      evarPlus = atof(tempevarPlus.c_str());
+      if (nlines < 3) std::cout << Form("var=%5f, error=%5f, cov=%5f, seed=%5f, run=%5f, init=%5f\n", var,evar,cov,seed, run, ivar);
     //if(var>trueval) evarHigh = evar;
     //if(var<trueval) evarLow = evar;
 

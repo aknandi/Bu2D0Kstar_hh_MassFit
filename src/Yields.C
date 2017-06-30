@@ -229,7 +229,7 @@ void::Yields::SetYieldRatios(std::string kstmasscut,std::string kshelcut,std::st
 	    		}
 	    	}
 	    }
-	    if(*m=="d2kk") frac_lckst = new RooRealVar("frac_lckst","",input->getD("frac_lckst"), 0.,1.);
+	    if(*m=="d2kk") frac_lckst = new RooRealVar("frac_lckst","",input->getD("frac_lckst"), -1.,2.);
 	  }
 }
 
